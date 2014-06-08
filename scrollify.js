@@ -1,5 +1,6 @@
 
-(function ( $,window,document,undefined ) {
+(function ($,window,document,undefined) {
+	"use strict";
 	var heights = [],
 		names = [],
 		elements = [],
@@ -17,6 +18,8 @@
 			scrollSpeed: 1100,
 			offset : 0,
 			scrollbars: true,
+			axis:"y",
+			target:"html,body",
 			before:function() {},
 			after:function() {}
 		};
@@ -30,11 +33,11 @@
 						window.location.hash = names[index];
 					}
 					
-					$("html,body").stop().animate({
+					$(settings.target).stop().animate({
 						scrollTop: heights[index]
 					}, settings.scrollSpeed,settings.easing);
 					
-					$("html,body").promise().done(function(){settings.after(index,elements);});
+					$(settings.target).promise().done(function(){settings.after(index,elements);});
 				}
 			}
 			var manualScroll = {

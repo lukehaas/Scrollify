@@ -1,13 +1,81 @@
 # [jQuery Scrollify](http://projects.lukehaas.me/scrollify)
 
-A jQuery plugin that assists scrolling and smoothly snaps to sections.
-
-Fully configurable and optimised for touch.
-
+A jQuery plugin that assists scrolling and snaps to sections. Touch compatible.
 
 ## Demo
 
-> [http://projects.lukehaas.me/scrollify](http://projects.lukehaas.me/scrollify).
+[http://projects.lukehaas.me/scrollify](http://projects.lukehaas.me/scrollify).
+
+## Basic setup
+
+Scrollify requires jQuery 1.6+ and an easing library such as jquery.easing.js.
+
+The most basic setup is as follows:
+
+```
+<! doctype html>
+	<html>
+		<head>
+			<script>
+				$(function() {
+					$.scrollify({
+						section : "section",
+					});
+				});
+			</script>
+		</head>
+		<body>
+			<section></section>
+			<section></section>
+		</body>
+	</html>
+```
+
+## Configuration
+
+This is the default configuration:
+
+```
+$.scrollify({
+		section : "section",
+		sectionName : "section-name",
+		easing: "easeOutExpo",
+		scrollSpeed: 1100,
+		offset : 0,
+		scrollbars: true,
+		before:function() {},
+		after:function() {}
+	});
+```
+
+## Options
+
+`section`
+A selector for the sections.
+
+`sectionName`
+Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`.
+
+`easing`
+Define the easing method.
+
+`offset`
+A distance in pixels to offset each sections position by.
+
+`scrollbars`
+A boolean to define whether scroll bars are visible or not.
+
+`before`
+A callback that is called before a section is scrolled to via the move method. Arguments include the index of the section and an array of all section elements.
+
+`after`
+A callback that is called after a new section is scrolled to. Arguments include the index of the section and an array of all section elements.
+
+## Methods
+
+The move method can be used to scroll to a particular section. This can take the index of the section, or the name of the section preceded by a hash.
+
+`$.scrollify("move","#name");`
 
 ## Browser Support
 
