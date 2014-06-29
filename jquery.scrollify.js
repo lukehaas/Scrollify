@@ -1,6 +1,6 @@
 /*!
  * jQuery scrollify
- * Version 0.1.2
+ * Version 0.1.3
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -269,7 +269,7 @@
 					} else {
 						heights[i] = $(this).offset().top;
 					}
-					if(settings.sectionName && $(this).data(settings.sectionName).length>0) {
+					if(settings.sectionName && $(this).data(settings.sectionName)) {
 						names[i] = "#" + $(this).data(settings.sectionName).replace(/ /g,"-");
 					} else {
 						names[i] = "#" + (i + 1);
