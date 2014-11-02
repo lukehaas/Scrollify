@@ -46,6 +46,7 @@
 			scrollbars: true,
 			axis:"y",
 			target:"html,body",
+			touchExceptions:"a",
 			before:function() {},
 			after:function() {}
 		};
@@ -177,7 +178,9 @@
 				touchHandler: function(event) {
 					var touch;
 					if (typeof event !== 'undefined'){	
-						event.preventDefault();
+						if($(event.target).parents(settings.touchExceptions).length<1 && $(event.target).is(settings.touchExceptions)===false) {
+							event.preventDefault();
+						}
 						if (typeof event.touches !== 'undefined') {
 							touch = event.touches[0];
 							switch (event.type) {
