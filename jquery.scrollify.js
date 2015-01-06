@@ -34,6 +34,7 @@
 		currentHash = window.location.hash,
 		hasLocation = false,
 		timeoutId,
+		timeoutId2,
 		top = $(window).scrollTop(),
 		scrollable = false,
 		settings = {
@@ -81,7 +82,7 @@
 					}
 					timeoutId = setTimeout(function(){
 							top = $(window).scrollTop();
-							if(scrollable==false) {
+							if(scrollable===false) {
 								return false;
 							}
 							scrollable = false;
@@ -255,7 +256,7 @@
 							animateScroll(z);
 						}
 					} else {
-						if(z==arguments[1]) {
+						if(z===arguments[1]) {
 							index = z;
 							animateScroll(z);
 						}
@@ -265,6 +266,28 @@
 				}
 			} else {
 				settings = $.extend(settings, options);
+
+				calculatePositions(false);
+
+
+				if(hasLocation===false && settings.sectionName) {
+					window.location.hash = names[0];
+				} else {
+					animateScroll(index);
+				}
+				
+				manualScroll.init();
+				swipeScroll.init();
+			}
+
+			$(window).resize(function() {
+				clearTimeout(timeoutId2);
+				timeoutId2 = setTimeout(function() {
+					calculatePositions(true);
+				},50);
+			});
+
+			function calculatePositions(resize) {
 				
 				$(settings.section).each(function(i){
 					if(i>0) {
@@ -281,22 +304,18 @@
 					
 					elements[i] = $(this);
 
-					if(currentHash==names[i]) {
+					if(window.location.hash===names[i]) {
 						index = i;
 						hasLocation = true;
 						
 					}
 				});
 
-				
-				if(hasLocation==false && settings.sectionName) {
-					window.location.hash = names[0];
-				} else {
+				if(true===resize) {
 					animateScroll(index);
 				}
-				
-				manualScroll.init();
-				swipeScroll.init();
+
+
 			}
 	};
 
