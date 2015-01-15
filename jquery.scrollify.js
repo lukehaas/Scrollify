@@ -1,13 +1,13 @@
 /*!
  * jQuery scrollify
- * Version 0.1.5
+ * Version 0.1.6
  *
  * Requires:
  * - jQuery 1.6 or higher
  *
  * https://github.com/lukehaas/Scrollify
  *
- * Copyright 2014, Luke Haas
+ * Copyright 2015, Luke Haas
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -128,13 +128,12 @@
 								index--;
 							}
 						}
-
 						if(index>=0) {
 							animateScroll(index);
 						} else {
 							index = 0;
 						}
-					},25);
+					},35);
 				},
 				keyHandler:function(e) {
 					e.preventDefault();
@@ -186,6 +185,9 @@
 							touch = event.touches[0];
 							switch (event.type) {
 								case 'touchstart':
+									swipeScroll.touches.touchstart.y = touch.pageY;
+									swipeScroll.touches.touchmove.y = -1;
+
 									swipeScroll.options.timeStamp = new Date().getTime();
 									swipeScroll.touches.touchend = false;
 								case 'touchmove':
@@ -195,7 +197,6 @@
 										if (swipeScroll.touches.touchstart.y > -1) {
 
 											if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
-											
 												if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
 													if(index>0) {
 														index--;
@@ -212,12 +213,11 @@
 									}
 									break;
 								case 'touchend':
-									if(swipeScroll.touches[event.type]==false) {
+									if(swipeScroll.touches[event.type]===false) {
 										swipeScroll.touches[event.type] = true;
-										if (swipeScroll.touches.touchstart.y > -1) {
+										if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1) {
 
 											if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
-											
 												if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
 													if(index>0) {
 														index--;
@@ -230,7 +230,7 @@
 													animateScroll(index);
 												}
 											}
-											
+											swipeScroll.touches.touchstart.y = -1;
 										}
 									}
 								default:
