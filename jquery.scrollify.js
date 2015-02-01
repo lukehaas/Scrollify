@@ -1,6 +1,6 @@
 /*!
  * jQuery scrollify
- * Version 0.1.6
+ * Version 0.1.7
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -47,7 +47,7 @@
 			scrollbars: true,
 			axis:"y",
 			target:"html,body",
-			touchExceptions:"a",
+			//touchExceptions:"a",
 			before:function() {},
 			after:function() {}
 		};
@@ -110,9 +110,8 @@
 					
 					delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
 
-					if(timeoutId){
-						clearTimeout(timeoutId);  
-					}
+					clearTimeout(timeoutId);  
+					
 					timeoutId = setTimeout(function(){
 						
 						//if(!(index==heights.length-1 && ((index-delta) % (heights.length)==0))) {
@@ -133,7 +132,7 @@
 						} else {
 							index = 0;
 						}
-					},35);
+					},50);
 				},
 				keyHandler:function(e) {
 					e.preventDefault();
@@ -178,9 +177,9 @@
 				touchHandler: function(event) {
 					var touch;
 					if (typeof event !== 'undefined'){	
-						if($(event.target).parents(settings.touchExceptions).length<1 && $(event.target).is(settings.touchExceptions)===false) {
-							event.preventDefault();
-						}
+						//if($(event.target).parents(settings.touchExceptions).length<1 && $(event.target).is(settings.touchExceptions)===false) {
+							//event.preventDefault();
+						//}
 						if (typeof event.touches !== 'undefined') {
 							touch = event.touches[0];
 							switch (event.type) {
@@ -191,22 +190,26 @@
 									swipeScroll.options.timeStamp = new Date().getTime();
 									swipeScroll.touches.touchend = false;
 								case 'touchmove':
-									swipeScroll.touches[event.type].y = touch.pageY;
-									if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
-										swipeScroll.touches.touchend = true;
-										if (swipeScroll.touches.touchstart.y > -1) {
+									swipeScroll.touches.touchmove.y = touch.pageY;
+									if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y) {
+										event.preventDefault();
+										if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
+											
+											swipeScroll.touches.touchend = true;
+											if (swipeScroll.touches.touchstart.y > -1) {
 
-											if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
-												if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
-													if(index>0) {
-														index--;
+												if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
+													if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
+														if(index>0) {
+															index--;
+														}
+														animateScroll(index);
+													} else {
+														if(index<heights.length-1) {
+															index++;
+														}
+														animateScroll(index);
 													}
-													animateScroll(index);
-												} else {
-													if(index<heights.length-1) {
-														index++;
-													}
-													animateScroll(index);
 												}
 											}
 										}
