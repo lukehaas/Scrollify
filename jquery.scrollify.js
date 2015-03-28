@@ -29,6 +29,7 @@
 	"use strict";
 	var heights = [],
 		names = [],
+		paused = false,
 		elements = [],
 		index = 0,
 		currentHash = window.location.hash,
@@ -105,47 +106,52 @@
 					}, 200);
 				},
 				wheelHandler:function(e,delta) {
-					
-					e.preventDefault();
-					
-					delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
-
-					clearTimeout(timeoutId);  
-					
-					timeoutId = setTimeout(function(){
+					if(!paused)
+					{
+						e.preventDefault();
 						
-						//if(!(index==heights.length-1 && ((index-delta) % (heights.length)==0))) {
-							//index = (index-delta) % (heights.length);
-						//}
+						delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
+	
+						clearTimeout(timeoutId);  
 						
-						if(delta<0) {
-							if(index<heights.length-1) {
-								index++;
+						timeoutId = setTimeout(function(){
+							
+							//if(!(index==heights.length-1 && ((index-delta) % (heights.length)==0))) {
+								//index = (index-delta) % (heights.length);
+							//}
+							
+							if(delta<0) {
+								if(index<heights.length-1) {
+									index++;
+								}
+							} else if(delta>0) {
+								if(index>0) {
+									index--;
+								}
 							}
-						} else if(delta>0) {
+							if(index>=0) {
+								animateScroll(index);
+							} else {
+								index = 0;
+							}
+						},50);						
+					}
+				},
+				keyHandler:function(e) {
+					if(!paused)
+					{
+						e.preventDefault();
+						if(e.keyCode==38) {
 							if(index>0) {
 								index--;
 							}
-						}
-						if(index>=0) {
 							animateScroll(index);
-						} else {
-							index = 0;
-						}
-					},50);
-				},
-				keyHandler:function(e) {
-					e.preventDefault();
-					if(e.keyCode==38) {
-						if(index>0) {
-							index--;
-						}
-						animateScroll(index);
-					} else if(e.keyCode==40) {
-						if(index<heights.length-1) {
-							index++;
-						}
-						animateScroll(index);
+						} else if(e.keyCode==40) {
+							if(index<heights.length-1) {
+								index++;
+							}
+							animateScroll(index);
+						}						
 					}
 				},
 				init:function() {
@@ -175,29 +181,53 @@
 					"timeStamp" : new Date().getTime()
 				},
 				touchHandler: function(event) {
-					var touch;
-					if (typeof event !== 'undefined'){	
-						//if($(event.target).parents(settings.touchExceptions).length<1 && $(event.target).is(settings.touchExceptions)===false) {
-							//event.preventDefault();
-						//}
-						if (typeof event.touches !== 'undefined') {
-							touch = event.touches[0];
-							switch (event.type) {
-								case 'touchstart':
-									swipeScroll.touches.touchstart.y = touch.pageY;
-									swipeScroll.touches.touchmove.y = -1;
-
-									swipeScroll.options.timeStamp = new Date().getTime();
-									swipeScroll.touches.touchend = false;
-								case 'touchmove':
-									swipeScroll.touches.touchmove.y = touch.pageY;
-									if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y) {
-										event.preventDefault();
-										if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
-											
-											swipeScroll.touches.touchend = true;
-											if (swipeScroll.touches.touchstart.y > -1) {
-
+					if(!paused)
+					{
+						var touch;
+						if (typeof event !== 'undefined'){	
+							//if($(event.target).parents(settings.touchExceptions).length<1 && $(event.target).is(settings.touchExceptions)===false) {
+								//event.preventDefault();
+							//}
+							if (typeof event.touches !== 'undefined') {
+								touch = event.touches[0];
+								switch (event.type) {
+									case 'touchstart':
+										swipeScroll.touches.touchstart.y = touch.pageY;
+										swipeScroll.touches.touchmove.y = -1;
+	
+										swipeScroll.options.timeStamp = new Date().getTime();
+										swipeScroll.touches.touchend = false;
+									case 'touchmove':
+										swipeScroll.touches.touchmove.y = touch.pageY;
+										if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y) {
+											event.preventDefault();
+											if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
+												
+												swipeScroll.touches.touchend = true;
+												if (swipeScroll.touches.touchstart.y > -1) {
+	
+													if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
+														if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
+															if(index>0) {
+																index--;
+															}
+															animateScroll(index);
+														} else {
+															if(index<heights.length-1) {
+																index++;
+															}
+															animateScroll(index);
+														}
+													}
+												}
+											}
+										}
+										break;
+									case 'touchend':
+										if(swipeScroll.touches[event.type]===false) {
+											swipeScroll.touches[event.type] = true;
+											if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1) {
+	
 												if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
 													if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
 														if(index>0) {
@@ -211,35 +241,14 @@
 														animateScroll(index);
 													}
 												}
+												swipeScroll.touches.touchstart.y = -1;
 											}
 										}
-									}
-									break;
-								case 'touchend':
-									if(swipeScroll.touches[event.type]===false) {
-										swipeScroll.touches[event.type] = true;
-										if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1) {
-
-											if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
-												if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
-													if(index>0) {
-														index--;
-													}
-													animateScroll(index);
-												} else {
-													if(index<heights.length-1) {
-														index++;
-													}
-													animateScroll(index);
-												}
-											}
-											swipeScroll.touches.touchstart.y = -1;
-										}
-									}
-								default:
-									break;
+									default:
+										break;
+								}
 							}
-						}
+						}						
 					}
 				},
 				init: function() {
@@ -251,22 +260,31 @@
 				}
 			};
 			if(typeof options === 'string') {
-				var z = names.length;
-				for(;z>=0;z--) {
-					if(typeof arguments[1] === 'string') {
-						if (names[z]==arguments[1]) {
-							index = z;
-							animateScroll(z);
+				switch(arguments[0])
+				{
+					case 'pause':
+						paused = true;
+						break;
+					case 'resume':
+						paused = false;
+						break;
+					case 'move':
+						var z = names.length;
+						for(;z>=0;z--) {
+							if(typeof arguments[1] === 'string') {
+								if (names[z]==arguments[1]) {
+									index = z;
+									animateScroll(z);
+								}
+							} else {
+								if(z===arguments[1]) {
+									index = z;
+									animateScroll(z);
+								}
+							}
 						}
-					} else {
-						if(z===arguments[1]) {
-							index = z;
-							animateScroll(z);
-						}
-					}
-
-
-				}
+						break;
+				}				
 			} else {
 				settings = $.extend(settings, options);
 
