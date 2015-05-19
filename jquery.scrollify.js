@@ -273,9 +273,9 @@
 				calculatePositions(false);
 
 
-				if(hasLocation===false && settings.sectionName) {
+				if(hasLocation===false && settings.sectionName && !currentHash) {
 					window.location.hash = names[0];
-				} else {
+				} else if (!currentHash) {
 					animateScroll(index);
 				}
 				
