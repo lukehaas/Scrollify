@@ -93,15 +93,15 @@ The next method can be used to scroll to a panel that immediately follows the cu
 
 `$.scrollify.previous()`
 
-The next method can be used to scroll to a panel that immediately precedes the current panel.
+The previous method can be used to scroll to a panel that immediately precedes the current panel.
 
 `$.scrollify.instantNext()`
 
-The next method can be used to scroll to a panel that immediately follows the current panel, without animation.
+The instantNext method can be used to scroll to a panel that immediately follows the current panel, without animation.
 
 `$.scrollify.instantPrevious()`
 
-The next method can be used to scroll to a panel that immediately precedes the current panel.
+The instantPrevious method can be used to scroll to a panel that immediately precedes the current panel.
 
 `$.scrollify.destroy()`
 
