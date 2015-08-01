@@ -8,7 +8,7 @@ A jQuery plugin that assists scrolling and snaps to sections. Touch compatible.
 
 ## Basic setup
 
-Scrollify requires jQuery 1.6+ and an easing library such as jquery.easing.js.
+Scrollify requires jQuery 1.6+.
 
 The most basic setup is as follows:
 
@@ -104,6 +104,12 @@ The next method can be used to scroll to a panel that immediately precedes the c
 `$.scrollify.destroy()`
 
 The destroy methods removes all Scrollify events and removes set heights from the panels.
+
+## Behaviour
+
+Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scoll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar. 
+
+If you are viewing a panel with a height that is greater than the window, Scrollify will only snap to another section if you are at the top or bottom of the panel, allowing for normal scrolling behaviour inbetween these points.
 
 ## Browser Support
 
