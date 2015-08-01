@@ -44,7 +44,8 @@ $.scrollify({
 		offset : 0,
 		scrollbars: true,
 		before:function() {},
-		after:function() {}
+		after:function() {},
+		afterResize:function() {}
 	});
 ```
 
@@ -71,11 +72,38 @@ A callback that is called before a section is scrolled to via the move method. A
 `after`
 A callback that is called after a new section is scrolled to. Arguments include the index of the section and an array of all section elements.
 
+`afterResize`
+A callback that is called after the window is resized.
+
 ## Methods
 
-The move method can be used to scroll to a particular section. This can take the index of the section, or the name of the section preceded by a hash.
+`$.scrollify.move("#name");`
 
-`$.scrollify("move","#name");`
+The move method can be used to scroll to a particular section. It can be parsed the index of the section, or the name of the section preceded by a hash.
+
+`$.scrollify.instantMove("#name");`
+
+The instantMove method can be used to scroll to a particular section without animation. It can be parsed the index of the section, or the name of the section preceded by a hash.
+
+`$.scrollify.next()`
+
+The next method can be used to scroll to a panel that immediately follows the current panel.
+
+`$.scrollify.previous()`
+
+The next method can be used to scroll to a panel that immediately precedes the current panel.
+
+`$.scrollify.instantNext()`
+
+The next method can be used to scroll to a panel that immediately follows the current panel, without animation.
+
+`$.scrollify.instantPrevious()`
+
+The next method can be used to scroll to a panel that immediately precedes the current panel.
+
+`$.scrollify.destroy()`
+
+The destroy methods removes all Scrollify events and removes set heights from the panels.
 
 ## Browser Support
 
