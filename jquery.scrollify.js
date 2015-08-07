@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.8
+ * Version 0.1.9
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -274,13 +274,12 @@
 				}
 			},
 			down: function() {
-				if(index<heights.length-1) {
-					if(atBottom()) {
+				if(index<=heights.length-1) {
+					if(atBottom() && index<heights.length-1) {
 						
 						index++;
 						animateScroll(index,false);
 					} else {
-						
 						if(Math.floor(elements[index].height()/$(window).height())>interstitialIndex) {
 
 							interstitialScroll(parseInt(heights[index])+($(window).height()*interstitialIndex));
