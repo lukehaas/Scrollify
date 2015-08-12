@@ -491,4 +491,10 @@
 		}
 		heights = names = elements = overflow = null;
 	};
+	$.scrollify.update = function() {
+		util.handleResize();
+	};
+	$.scrollify.current = function() {
+		return $('section').eq(index);
+	};
 }(jQuery,this,document));
