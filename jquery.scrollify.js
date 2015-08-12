@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.9
+ * Version 0.1.10
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -495,6 +495,6 @@
 		util.handleResize();
 	};
 	$.scrollify.current = function() {
-		return $('section').eq(index);
+		return elements[index];
 	};
 }(jQuery,this,document));

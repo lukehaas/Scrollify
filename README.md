@@ -107,6 +107,14 @@ The instantPrevious method can be used to scroll to a panel that immediately pre
 
 The destroy methods removes all Scrollify events and removes set heights from the panels.
 
+`$.scrollify.update()`
+
+The update methods recalculates the heights and positions of the panels.
+
+`$.scrollify.current()`
+
+The current method returns the current section as a jQuery object.
+
 ## Behaviour
 
 Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scoll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar. 
