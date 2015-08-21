@@ -44,6 +44,8 @@
 		manualScroll,
 		swipeScroll,
 		util,
+		disabled = false,
+		scrollTime = 0,
 		settings = {
 			//section should be an identifier that is the same for each section
 			section: "section",
@@ -137,7 +139,6 @@
 				if(!overflow[index]) {
 					e.preventDefault();
 				}
-				
 				delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
 
 				//clearTimeout(timeoutId);  
@@ -145,9 +146,15 @@
 				//timeoutId = setTimeout(function(){
 					
 					if(locked) {
+						scrollTime = new Date().getTime();
 						return false;
+					} else {
+						//if its locked but still scrolling, its most likely momentum
+						if(((new Date().getTime()) < (scrollTime+50))) {
+							scrollTime = new Date().getTime();
+							return false;
+						}
 					}
-					
 					if(delta<0) {
 						if(index<heights.length-1) {
 							if(atBottom()) {
@@ -496,5 +503,11 @@
 	};
 	$.scrollify.current = function() {
 		return elements[index];
+	};
+	$.scrollify.disable = function() {
+		disable = true;
+	};
+	$.scrollify.enable = function() {
+		disabled = false;
 	};
 }(jQuery,this,document));
