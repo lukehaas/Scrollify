@@ -496,7 +496,7 @@
 			document.removeEventListener('touchmove', swipeScroll.touchHandler, false);	
 			document.removeEventListener('touchend', swipeScroll.touchHandler, false);
 		}
-		heights = names = elements = overflow = null;
+		heights = names = elements = overflow = [];
 	};
 	$.scrollify.update = function() {
 		util.handleResize();
