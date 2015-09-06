@@ -27,7 +27,29 @@
  */
 (function ($,window,document,undefined) {
 	"use strict";
-	var heights = [],
+	var heights,
+		names,
+		elements,
+		overflow,
+		index,
+		interstitialIndex,
+		currentHash,
+		hasLocation,
+		timeoutId,
+		timeoutId2,
+		top,
+		scrollable,
+		locked,
+		scrolled,
+		manualScroll,
+		swipeScroll,
+		util,
+		disabled,
+		scrollTime,
+		settings;
+
+	function variablesInit() {
+		heights = [],
 		names = [],
 		elements = [],
 		overflow = [],
@@ -59,7 +81,9 @@
 			before:function() {},
 			after:function() {},
 			afterResize:function() {}
-		};
+		}
+	}
+
 	function animateScroll(index,instant) {
 		
 		if(names[index]) {
@@ -82,6 +106,9 @@
 		}
 	}
 	$.scrollify = function(options) {
+
+		variablesInit();
+
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
