@@ -379,7 +379,6 @@
 		}
 
 		function calculatePositions(resize) {
-			
 			$(settings.section).each(function(i){
 				if(i>0) {
 					heights[i] = $(this).offset().top + settings.offset;
@@ -496,7 +495,10 @@
 			document.removeEventListener('touchmove', swipeScroll.touchHandler, false);	
 			document.removeEventListener('touchend', swipeScroll.touchHandler, false);
 		}
-		heights = names = elements = overflow = [];
+		heights = [];
+		names = [];
+		elements = [];
+		overflow = [];
 	};
 	$.scrollify.update = function() {
 		util.handleResize();
