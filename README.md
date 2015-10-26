@@ -105,15 +105,27 @@ The instantPrevious method can be used to scroll to a panel that immediately pre
 
 `$.scrollify.destroy()`
 
-The destroy methods removes all Scrollify events and removes set heights from the panels.
+The destroy method removes all Scrollify events and removes set heights from the panels.
 
 `$.scrollify.update()`
 
-The update methods recalculates the heights and positions of the panels.
+The update method recalculates the heights and positions of the panels.
 
 `$.scrollify.current()`
 
 The current method returns the current section as a jQuery object.
+
+`$.scrollify.disable()`
+
+The disable method turns off the scroll snap behaviour so that the page scroll like normal.
+
+`$.scrollify.enable()`
+
+The enable method resumes the scroll snap behaviour after the disable method has been used.
+
+`$.scrollify.isDisabled()`
+
+The isDisabled method returns true if Scrollify is currently disabled, otherwise false.
 
 ## Behaviour
 

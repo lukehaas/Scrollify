@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.10
+ * Version 0.1.11
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -45,7 +45,8 @@
 		swipeScroll,
 		util,
 		disabled = false,
-		scrollTime = 0,
+		scrollSamples = [],
+		scrollTime = new Date().getTime(),
 		settings = {
 			//section should be an identifier that is the same for each section
 			section: "section",
@@ -61,7 +62,9 @@
 			afterResize:function() {}
 		};
 	function animateScroll(index,instant) {
-		
+		if(disabled===true) {
+			return true;
+		}
 		if(names[index]) {
 			settings.before(index,elements);
 			interstitialIndex = 1;
@@ -81,6 +84,36 @@
 
 		}
 	}
+
+	function isAccelerating(samples) {
+
+        if(samples<4) {
+        	return false;
+        }
+        var limit = 20,sum = 0,i = samples.length-1,l;
+        if(samples.length<limit*2) {
+        	limit = Math.floor(samples.length/2);
+        }
+        l = samples.length-limit;
+        for(;i>=l;i--) {
+        	sum = sum+samples[i];
+        }
+        var average1 = sum/limit;
+
+        sum = 0;
+        i = samples.length-limit-1;
+        l = samples.length-(limit*2);
+        for(;i>=l;i--) {
+        	sum = sum+samples[i];
+        }
+        var average2 = sum/limit;
+
+        if(average1>=average2) {
+        	return true;
+        } else {
+        	return false;
+        }
+	}
 	$.scrollify = function(options) {
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
@@ -89,18 +122,25 @@
 
 		manualScroll = {
 			handleMousedown:function() {
+				if(disabled===true) {
+					return true;
+				}
 				scrollable = false;
 				scrolled = false;
 			},
 			handleMouseup:function() {
+				if(disabled===true) {
+					return true;
+				}
 				scrollable = true;
 				if(scrolled) {
 					manualScroll.calculateNearest();
 				}
-				
 			},
 			handleScroll:function() {
-				
+				if(disabled===true) {
+					return true;
+				}
 				if(timeoutId){
 					clearTimeout(timeoutId);  
 				}
@@ -136,48 +176,63 @@
 				}
 			},
 			wheelHandler:function(e,delta) {
+				if(disabled===true) {
+					return true;
+				}
 				if(!overflow[index]) {
 					e.preventDefault();
 				}
+				var currentScrollTime = new Date().getTime();
 				delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
 
-				//clearTimeout(timeoutId);  
 				
-				//timeoutId = setTimeout(function(){
-					
-					if(locked) {
-						scrollTime = new Date().getTime();
-						return false;
-					} else {
-						//if its locked but still scrolling, its most likely momentum
-						if(((new Date().getTime()) < (scrollTime+50))) {
-							scrollTime = new Date().getTime();
-							return false;
-						}
-					}
-					if(delta<0) {
-						if(index<heights.length-1) {
-							if(atBottom()) {
+				if((currentScrollTime-scrollTime) > 1300){
+					scrollSamples = [];
+				}
+				scrollTime = currentScrollTime;
+
+				if(scrollSamples.length >= 35){
+					scrollSamples.shift();
+				}
+				scrollSamples.push(Math.abs(delta*10));
+
+				if(locked) {
+					return false;
+				}
+
+				if(delta<0) {
+					if(index<heights.length-1) {
+						if(atBottom()) {
+							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
 								index++;
 								locked = true;
 								animateScroll(index,false);
+							} else {
+								return false;
 							}
 						}
-					} else if(delta>0) {
-						if(index>0) {
-							if(atTop()) {
+					}
+				} else if(delta>0) {
+					if(index>0) {
+						if(atTop()) {
+							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
 								index--;
 								locked = true;
 								animateScroll(index,false);
+							} else {
+								return false
 							}
 						}
 					}
+				}
 
-				//},5);
 			},
 			keyHandler:function(e) {
+				if(disabled===true) {
+					return true;
+				}
 				if(e.keyCode==38) {
 					if(index>0) {
 						if(atTop()) {
@@ -221,6 +276,9 @@
 				"timeStamp" : new Date().getTime()
 			},
 			touchHandler: function(event) {
+				if(disabled===true) {
+					return true;
+				}
 				var touch;
 				if (typeof event !== 'undefined'){	
 					if (typeof event.touches !== 'undefined') {
@@ -359,6 +417,7 @@
 		swipeScroll.init();
 
 		$(window).bind("resize",util.handleResize);
+		window.addEventListener("orientationchange", util.handleResize, false);
 
 		function interstitialScroll(pos) {
 			$(settings.target).stop().animate({
@@ -368,22 +427,21 @@
 
 		function sizePanels() {
 			$(settings.section).each(function(i) {
-
 				if($(this).css("height","auto").outerHeight()<$(window).height()) {
 					$(this).css({"height":$(window).height()});
 					overflow[i] = false;
 				} else {
+					$(this).css({"height":$(this).height()});
 					overflow[i] = true;
 				}
 			});
 		}
-
 		function calculatePositions(resize) {
 			$(settings.section).each(function(i){
 				if(i>0) {
-					heights[i] = $(this).offset().top + settings.offset;
+					heights[i] = parseInt($(this).offset().top) + settings.offset;
 				} else {
-					heights[i] = $(this).offset().top;
+					heights[i] = parseInt($(this).offset().top);
 				}
 				if(settings.sectionName && $(this).data(settings.sectionName)) {
 					names[i] = "#" + $(this).data(settings.sectionName).replace(/ /g,"-");
@@ -400,6 +458,7 @@
 					
 				}
 			});
+			
 
 			if(true===resize) {
 				animateScroll(index,false);
@@ -416,7 +475,6 @@
 		}
 		function atBottom() {
 			top = $(window).scrollTop();
-			
 			if(top<parseInt(heights[index])+(elements[index].height()-$(window).height())) {
 				return false;
 			} else {
@@ -507,9 +565,12 @@
 		return elements[index];
 	};
 	$.scrollify.disable = function() {
-		disable = true;
+		disabled = true;
 	};
 	$.scrollify.enable = function() {
 		disabled = false;
+	};
+	$.scrollify.isDisabled = function() {
+		return disabled;
 	};
 }(jQuery,this,document));
