@@ -57,7 +57,7 @@
 			scrollbars: true,
 			axis:"y",
 			target:"html,body",
-			defaultHash:true,
+			defaultHash:true, 
 			before:function() {},
 			after:function() {},
 			afterResize:function() {}
