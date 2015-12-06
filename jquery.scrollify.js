@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.11
+ * Version 0.1.12
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -417,7 +417,9 @@
 		swipeScroll.init();
 
 		$(window).bind("resize",util.handleResize);
-		window.addEventListener("orientationchange", util.handleResize, false);
+		if (document.addEventListener) {
+			window.addEventListener("orientationchange", util.handleResize, false);
+		}
 
 		function interstitialScroll(pos) {
 			$(settings.target).stop().animate({

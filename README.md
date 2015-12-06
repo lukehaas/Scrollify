@@ -21,14 +21,14 @@ The most basic setup is as follows:
 			<script>
 				$(function() {
 					$.scrollify({
-						section : "section",
+						section : ".section-class-name",
 					});
 				});
 			</script>
 		</head>
 		<body>
-			<section></section>
-			<section></section>
+			<div class="section-class-name"></div>
+			<div class="section-class-name"></div>
 		</body>
 	</html>
 ```
@@ -39,7 +39,7 @@ This is the default configuration:
 
 ```
 $.scrollify({
-		section : "section",
+		section : ".section-class-name",
 		sectionName : "section-name",
 		easing: "easeOutExpo",
 		scrollSpeed: 1100,
@@ -54,7 +54,7 @@ $.scrollify({
 ## Options
 
 `section`
-A selector for the sections.
+A CSS selector for the sections.
 
 `sectionName`
 Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`.
