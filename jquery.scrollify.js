@@ -57,6 +57,7 @@
 			scrollbars: true,
 			axis:"y",
 			target:"html,body",
+			defaultHash:true, 
 			before:function() {},
 			after:function() {},
 			afterResize:function() {}
@@ -69,6 +70,7 @@
 			settings.before(index,elements);
 			interstitialIndex = 1;
 			if(settings.sectionName) {
+				
 				window.location.hash = names[index];
 			}
 			if(instant) {
@@ -408,7 +410,10 @@
 
 
 		if(hasLocation===false && settings.sectionName) {
-			window.location.hash = names[0];
+			if (settings.defaultHash) {
+				window.location.hash = names[0];
+			}
+			
 		} else {
 			animateScroll(index,false);
 		}
