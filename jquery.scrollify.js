@@ -7,7 +7,7 @@
  *
  * https://github.com/lukehaas/Scrollify
  *
- * Copyright 2015, Luke Haas
+ * Copyright 2016, Luke Haas
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
  * the Software without restriction, including without limitation the rights to
@@ -33,7 +33,6 @@
 		overflow = [],
 		index = 0,
 		interstitialIndex = 1,
-		currentHash = window.location.hash,
 		hasLocation = false,
 		timeoutId,
 		timeoutId2,
@@ -57,19 +56,26 @@
 			scrollbars: true,
 			axis:"y",
 			target:"html,body",
+			standardScrollElements: false,
 			before:function() {},
 			after:function() {},
-			afterResize:function() {}
+			afterResize:function() {},
+			afterRender:function() {}
 		};
 	function animateScroll(index,instant) {
 		if(disabled===true) {
 			return true;
 		}
 		if(names[index]) {
+			scrollable = false;
 			settings.before(index,elements);
 			interstitialIndex = 1;
 			if(settings.sectionName) {
-				window.location.hash = names[index];
+				if(history.pushState) {
+				    history.replaceState(null, null, names[index]);
+				} else {
+					window.location.hash = names[index];
+				}
 			}
 			if(instant) {
 				$(settings.target).stop().scrollTop(heights[index]);
@@ -178,6 +184,10 @@
 			wheelHandler:function(e,delta) {
 				if(disabled===true) {
 					return true;
+				} else if(settings.standardScrollElements) {
+					if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+						return true;
+					}
 				}
 				if(!overflow[index]) {
 					e.preventDefault();
@@ -265,8 +275,8 @@
 		
 		swipeScroll = {
 			touches : {
-				"touchstart": {"y":-1}, 
-				"touchmove" : {"y":-1},
+				"touchstart": {"y":-1,"x":-1}, 
+				"touchmove" : {"y":-1,"x":-1},
 				"touchend"  : false,
 				"direction" : "undetermined"
 			},
@@ -278,6 +288,10 @@
 			touchHandler: function(event) {
 				if(disabled===true) {
 					return true;
+				} else if(settings.standardScrollElements) {
+					if($(event.target).is(settings.standardScrollElements) || $(event.target).closest(settings.standardScrollElements).length) {
+						return true;
+					}
 				}
 				var touch;
 				if (typeof event !== 'undefined'){	
@@ -288,14 +302,19 @@
 								swipeScroll.touches.touchstart.y = touch.pageY;
 								swipeScroll.touches.touchmove.y = -1;
 
+								swipeScroll.touches.touchstart.x = touch.pageX;
+								swipeScroll.touches.touchmove.x = -1;
+
 								swipeScroll.options.timeStamp = new Date().getTime();
 								swipeScroll.touches.touchend = false;
 							case 'touchmove':
 								swipeScroll.touches.touchmove.y = touch.pageY;
-								if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y) {
+								swipeScroll.touches.touchmove.x = touch.pageX;
+								if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y && (Math.abs(swipeScroll.touches.touchstart.y-swipeScroll.touches.touchmove.y)>Math.abs(swipeScroll.touches.touchstart.x-swipeScroll.touches.touchmove.x))) {
 									//if(!overflow[index]) {
 										event.preventDefault();
 									//}
+									swipeScroll.touches.direction = "y";
 									if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
 										
 										swipeScroll.touches.touchend = true;
@@ -318,7 +337,7 @@
 							case 'touchend':
 								if(swipeScroll.touches[event.type]===false) {
 									swipeScroll.touches[event.type] = true;
-									if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1) {
+									if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1 && swipeScroll.touches.direction==="y") {
 
 										if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
 											if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
@@ -330,6 +349,8 @@
 											}
 										}
 										swipeScroll.touches.touchstart.y = -1;
+										swipeScroll.touches.touchstart.x = -1;
+										swipeScroll.touches.direction = "undetermined";
 									}
 								}
 							default:
@@ -396,10 +417,9 @@
 					sizePanels();
 					calculatePositions(true);
 					settings.afterResize();
-				},50);
+				},400);
 			}
 		};
-
 		settings = $.extend(settings, options);
 		
 		sizePanels();
@@ -407,9 +427,7 @@
 		calculatePositions(false);
 
 
-		if(hasLocation===false && settings.sectionName) {
-			window.location.hash = names[0];
-		} else {
+		if(true===hasLocation) {
 			animateScroll(index,false);
 		}
 		
@@ -451,7 +469,6 @@
 					names[i] = "#" + (i + 1);
 				}
 				
-				
 				elements[i] = $(this);
 
 				if(window.location.hash===names[i]) {
@@ -461,9 +478,10 @@
 				}
 			});
 			
-
 			if(true===resize) {
 				animateScroll(index,false);
+			} else {
+				settings.afterRender();
 			}
 		}
 

@@ -2,7 +2,7 @@
 
 A jQuery plugin that assists scrolling and snaps to sections. Touch optimised. 
 
-5KB minified!
+6KB minified!
 
 ## Demo
 
@@ -45,9 +45,11 @@ $.scrollify({
 		scrollSpeed: 1100,
 		offset : 0,
 		scrollbars: true,
+		standardScrollElements: "",
 		before:function() {},
 		after:function() {},
-		afterResize:function() {}
+		afterResize:function() {},
+		afterRender:function() {}
 	});
 ```
 
@@ -68,14 +70,20 @@ A distance in pixels to offset each sections position by.
 `scrollbars`
 A boolean to define whether scroll bars are visible or not.
 
+`standardScrollElements`
+A string of selectors for elements that require standard scrolling behaviour. For example `standardScrollElements: ".map, .frame"`.
+
 `before`
-A callback that is called before a section is scrolled to via the move method. Arguments include the index of the section and an array of all section elements.
+A callback that is fired before a section is scrolled to via the move method. Arguments include the index of the section and an array of all section elements.
 
 `after`
-A callback that is called after a new section is scrolled to. Arguments include the index of the section and an array of all section elements.
+A callback that is fired after a new section is scrolled to. Arguments include the index of the section and an array of all section elements.
 
 `afterResize`
-A callback that is called after the window is resized.
+A callback that is fired after the window is resized.
+
+`afterRender`
+A callback that is fired after Scrollify's initialisation.
 
 ## Methods
 
