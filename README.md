@@ -137,7 +137,7 @@ The isDisabled method returns true if Scrollify is currently disabled, otherwise
 
 ## Behaviour
 
-Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scoll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar. 
+Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scroll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar. 
 
 If you are viewing a panel with a height that is greater than the window, Scrollify will only snap to another section if you are at the top or bottom of the panel, allowing for normal scrolling behaviour inbetween these points.
 
