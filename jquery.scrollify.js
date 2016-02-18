@@ -27,7 +27,9 @@
  */
 (function ($,window,document,undefined) {
 	"use strict";
-	var heights = [],
+	var $window = $(window),
+		$document = $(document),
+		heights = [],
 		names = [],
 		elements = [],
 		overflow = [],
@@ -36,7 +38,7 @@
 		hasLocation = false,
 		timeoutId,
 		timeoutId2,
-		top = $(window).scrollTop(),
+		top = $window.scrollTop(),
 		scrollable = false,
 		locked = false,
 		scrolled = false,
@@ -46,6 +48,7 @@
 		disabled = false,
 		scrollSamples = [],
 		scrollTime = new Date().getTime(),
+		scrollBottom = false,
 		settings = {
 			//section should be an identifier that is the same for each section
 			section: "section",
@@ -57,6 +60,7 @@
 			axis:"y",
 			target:"html,body",
 			standardScrollElements: false,
+			scrollBottom: false,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
@@ -81,8 +85,14 @@
 				$(settings.target).stop().scrollTop(heights[index]);
 				settings.after(index,elements);
 			} else {
+				var scrollLocation;
+				if (scrollBottom) {
+					scrollLocation = heights[index + 1] - $window.height();
+				} else {
+					scrollLocation = heights[index];
+				}
 				$(settings.target).stop().animate({
-					scrollTop: heights[index]
+					scrollTop: scrollLocation
 				}, settings.scrollSpeed,settings.easing);
 				
 				$(settings.target).promise().done(function(){locked = false;settings.after(index,elements);});
@@ -162,7 +172,7 @@
 				}, 200);
 			},
 			calculateNearest:function() {
-				top = $(window).scrollTop();
+				top = $window.scrollTop();
 				var i =1,
 					max = heights.length,
 					closest = 0,
@@ -261,15 +271,15 @@
 			},
 			init:function() {
 				if(settings.scrollbars) {
-					$(window).bind('mousedown', manualScroll.handleMousedown);
-					$(window).bind('mouseup', manualScroll.handleMouseup);
-					$(window).bind('scroll', manualScroll.handleScroll);
+					$window.bind('mousedown', manualScroll.handleMousedown);
+					$window.bind('mouseup', manualScroll.handleMouseup);
+					$window.bind('scroll', manualScroll.handleScroll);
 				} else {
 					$("body").css({"overflow":"hidden"});
 				}
 				
-				$(document).bind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
-				$(document).bind('keydown', manualScroll.keyHandler);
+				$document.bind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
+				$document.bind('keydown', manualScroll.keyHandler);
 			}
 		};
 		
@@ -366,13 +376,13 @@
 						index++;
 						animateScroll(index,false);
 					} else {
-						if(Math.floor(elements[index].height()/$(window).height())>interstitialIndex) {
+						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
 
-							interstitialScroll(parseInt(heights[index])+($(window).height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
 							interstitialIndex += 1;
 
 						} else {
-							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$(window).height()));
+							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$window.height()));
 						}
 						
 					}
@@ -389,7 +399,7 @@
 						if(interstitialIndex>2) {
 
 							interstitialIndex -= 1;
-							interstitialScroll(parseInt(heights[index])+($(window).height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
 							
 						} else {
 
@@ -434,7 +444,7 @@
 		manualScroll.init();
 		swipeScroll.init();
 
-		$(window).bind("resize",util.handleResize);
+		$window.bind("resize",util.handleResize);
 		if (document.addEventListener) {
 			window.addEventListener("orientationchange", util.handleResize, false);
 		}
@@ -447,8 +457,8 @@
 
 		function sizePanels() {
 			$(settings.section).each(function(i) {
-				if($(this).css("height","auto").outerHeight()<$(window).height()) {
-					$(this).css({"height":$(window).height()});
+				if($(this).css("height","auto").outerHeight()<$window.height()) {
+					$(this).css({"height":$window.height()});
 					overflow[i] = false;
 				} else {
 					$(this).css({"height":$(this).height()});
@@ -486,18 +496,20 @@
 		}
 
 		function atTop() {
-			top = $(window).scrollTop();
+			top = $window.scrollTop();
 			if(top>parseInt(heights[index])) {
 				return false;
 			} else {
+				if (settings.scrollBottom) scrollBottom = true;
 				return true;
 			}
 		}
 		function atBottom() {
-			top = $(window).scrollTop();
-			if(top<parseInt(heights[index])+(elements[index].height()-$(window).height())) {
+			top = $window.scrollTop();
+			if(top<parseInt(heights[index])+(elements[index].height()-$window.height())) {
 				return false;
 			} else {
+				if (settings.scrollBottom) scrollBottom = false;
 				return true;
 			}
 		}
@@ -559,14 +571,14 @@
 		$(settings.section).each(function() {
 			$(this).css("height","auto");
 		});
-		$(window).unbind("resize",util.handleResize);
+		$window.unbind("resize",util.handleResize);
 		if(settings.scrollbars) {
-			$(window).unbind('mousedown', manualScroll.handleMousedown);
-			$(window).unbind('mouseup', manualScroll.handleMouseup);
-			$(window).unbind('scroll', manualScroll.handleScroll);
+			$window.unbind('mousedown', manualScroll.handleMousedown);
+			$window.unbind('mouseup', manualScroll.handleMouseup);
+			$window.unbind('scroll', manualScroll.handleScroll);
 		}
-		$(document).unbind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
-		$(document).unbind('keydown', manualScroll.keyHandler);
+		$document.unbind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
+		$document.unbind('keydown', manualScroll.keyHandler);
 
 		if (document.addEventListener) {
 			document.removeEventListener('touchstart', swipeScroll.touchHandler, false);	
