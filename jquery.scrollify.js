@@ -88,6 +88,7 @@
 				var scrollLocation;
 				if (scrollBottom) {
 					scrollLocation = heights[index + 1] - $window.height();
+					scrollBottom = false;
 				} else {
 					scrollLocation = heights[index];
 				}
