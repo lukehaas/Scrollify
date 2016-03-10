@@ -448,7 +448,11 @@
 		function sizePanels() {
 			$(settings.section).each(function(i) {
 				if($(this).css("height","auto").outerHeight()<$(window).height()) {
-					$(this).css({"height":$(window).height()});
+					if(i > 0){
+						$(this).css({"height":($(window).height()+settings.offset)});
+					}else{
+						$(this).css({"height":$(window).height()});
+					}
 					overflow[i] = false;
 				} else {
 					$(this).css({"height":$(this).height()});
@@ -456,6 +460,7 @@
 				}
 			});
 		}
+		
 		function calculatePositions(resize) {
 			$(settings.section).each(function(i){
 				if(i>0) {
