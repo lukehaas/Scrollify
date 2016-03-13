@@ -167,8 +167,8 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
 ```
 ## Installation
 
-[bower](http://bower.io/) - bower install scrollify
-[npm](https://www.npmjs.com/) - npm install jquery-scrollify
+-	[bower](http://bower.io/) - bower install scrollify
+-	[npm](https://www.npmjs.com/) - npm install jquery-scrollify
 
 ## Behaviour
 
