@@ -1,6 +1,6 @@
 {
   "name": "Scrollify",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "homepage": "https://github.com/lukehaas/Scrollify",
   "authors": [
     "Luke Haas <lukehaas7@gmail.com>"
@@ -23,6 +23,6 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "~1.*"
+    "jquery": "*"
   }
 }

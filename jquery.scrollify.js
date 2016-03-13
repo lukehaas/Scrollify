@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.12
+ * Version 0.1.13
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -25,6 +25,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
 (function ($,window,document,undefined) {
 	"use strict";
 	var heights = [],
@@ -46,6 +47,7 @@
 		disabled = false,
 		scrollSamples = [],
 		scrollTime = new Date().getTime(),
+		firstLoad = true,
 		settings = {
 			//section should be an identifier that is the same for each section
 			section: "section",
@@ -57,35 +59,59 @@
 			axis:"y",
 			target:"html,body",
 			standardScrollElements: false,
+			setHeights: true,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
 			afterRender:function() {}
 		};
-	function animateScroll(index,instant) {
+	function animateScroll(index,instant,callbacks) {
 		if(disabled===true) {
 			return true;
 		}
 		if(names[index]) {
 			scrollable = false;
-			settings.before(index,elements);
+			if(callbacks) {
+				settings.before(index,elements);
+			}
 			interstitialIndex = 1;
-			if(settings.sectionName) {
+			if(settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
-				    history.replaceState(null, null, names[index]);
+				    try {
+						history.replaceState(null, null, names[index]);
+				    } catch (e) {
+				    	if(window.console) {
+				    		console.warn("Scrollify warning: This needs to be hosted on a server to manipulate the hash value.");
+				    	}
+				    }
+				    
 				} else {
 					window.location.hash = names[index];
 				}
 			}
 			if(instant) {
 				$(settings.target).stop().scrollTop(heights[index]);
-				settings.after(index,elements);
+				if(callbacks) {
+					settings.after(index,elements);
+				}
 			} else {
+				locked = true;
 				$(settings.target).stop().animate({
 					scrollTop: heights[index]
 				}, settings.scrollSpeed,settings.easing);
-				
-				$(settings.target).promise().done(function(){locked = false;settings.after(index,elements);});
+
+				if(window.location.hash.length) {
+					if($(window.location.hash).length && window.console) {
+						console.warn("Scrollify warning: There are IDs on the page that match the hash value - this will cause the page to anchor.");
+					}
+				}
+				$(settings.target).promise().done(function(){
+					locked = false;
+					firstLoad = false;
+					if(callbacks) {
+						settings.after(index,elements);
+					}
+				});
 			}
 
 		}
@@ -178,7 +204,7 @@
 				}
 				if(atBottom() || atTop()) {
 					index = closest;
-					animateScroll(closest,false);
+					animateScroll(closest,false,true);
 				}
 			},
 			wheelHandler:function(e,delta) {
@@ -217,7 +243,7 @@
 								e.preventDefault();
 								index++;
 								locked = true;
-								animateScroll(index,false);
+								animateScroll(index,false,true);
 							} else {
 								return false;
 							}
@@ -230,7 +256,7 @@
 								e.preventDefault();
 								index--;
 								locked = true;
-								animateScroll(index,false);
+								animateScroll(index,false,true);
 							} else {
 								return false
 							}
@@ -247,14 +273,14 @@
 					if(index>0) {
 						if(atTop()) {
 							index--;
-							animateScroll(index,false);
+							animateScroll(index,false,true);
 						}
 					}
 				} else if(e.keyCode==40) {
 					if(index<heights.length-1) {
 						if(atBottom()) {
 							index++;
-							animateScroll(index,false);
+							animateScroll(index,false,true);
 						}
 					}
 				}
@@ -364,7 +390,7 @@
 					if(atBottom() && index<heights.length-1) {
 						
 						index++;
-						animateScroll(index,false);
+						animateScroll(index,false,true);
 					} else {
 						if(Math.floor(elements[index].height()/$(window).height())>interstitialIndex) {
 
@@ -383,7 +409,7 @@
 					if(atTop() && index>0) {
 						
 						index--;
-						animateScroll(index,false);
+						animateScroll(index,false,true);
 					} else {
 						
 						if(interstitialIndex>2) {
@@ -426,9 +452,10 @@
 
 		calculatePositions(false);
 
-
 		if(true===hasLocation) {
-			animateScroll(index,false);
+			animateScroll(index,false,true);
+		} else {
+			animateScroll(0,true,true);
 		}
 		
 		manualScroll.init();
@@ -448,10 +475,14 @@
 		function sizePanels() {
 			$(settings.section).each(function(i) {
 				if($(this).css("height","auto").outerHeight()<$(window).height()) {
-					$(this).css({"height":$(window).height()});
+					if(settings.setHeights) {
+						$(this).css({"height":$(window).height()});
+					}
 					overflow[i] = false;
 				} else {
-					$(this).css({"height":$(this).height()});
+					if(settings.setHeights) {
+						$(this).css({"height":$(this).height()});
+					}
 					overflow[i] = true;
 				}
 			});
@@ -471,6 +502,9 @@
 				
 				elements[i] = $(this);
 
+				if($(names[i]).length && window.console) {
+					console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
+				}
 				if(window.location.hash===names[i]) {
 					index = i;
 					hasLocation = true;
@@ -479,7 +513,7 @@
 			});
 			
 			if(true===resize) {
-				animateScroll(index,false);
+				animateScroll(index,false,false);
 			} else {
 				settings.afterRender();
 			}
@@ -509,12 +543,12 @@
 			if(typeof panel === 'string') {
 				if (names[z]===panel) {
 					index = z;
-					animateScroll(z,instant);
+					animateScroll(z,instant,true);
 				}
 			} else {
 				if(z===panel) {
 					index = z;
-					animateScroll(z,instant);
+					animateScroll(z,instant,true);
 				}
 			}
 		}
@@ -534,25 +568,25 @@
 	$.scrollify.next = function() {
 		if(index<names.length) {
 			index += 1;
-			animateScroll(index,false);
+			animateScroll(index,false,true);
 		}
 	};
 	$.scrollify.previous = function() {
 		if(index>0) {
 			index -= 1;
-			animateScroll(index,false);
+			animateScroll(index,false,true);
 		}
 	};
 	$.scrollify.instantNext = function() {
 		if(index<names.length) {
 			index += 1;
-			animateScroll(index,true);
+			animateScroll(index,true,true);
 		}
 	};
 	$.scrollify.instantPrevious = function() {
 		if(index>0) {
 			index -= 1;
-			animateScroll(index,true);
+			animateScroll(index,true,true);
 		}
 	};
 	$.scrollify.destroy = function() {
@@ -592,5 +626,13 @@
 	};
 	$.scrollify.isDisabled = function() {
 		return disabled;
+	};
+	$.scrollify.setOptions = function(updatedOptions) {
+		if(typeof updatedOptions === "object") {
+			settings = $.extend(settings, updatedOptions);
+			util.handleResize();
+		} else if(window.console) {
+			console.warn("Scrollify warning: Options need to be in an object.");
+		}
 	};
 }(jQuery,this,document));

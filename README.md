@@ -46,6 +46,7 @@ $.scrollify({
 		offset : 0,
 		scrollbars: true,
 		standardScrollElements: "",
+		setHeights: true,
 		before:function() {},
 		after:function() {},
 		afterResize:function() {},
@@ -59,7 +60,7 @@ $.scrollify({
 A CSS selector for the sections.
 
 `sectionName`
-Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`.
+Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`. Set this to `false` to disable hash values.
 
 `easing`
 Define the easing method.
@@ -73,8 +74,11 @@ A boolean to define whether scroll bars are visible or not.
 `standardScrollElements`
 A string of selectors for elements that require standard scrolling behaviour. For example `standardScrollElements: ".map, .frame"`.
 
+`setHeights`
+A boolean to define whether Scollify assigns a height to the sections. True by default.
+
 `before`
-A callback that is fired before a section is scrolled to via the move method. Arguments include the index of the section and an array of all section elements.
+A callback that is fired before a section is scrolled to. Arguments include the index of the section and an array of all section elements.
 
 `after`
 A callback that is fired after a new section is scrolled to. Arguments include the index of the section and an array of all section elements.
@@ -134,6 +138,39 @@ The enable method resumes the scroll snap behaviour after the disable method has
 `$.scrollify.isDisabled()`
 
 The isDisabled method returns true if Scrollify is currently disabled, otherwise false.
+
+
+`$.scrollify.setOptions()`
+
+The setOptions method can be used to change any of the initialisation options. Just parse it an options object.
+
+## Setup with SectionName
+
+Scrollify appends a hash value to the URL for each section, this allows for permalinking to particular sections. To define the hash value for each section you need to set a data-attribute on your sections. This data attribute can be called anything you like. The default is "section-name", but if you'd like something else then you'll need to define it with the `sectionName` option.
+
+```
+<! doctype html>
+	<html>
+		<head>
+			<script>
+				$(function() {
+					$.scrollify({
+						section : ".section-class-name",
+						sectionName : "section-name"
+					});
+				});
+			</script>
+		</head>
+		<body>
+			<div class="section-class-name" data-section-name="home"></div>
+			<div class="section-class-name" data-section-name="about"></div>
+		</body>
+	</html>
+```
+## Installation
+
+[bower](http://bower.io/) - bower install scrollify
+[npm](https://www.npmjs.com/) - npm install jquery-scrollify
 
 ## Behaviour
 
