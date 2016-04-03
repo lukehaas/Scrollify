@@ -474,16 +474,22 @@
 
 		function sizePanels() {
 			$(settings.section).each(function(i) {
-				if($(this).css("height","auto").outerHeight()<$(window).height()) {
-					if(settings.setHeights) {
+				if(settings.setHeights) {
+					if($(this).css("height","auto").outerHeight()<$(window).height()) {
 						$(this).css({"height":$(window).height()});
-					}
-					overflow[i] = false;
-				} else {
-					if(settings.setHeights) {
+						
+						overflow[i] = false;
+					} else {
 						$(this).css({"height":$(this).height()});
+						
+						overflow[i] = true;
 					}
-					overflow[i] = true;
+				} else {
+					if($(this).outerHeight()<$(window).height()) {
+						overflow[i] = false;
+					} else {
+						overflow[i] = true;
+					}
 				}
 			});
 		}
