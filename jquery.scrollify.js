@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.13
+ * Version 0.1.14
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -25,8 +25,36 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-
-(function ($,window,document,undefined) {
+(function (global,factory) {
+	"use strict";
+    if (typeof define === 'function' && define.amd) {
+        // AMD. Register as an anonymous module.
+        define(['jquery'], function($) {
+        	return factory($, global, global.document);
+        });
+    } else if (typeof module === 'object' && module.exports) {
+        // Node/CommonJS
+        module.exports = function( root, jQuery ) {
+            if ( jQuery === undefined ) {
+                // require('jQuery') returns a factory that requires window to
+                // build a jQuery instance, we normalize how we use modules
+                // that require this pattern but the window provided is a noop
+                // if it's defined (how jquery works)
+                if ( typeof window !== 'undefined' ) {
+                    jQuery = require('jquery');
+                }
+                else {
+                    jQuery = require('jquery')(root);
+                }
+            }
+            factory(jQuery, global, global.document);
+            return jQuery;
+        };
+    } else {
+        // Browser globals
+        factory(jQuery, global, global.document);
+    }
+}(typeof window !== 'undefined' ? window : this, function ($, window, document, undefined) {
 	"use strict";
 	var heights = [],
 		names = [],
@@ -641,4 +669,4 @@
 			console.warn("Scrollify warning: Options need to be in an object.");
 		}
 	};
-}(jQuery,this,document));
+}));
