@@ -68,7 +68,7 @@
 		top = $(window).scrollTop(),
 		scrollable = false,
 		locked = false,
-		scrolled = false,
+		scrolled = true,
 		manualScroll,
 		swipeScroll,
 		util,
@@ -126,7 +126,15 @@
 				locked = true;
 				$(settings.target).stop().animate({
 					scrollTop: heights[index]
-				}, settings.scrollSpeed,settings.easing);
+				}, {
+					step: function() {
+						if(!scrolled) {
+							$(settings.target).stop();
+						}
+					},
+					duration: settings.scrollSpeed,
+					easing: settings.easing
+				});
 
 				if(window.location.hash.length) {
 					if($(window.location.hash).length && window.console) {
@@ -136,6 +144,7 @@
 				$(settings.target).promise().done(function(){
 					locked = false;
 					firstLoad = false;
+					scrolled = true;
 					if(callbacks) {
 						settings.after(index,elements);
 					}
