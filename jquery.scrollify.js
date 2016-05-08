@@ -129,8 +129,12 @@
 				}, settings.scrollSpeed,settings.easing);
 
 				if(window.location.hash.length) {
-					if($(window.location.hash).length && window.console) {
-						console.warn("Scrollify warning: There are IDs on the page that match the hash value - this will cause the page to anchor.");
+					try {
+						if($(window.location.hash).length && window.console) {
+							console.warn("Scrollify warning: There are IDs on the page that match the hash value - this will cause the page to anchor.");
+						}
+					} catch (e) {
+						console.warn("Scrollify warning:", window.location.hash, "is not a valid jQuery expression, skipping hash value detection");
 					}
 				}
 				$(settings.target).promise().done(function(){
