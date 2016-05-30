@@ -1,6 +1,6 @@
 # [jQuery Scrollify](http://projects.lukehaas.me/scrollify)
 
-A jQuery plugin that assists scrolling and snaps to sections. Touch optimised. 
+A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
 
 ## Demo
 
@@ -172,7 +172,7 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
 
 ## Behaviour
 
-Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scoll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar. 
+Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scoll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar.
 
 If you are viewing a panel with a height that is greater than the window, Scrollify will only snap to another section if you are at the top or bottom of the panel, allowing for normal scrolling behaviour inbetween these points.
 
@@ -181,6 +181,11 @@ If you are viewing a panel with a height that is greater than the window, Scroll
 ![IE](https://raw.github.com/alrra/browser-logos/master/internet-explorer/internet-explorer_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
 IE 7+ ✔ | Chrome ✔ | Firefox ✔ | Opera ✔ | Safari ✔ |
+
+
+[![Browserstack](http://wallpapers-for-ipad.com/fullpage/imgs3/logos/browserstack.png)](http://www.browserstack.com/)
+
+Special thanks to [Browserstack](http://www.browserstack.com/) for supporting Scrollify.
 
 ## Contributing
 
@@ -194,4 +199,3 @@ IE 7+ ✔ | Chrome ✔ | Firefox ✔ | Opera ✔ | Safari ✔ |
 ## License
 
 [MIT License](https://github.com/lukehaas/Scrollify/blob/master/LICENSE)
-
