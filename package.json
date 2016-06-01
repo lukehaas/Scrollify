@@ -1,6 +1,6 @@
 {
   "name": "jquery-scrollify",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "A jQuery plugin that assists scrolling and smoothly snaps to sections.",
   "main": "jquery.scrollify.js",
   "scripts": {
