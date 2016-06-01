@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.14
+ * Version 0.1.15
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -14,10 +14,10 @@
  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
  * the Software, and to permit persons to whom the Software is furnished to do so,
  * subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
@@ -80,6 +80,7 @@
 			//section should be an identifier that is the same for each section
 			section: "section",
 			sectionName: "section-name",
+			interstitialSection: "",
 			easing: "easeOutExpo",
 			scrollSpeed: 1100,
 			offset : 0,
@@ -106,13 +107,13 @@
 			if(settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
 				    try {
-						history.replaceState(null, null, names[index]);
+							history.replaceState(null, null, names[index]);
 				    } catch (e) {
 				    	if(window.console) {
 				    		console.warn("Scrollify warning: This needs to be hosted on a server to manipulate the hash value.");
 				    	}
 				    }
-				    
+
 				} else {
 					window.location.hash = names[index];
 				}
@@ -124,9 +125,18 @@
 				}
 			} else {
 				locked = true;
-				$(settings.target).stop().animate({
-					scrollTop: heights[index]
-				}, settings.scrollSpeed,settings.easing);
+				if( jQuery().velocity ) {
+					$(settings.target).stop().velocity('scroll', {
+	          duration: settings.scrollSpeed,
+	          easing: settings.easing,
+	          offset: heights[index],
+	          mobileHA: false
+          });
+				} else {
+					$(settings.target).stop().animate({
+						scrollTop: heights[index]
+					}, settings.scrollSpeed,settings.easing);
+				}
 
 				if(window.location.hash.length) {
 					try {
@@ -182,7 +192,7 @@
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
-		
+
 
 		manualScroll = {
 			handleMousedown:function() {
@@ -206,10 +216,10 @@
 					return true;
 				}
 				if(timeoutId){
-					clearTimeout(timeoutId);  
+					clearTimeout(timeoutId);
 				}
 				timeoutId = setTimeout(function(){
-						
+
 					scrolled = true;
 					if(scrollable===false) {
 						return false;
@@ -228,7 +238,7 @@
 					diff;
 				for(;i<max;i++) {
 					diff = Math.abs(heights[i] - top);
-					
+
 					if(diff < prev) {
 						prev = diff;
 						closest = i;
@@ -253,7 +263,7 @@
 				var currentScrollTime = new Date().getTime();
 				delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
 
-				
+
 				if((currentScrollTime-scrollTime) > 1300){
 					scrollSamples = [];
 				}
@@ -325,15 +335,15 @@
 				} else {
 					$("body").css({"overflow":"hidden"});
 				}
-				
+
 				$(document).bind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
 				$(document).bind('keydown', manualScroll.keyHandler);
 			}
 		};
-		
+
 		swipeScroll = {
 			touches : {
-				"touchstart": {"y":-1,"x":-1}, 
+				"touchstart": {"y":-1,"x":-1},
 				"touchmove" : {"y":-1,"x":-1},
 				"touchend"  : false,
 				"direction" : "undetermined"
@@ -352,7 +362,7 @@
 					}
 				}
 				var touch;
-				if (typeof event !== 'undefined'){	
+				if (typeof event !== 'undefined'){
 					if (typeof event.touches !== 'undefined') {
 						touch = event.touches[0];
 						switch (event.type) {
@@ -374,18 +384,18 @@
 									//}
 									swipeScroll.touches.direction = "y";
 									if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
-										
+
 										swipeScroll.touches.touchend = true;
 										if (swipeScroll.touches.touchstart.y > -1) {
 
 											if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
 												if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
-													
+
 													swipeScroll.up();
 
 												} else {
 													swipeScroll.down();
-													
+
 												}
 											}
 										}
@@ -400,10 +410,10 @@
 										if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
 											if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
 												swipeScroll.up();
-												
+
 											} else {
 												swipeScroll.down();
-												
+
 											}
 										}
 										swipeScroll.touches.touchstart.y = -1;
@@ -420,7 +430,7 @@
 			down: function() {
 				if(index<=heights.length-1) {
 					if(atBottom() && index<heights.length-1) {
-						
+
 						index++;
 						animateScroll(index,false,true);
 					} else {
@@ -432,23 +442,23 @@
 						} else {
 							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$(window).height()));
 						}
-						
+
 					}
 				}
 			},
 			up: function() {
 				if(index>=0) {
 					if(atTop() && index>0) {
-						
+
 						index--;
 						animateScroll(index,false,true);
 					} else {
-						
+
 						if(interstitialIndex>2) {
 
 							interstitialIndex -= 1;
 							interstitialScroll(parseInt(heights[index])+($(window).height()*interstitialIndex));
-							
+
 						} else {
 
 							interstitialIndex = 1;
@@ -460,8 +470,8 @@
 			},
 			init: function() {
 				if (document.addEventListener) {
-					document.addEventListener('touchstart', swipeScroll.touchHandler, false);	
-					document.addEventListener('touchmove', swipeScroll.touchHandler, false);	
+					document.addEventListener('touchstart', swipeScroll.touchHandler, false);
+					document.addEventListener('touchmove', swipeScroll.touchHandler, false);
 					document.addEventListener('touchend', swipeScroll.touchHandler, false);
 				}
 			}
@@ -469,17 +479,25 @@
 
 
 		util = {
-			handleResize:function() {
+			refresh:function(withCallback) {
 				clearTimeout(timeoutId2);
 				timeoutId2 = setTimeout(function() {
 					sizePanels();
 					calculatePositions(true);
-					settings.afterResize();
+					if(withCallback) {
+							settings.afterResize();
+					}
 				},400);
+			},
+			handleUpdate:function() {
+				util.refresh(false);
+			},
+			handleResize:function() {
+				util.refresh(true);
 			}
 		};
 		settings = $.extend(settings, options);
-		
+
 		sizePanels();
 
 		calculatePositions(false);
@@ -487,9 +505,11 @@
 		if(true===hasLocation) {
 			animateScroll(index,false,true);
 		} else {
-			animateScroll(0,true,true);
+			setTimeout(function() {
+				animateScroll(0,false,true);
+			},200);
 		}
-		
+
 		manualScroll.init();
 		swipeScroll.init();
 
@@ -499,23 +519,42 @@
 		}
 
 		function interstitialScroll(pos) {
-			$(settings.target).stop().animate({
-				scrollTop: pos
-			}, settings.scrollSpeed,settings.easing);
+			if( jQuery().velocity ) {
+				$(settings.target).stop().velocity('scroll', {
+					duration: settings.scrollSpeed,
+					easing: settings.easing,
+					offset: pos,
+					mobileHA: false
+				});
+			} else {
+				$(settings.target).stop().animate({
+					scrollTop: pos
+				}, settings.scrollSpeed,settings.easing);
+			}
 		}
 
 		function sizePanels() {
-			$(settings.section).each(function(i) {
+			var selector = settings.section;
+			if(settings.interstitialSection.length) {
+				selector += "," + settings.interstitialSection;
+			}
+			$(selector).each(function(i) {
 				if(settings.setHeights) {
-					if($(this).css("height","auto").outerHeight()<$(window).height()) {
-						$(this).css({"height":$(window).height()});
-						
+					if($(this).is(settings.interstitialSection)) {
 						overflow[i] = false;
 					} else {
-						$(this).css({"height":$(this).height()});
-						
-						overflow[i] = true;
+
+						if($(this).css("height","auto").outerHeight()<$(window).height()) {
+							$(this).css({"height":$(window).height()});
+
+							overflow[i] = false;
+						} else {
+							$(this).css({"height":$(this).height()});
+
+							overflow[i] = true;
+						}
 					}
+
 				} else {
 					if($(this).outerHeight()<$(window).height()) {
 						overflow[i] = false;
@@ -526,30 +565,37 @@
 			});
 		}
 		function calculatePositions(resize) {
-			$(settings.section).each(function(i){
-				if(i>0) {
-					heights[i] = parseInt($(this).offset().top) + settings.offset;
-				} else {
-					heights[i] = parseInt($(this).offset().top);
-				}
-				if(settings.sectionName && $(this).data(settings.sectionName)) {
-					names[i] = "#" + $(this).data(settings.sectionName).replace(/ /g,"-");
-				} else {
-					names[i] = "#" + (i + 1);
-				}
-				
-				elements[i] = $(this);
+			var selector = settings.section;
+			if(settings.interstitialSection.length) {
+				selector += "," + settings.interstitialSection;
+			}
+			$(selector).each(function(i){
+					if(i>0) {
+						heights[i] = parseInt($(this).offset().top) + settings.offset;
+					} else {
+						heights[i] = parseInt($(this).offset().top);
+					}
+					if(settings.sectionName && $(this).data(settings.sectionName)) {
+						names[i] = "#" + $(this).data(settings.sectionName).replace(/ /g,"-");
+					} else {
+						if($(this).is(settings.interstitialSection)===false) {
+							names[i] = "#" + (i + 1);
+						} else {
+							names[i] = "#";
+						}
+					}
+					elements[i] = $(this);
 
-				if($(names[i]).length && window.console) {
-					console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
-				}
-				if(window.location.hash===names[i]) {
-					index = i;
-					hasLocation = true;
-					
-				}
+					if($(names[i]).length && window.console) {
+						console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
+					}
+					if(window.location.hash===names[i]) {
+						index = i;
+						hasLocation = true;
+					}
+
 			});
-			
+
 			if(true===resize) {
 				animateScroll(index,false,false);
 			} else {
@@ -628,9 +674,11 @@
 		}
 	};
 	$.scrollify.destroy = function() {
-		$(settings.section).each(function() {
-			$(this).css("height","auto");
-		});
+		if(settings.setHeights) {
+			$(settings.section).each(function() {
+				$(this).css("height","auto");
+			});
+		}
 		$(window).unbind("resize",util.handleResize);
 		if(settings.scrollbars) {
 			$(window).unbind('mousedown', manualScroll.handleMousedown);
@@ -641,8 +689,8 @@
 		$(document).unbind('keydown', manualScroll.keyHandler);
 
 		if (document.addEventListener) {
-			document.removeEventListener('touchstart', swipeScroll.touchHandler, false);	
-			document.removeEventListener('touchmove', swipeScroll.touchHandler, false);	
+			document.removeEventListener('touchstart', swipeScroll.touchHandler, false);
+			document.removeEventListener('touchmove', swipeScroll.touchHandler, false);
 			document.removeEventListener('touchend', swipeScroll.touchHandler, false);
 		}
 		heights = [];
@@ -651,7 +699,7 @@
 		overflow = [];
 	};
 	$.scrollify.update = function() {
-		util.handleResize();
+		util.handleUpdate();
 	};
 	$.scrollify.current = function() {
 		return elements[index];
@@ -668,7 +716,7 @@
 	$.scrollify.setOptions = function(updatedOptions) {
 		if(typeof updatedOptions === "object") {
 			settings = $.extend(settings, updatedOptions);
-			util.handleResize();
+			util.handleUpdate();
 		} else if(window.console) {
 			console.warn("Scrollify warning: Options need to be in an object.");
 		}

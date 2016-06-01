@@ -19,14 +19,14 @@ The most basic setup is as follows:
 			<script>
 				$(function() {
 					$.scrollify({
-						section : ".section-class-name",
+						section : ".example-classname",
 					});
 				});
 			</script>
 		</head>
 		<body>
-			<div class="section-class-name"></div>
-			<div class="section-class-name"></div>
+			<div class="example-classname"></div>
+			<div class="example-classname"></div>
 		</body>
 	</html>
 ```
@@ -37,8 +37,9 @@ This is the default configuration:
 
 ```
 $.scrollify({
-		section : ".section-class-name",
+		section : ".example-classname",
 		sectionName : "section-name",
+		interstitialSection : "",
 		easing: "easeOutExpo",
 		scrollSpeed: 1100,
 		offset : 0,
@@ -55,10 +56,13 @@ $.scrollify({
 ## Options
 
 `section`
-A CSS selector for the sections.
+A CSS selector for the sections of the page.
 
 `sectionName`
 Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`. Set this to `false` to disable hash values.
+
+`interstitialSection`
+A CSS selector for non-full-height sections, such as a header and footer.
 
 `easing`
 Define the easing method.
@@ -70,7 +74,7 @@ A distance in pixels to offset each sections position by.
 A boolean to define whether scroll bars are visible or not.
 
 `standardScrollElements`
-A string of selectors for elements that require standard scrolling behaviour. For example `standardScrollElements: ".map, .frame"`.
+A CSS selector for elements within sections that require standard scrolling behaviour. For example `standardScrollElements: ".map, .frame"`.
 
 `setHeights`
 A boolean to define whether Scollify assigns a height to the sections. True by default.
