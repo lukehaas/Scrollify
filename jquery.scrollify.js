@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.15
+ * Version 1.0.0
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -65,7 +65,8 @@
 		hasLocation = false,
 		timeoutId,
 		timeoutId2,
-		top = $(window).scrollTop(),
+		$window = $(window),
+		top = $window.scrollTop(),
 		scrollable = false,
 		locked = false,
 		scrolled = false,
@@ -76,9 +77,10 @@
 		scrollSamples = [],
 		scrollTime = new Date().getTime(),
 		firstLoad = true,
+		initialised = false,
 		settings = {
 			//section should be an identifier that is the same for each section
-			section: "section",
+			section: ".section",
 			sectionName: "section-name",
 			interstitialSection: "",
 			easing: "easeOutExpo",
@@ -89,6 +91,7 @@
 			target:"html,body",
 			standardScrollElements: false,
 			setHeights: true,
+			overflowScroll:true,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
@@ -138,13 +141,13 @@
 					}, settings.scrollSpeed,settings.easing);
 				}
 
-				if(window.location.hash.length) {
+				if(window.location.hash.length && settings.sectionName && window.console) {
 					try {
-						if($(window.location.hash).length && window.console) {
+						if($(window.location.hash).length) {
 							console.warn("Scrollify warning: There are IDs on the page that match the hash value - this will cause the page to anchor.");
 						}
 					} catch (e) {
-						console.warn("Scrollify warning:", window.location.hash, "is not a valid jQuery expression, skipping hash value detection");
+						console.warn("Scrollify warning:", window.location.hash, "is not a valid jQuery expression.");
 					}
 				}
 				$(settings.target).promise().done(function(){
@@ -189,6 +192,8 @@
         }
 	}
 	$.scrollify = function(options) {
+		initialised = true;
+
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
@@ -230,7 +235,7 @@
 				}, 200);
 			},
 			calculateNearest:function() {
-				top = $(window).scrollTop();
+				top = $window.scrollTop();
 				var i =1,
 					max = heights.length,
 					closest = 0,
@@ -329,9 +334,9 @@
 			},
 			init:function() {
 				if(settings.scrollbars) {
-					$(window).bind('mousedown', manualScroll.handleMousedown);
-					$(window).bind('mouseup', manualScroll.handleMouseup);
-					$(window).bind('scroll', manualScroll.handleScroll);
+					$window.bind('mousedown', manualScroll.handleMousedown);
+					$window.bind('mouseup', manualScroll.handleMouseup);
+					$window.bind('scroll', manualScroll.handleScroll);
 				} else {
 					$("body").css({"overflow":"hidden"});
 				}
@@ -434,13 +439,13 @@
 						index++;
 						animateScroll(index,false,true);
 					} else {
-						if(Math.floor(elements[index].height()/$(window).height())>interstitialIndex) {
+						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
 
-							interstitialScroll(parseInt(heights[index])+($(window).height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
 							interstitialIndex += 1;
 
 						} else {
-							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$(window).height()));
+							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$window.height()));
 						}
 
 					}
@@ -457,7 +462,7 @@
 						if(interstitialIndex>2) {
 
 							interstitialIndex -= 1;
-							interstitialScroll(parseInt(heights[index])+($(window).height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
 
 						} else {
 
@@ -509,13 +514,14 @@
 				animateScroll(0,false,true);
 			},200);
 		}
+		if(heights.length) {
+			manualScroll.init();
+			swipeScroll.init();
 
-		manualScroll.init();
-		swipeScroll.init();
-
-		$(window).bind("resize",util.handleResize);
-		if (document.addEventListener) {
-			window.addEventListener("orientationchange", util.handleResize, false);
+			$window.bind("resize",util.handleResize);
+			if (document.addEventListener) {
+				window.addEventListener("orientationchange", util.handleResize, false);
+			}
 		}
 
 		function interstitialScroll(pos) {
@@ -535,6 +541,7 @@
 
 		function sizePanels() {
 			var selector = settings.section;
+			overflow = [];
 			if(settings.interstitialSection.length) {
 				selector += "," + settings.interstitialSection;
 			}
@@ -544,19 +551,25 @@
 						overflow[i] = false;
 					} else {
 
-						if($(this).css("height","auto").outerHeight()<$(window).height()) {
-							$(this).css({"height":$(window).height()});
+						if(($(this).css("height","auto").outerHeight()<$window.height()) || $(this).css("overflow")==="hidden") {
+							$(this).css({"height":$window.height()});
 
 							overflow[i] = false;
 						} else {
 							$(this).css({"height":$(this).height()});
 
-							overflow[i] = true;
+							if(settings.overflowScroll) {
+									overflow[i] = true;
+							} else {
+								overflow[i] = false;
+							}
 						}
+
 					}
 
 				} else {
-					if($(this).outerHeight()<$(window).height()) {
+
+					if(($(this).outerHeight()<$window.height()) || (settings.overflowScroll===false)) {
 						overflow[i] = false;
 					} else {
 						overflow[i] = true;
@@ -569,6 +582,9 @@
 			if(settings.interstitialSection.length) {
 				selector += "," + settings.interstitialSection;
 			}
+			heights = [];
+			names = [];
+			elements = [];
 			$(selector).each(function(i){
 					if(i>0) {
 						heights[i] = parseInt($(this).offset().top) + settings.offset;
@@ -604,7 +620,10 @@
 		}
 
 		function atTop() {
-			top = $(window).scrollTop();
+			if(!overflow[index]) {
+				return true;
+			}
+			top = $window.scrollTop();
 			if(top>parseInt(heights[index])) {
 				return false;
 			} else {
@@ -612,8 +631,11 @@
 			}
 		}
 		function atBottom() {
-			top = $(window).scrollTop();
-			if(top<parseInt(heights[index])+(elements[index].height()-$(window).height())) {
+			if(!overflow[index]) {
+				return true;
+			}
+			top = $window.scrollTop();
+			if(top<parseInt(heights[index])+(elements[index].height()-$window.height())) {
 				return false;
 			} else {
 				return true;
@@ -640,6 +662,9 @@
 	$.scrollify.move = function(panel) {
 		if(panel===undefined) {
 			return false;
+		}
+		if(panel.originalEvent) {
+			panel = $(this).attr("href");
 		}
 		move(panel,false);
 	};
@@ -674,16 +699,19 @@
 		}
 	};
 	$.scrollify.destroy = function() {
+		if(!initialised) {
+			return false;
+		}
 		if(settings.setHeights) {
 			$(settings.section).each(function() {
 				$(this).css("height","auto");
 			});
 		}
-		$(window).unbind("resize",util.handleResize);
+		$window.unbind("resize",util.handleResize);
 		if(settings.scrollbars) {
-			$(window).unbind('mousedown', manualScroll.handleMousedown);
-			$(window).unbind('mouseup', manualScroll.handleMouseup);
-			$(window).unbind('scroll', manualScroll.handleScroll);
+			$window.unbind('mousedown', manualScroll.handleMousedown);
+			$window.unbind('mouseup', manualScroll.handleMouseup);
+			$window.unbind('scroll', manualScroll.handleScroll);
 		}
 		$(document).unbind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
 		$(document).unbind('keydown', manualScroll.keyHandler);
@@ -699,6 +727,9 @@
 		overflow = [];
 	};
 	$.scrollify.update = function() {
+		if(!initialised) {
+			return false;
+		}
 		util.handleUpdate();
 	};
 	$.scrollify.current = function() {
@@ -714,6 +745,9 @@
 		return disabled;
 	};
 	$.scrollify.setOptions = function(updatedOptions) {
+		if(!initialised) {
+			return false;
+		}
 		if(typeof updatedOptions === "object") {
 			settings = $.extend(settings, updatedOptions);
 			util.handleUpdate();

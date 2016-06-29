@@ -6,6 +6,10 @@ A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
 
 [http://projects.lukehaas.me/scrollify](http://projects.lukehaas.me/scrollify).
 
+##More examples
+
+[Scroll animations](http://projects.lukehaas.me/scrollify/examples/apple).
+
 ## Basic setup
 
 Scrollify requires jQuery 1.6+.
@@ -46,6 +50,7 @@ $.scrollify({
 		scrollbars: true,
 		standardScrollElements: "",
 		setHeights: true,
+		overflowScroll: true,
 		before:function() {},
 		after:function() {},
 		afterResize:function() {},
@@ -79,16 +84,19 @@ A CSS selector for elements within sections that require standard scrolling beha
 `setHeights`
 A boolean to define whether Scollify assigns a height to the sections. True by default.
 
-`before`
+`overflowScroll`
+
+
+`before(index, sections)`
 A callback that is fired before a section is scrolled to. Arguments include the index of the section and an array of all section elements.
 
-`after`
+`after(index, sections)`
 A callback that is fired after a new section is scrolled to. Arguments include the index of the section and an array of all section elements.
 
-`afterResize`
+`afterResize()`
 A callback that is fired after the window is resized.
 
-`afterRender`
+`afterRender()`
 A callback that is fired after Scrollify's initialisation.
 
 ## Methods
@@ -146,6 +154,27 @@ The isDisabled method returns true if Scrollify is currently disabled, otherwise
 
 The setOptions method can be used to change any of the initialisation options. Just parse it an options object.
 
+## Issues
+
+If you're working with Scrollify and having issues, please post your questions to [Stackoverflow](http://stackoverflow.com) and tag it with 'jquery-scrollify'.
+
+If you think the issue is with Scrollify itself, please check the [open issues](https://github.com/lukehaas/Scrollify/issues) to see if it has already been logged. If it hasn't, please open a ticket with a detailed description of what you're seeing and details of the device and browser version you're seeing it on.
+
+## FAQ
+
+- Do I have to use the section element for Scrollify sections?
+No, Scrollify sections have no relation to the section element. Scrollify sections can be any element you want.
+
+- Can sections receive an active class when they are scrolled to?
+Yes, this is something you can easily do in either the `before` or `after` callbacks (which ever suites you best).
+
+- Can Scrollify be used for horizontal scrolling?
+No, this is not currently supported.
+
+- Can I disable Scrollify on mobile?
+Yes. Scrollify works well on mobile but if you need to disable it you can use the disable method. `$.scrollify.disable()`.
+
+
 ## Setup with SectionName
 
 Scrollify appends a hash value to the URL for each section, this allows for permalinking to particular sections. To define the hash value for each section you need to set a data-attribute on your sections. This data attribute can be called anything you like. The default is "section-name", but if you'd like something else then you'll need to define it with the `sectionName` option.
@@ -174,11 +203,6 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
 -	[bower](http://bower.io/) - bower install Scrollify
 -	[npm](https://www.npmjs.com/) - npm install jquery-scrollify
 
-## Behaviour
-
-Scrollify will set a height on panels equal to the window height unless a panel is already equal to or greater than the window height. On scrolling up or down, Scrollify will snap the scoll position to a panel that is one along from the current panel, in the direction of scrolling. Scrolling can be done via the keyboards up and down arrows, the mouse wheel, a trackpad, or clicking and dragging the scroll bar.
-
-If you are viewing a panel with a height that is greater than the window, Scrollify will only snap to another section if you are at the top or bottom of the panel, allowing for normal scrolling behaviour inbetween these points.
 
 ## Browser Support
 
