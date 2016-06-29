@@ -84,7 +84,7 @@ A CSS selector for elements within sections that require standard scrolling beha
 `setHeights`
 A boolean to define whether Scollify assigns a height to the sections. True by default.
 
-`overflowScroll`
+
 
 
 `before(index, sections)`
@@ -211,7 +211,7 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
 IE 7+ ✔ | Chrome ✔ | Firefox ✔ | Opera ✔ | Safari ✔ |
 
 
-[![Browserstack](http://wallpapers-for-ipad.com/fullpage/imgs3/logos/browserstack.png)](http://www.browserstack.com/)
+[![Browserstack](http://projects.lukehaas.me/scrollify/images/browserstack2.png)](http://www.browserstack.com/)
 
 Special thanks to [Browserstack](http://www.browserstack.com/) for supporting Scrollify.
 

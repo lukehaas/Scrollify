@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.0
+ * Version 0.1.15
  *
  * Requires:
  * - jQuery 1.6 or higher
