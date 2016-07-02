@@ -84,8 +84,8 @@ A CSS selector for elements within sections that require standard scrolling beha
 `setHeights`
 A boolean to define whether Scollify assigns a height to the sections. True by default.
 
-
-
+`overflowScroll`
+A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default.
 
 `before(index, sections)`
 A callback that is fired before a section is scrolled to. Arguments include the index of the section and an array of all section elements.
@@ -163,15 +163,19 @@ If you think the issue is with Scrollify itself, please check the [open issues](
 ## FAQ
 
 - Do I have to use the section element for Scrollify sections?
+
 No, Scrollify sections have no relation to the section element. Scrollify sections can be any element you want.
 
 - Can sections receive an active class when they are scrolled to?
+
 Yes, this is something you can easily do in either the `before` or `after` callbacks (which ever suites you best).
 
 - Can Scrollify be used for horizontal scrolling?
+
 No, this is not currently supported.
 
 - Can I disable Scrollify on mobile?
+
 Yes. Scrollify works well on mobile but if you need to disable it you can use the disable method. `$.scrollify.disable()`.
 
 

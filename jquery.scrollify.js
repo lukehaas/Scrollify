@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 0.1.15
+ * Version 1.0.0
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -508,10 +508,10 @@
 		calculatePositions(false);
 
 		if(true===hasLocation) {
-			animateScroll(index,false,true);
+			animateScroll(index,false,false);
 		} else {
 			setTimeout(function() {
-				animateScroll(0,false,true);
+				animateScroll(0,false,false);
 			},200);
 		}
 		if(heights.length) {
