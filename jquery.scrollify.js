@@ -316,6 +316,9 @@
 				if(disabled===true) {
 					return true;
 				}
+				if(locked===true) {
+					return false;
+				}
 				if(e.keyCode==38) {
 					if(index>0) {
 						if(atTop()) {
@@ -434,6 +437,7 @@
 			},
 			down: function() {
 				if(index<=heights.length-1) {
+
 					if(atBottom() && index<heights.length-1) {
 
 						index++;
@@ -508,10 +512,10 @@
 		calculatePositions(false);
 
 		if(true===hasLocation) {
-			animateScroll(index,false,false);
+			animateScroll(index,false,true);
 		} else {
 			setTimeout(function() {
-				animateScroll(0,false,false);
+				animateScroll(0,false,true);
 			},200);
 		}
 		if(heights.length) {
@@ -523,7 +527,6 @@
 				window.addEventListener("orientationchange", util.handleResize, false);
 			}
 		}
-
 		function interstitialScroll(pos) {
 			if( jQuery().velocity ) {
 				$(settings.target).stop().velocity('scroll', {
@@ -635,8 +638,11 @@
 				return true;
 			}
 			top = $window.scrollTop();
-			if(top<parseInt(heights[index])+(elements[index].height()-$window.height())) {
+
+			if(top<parseInt(heights[index])+(elements[index].outerHeight()-$window.height())-28) {
+
 				return false;
+
 			} else {
 				return true;
 			}
