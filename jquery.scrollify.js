@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.0
+ * Version 1.0.1
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -128,7 +128,7 @@
 				}
 			} else {
 				locked = true;
-				if( jQuery().velocity ) {
+				if( $().velocity ) {
 					$(settings.target).stop().velocity('scroll', {
 	          duration: settings.scrollSpeed,
 	          easing: settings.easing,
@@ -520,7 +520,7 @@
 			}
 		}
 		function interstitialScroll(pos) {
-			if( jQuery().velocity ) {
+			if( $().velocity ) {
 				$(settings.target).stop().velocity('scroll', {
 					duration: settings.scrollSpeed,
 					easing: settings.easing,
