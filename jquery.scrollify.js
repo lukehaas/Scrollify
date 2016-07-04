@@ -163,33 +163,26 @@
 	}
 
 	function isAccelerating(samples) {
+				function average(num) {
+					var sum = 0;
 
-        if(samples<4) {
-        	return false;
-        }
-        var limit = 20,sum = 0,i = samples.length-1,l;
-        if(samples.length<limit*2) {
-        	limit = Math.floor(samples.length/2);
-        }
-        l = samples.length-limit;
-        for(;i>=l;i--) {
-        	sum = sum+samples[i];
-        }
-        var average1 = sum/limit;
+					var lastElements = samples.slice(Math.max(samples.length - num, 1));
 
-        sum = 0;
-        i = samples.length-limit-1;
-        l = samples.length-(limit*2);
-        for(;i>=l;i--) {
-        	sum = sum+samples[i];
-        }
-        var average2 = sum/limit;
+          for(var i = 0; i < lastElements.length; i++){
+              sum += lastElements[i];
+          }
 
-        if(average1>=average2) {
-        	return true;
-        } else {
-        	return false;
-        }
+          return Math.ceil(sum/num);
+				}
+
+				var avEnd = average(10);
+        var avMiddle = average(70);
+
+        if(avEnd >= avMiddle) {
+					return true;
+				} else {
+					return false;
+				}
 	}
 	$.scrollify = function(options) {
 		initialised = true;
@@ -197,7 +190,6 @@
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
-
 
 		manualScroll = {
 			handleMousedown:function() {
@@ -268,16 +260,16 @@
 				var currentScrollTime = new Date().getTime();
 				delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
 
+				if(scrollSamples.length > 149){
+					scrollSamples.shift();
+				}
+				scrollSamples.push(Math.abs(delta*10));
 
-				if((currentScrollTime-scrollTime) > 1300){
+				if((currentScrollTime-scrollTime) > 200){
 					scrollSamples = [];
 				}
 				scrollTime = currentScrollTime;
 
-				if(scrollSamples.length >= 35){
-					scrollSamples.shift();
-				}
-				scrollSamples.push(Math.abs(delta*10));
 
 				if(locked) {
 					return false;
@@ -549,6 +541,7 @@
 				selector += "," + settings.interstitialSection;
 			}
 			$(selector).each(function(i) {
+
 				if(settings.setHeights) {
 					if($(this).is(settings.interstitialSection)) {
 						overflow[i] = false;
@@ -559,6 +552,7 @@
 
 							overflow[i] = false;
 						} else {
+
 							$(this).css({"height":$(this).height()});
 
 							if(settings.overflowScroll) {
