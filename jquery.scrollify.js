@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.2
+ * Version 1.0.3
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -598,10 +598,12 @@
 						}
 					}
 					elements[i] = $(this);
+					try {
+						if($(names[i]).length && window.console) {
+							console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
+						}
+					} catch (e) {}
 
-					if($(names[i]).length && window.console) {
-						console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
-					}
 					if(window.location.hash===names[i]) {
 						index = i;
 						hasLocation = true;
