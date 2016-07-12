@@ -186,6 +186,10 @@ No, this is not currently supported.
 
 Yes. Scrollify works well on mobile but if you need to disable it you can use the disable method. `$.scrollify.disable()`.
 
+- Why am I not able to scroll to the bottom of a section?
+
+You must ensure that there is no collapsed content within your sections. This often happens when you have floated content within a container that isn't cleared. All content must be properly contained in order for an accurate section height to be calculated.
+
 
 ## Setup with SectionName
 
