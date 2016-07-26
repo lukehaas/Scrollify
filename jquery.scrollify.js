@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.3
+ * Version 1.0.4
  *
  * Requires:
  * - jQuery 1.6 or higher
@@ -24,6 +24,13 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+ If section being scrolled to is an interstitialSection and the last section on page
+
+ then value to scroll to is current position plus height of interstitialSection
+
  */
 (function (global,factory) {
 	"use strict";
@@ -61,6 +68,7 @@
 		elements = [],
 		overflow = [],
 		index = 0,
+		currentIndex = 0,
 		interstitialIndex = 1,
 		hasLocation = false,
 		timeoutId,
@@ -78,6 +86,7 @@
 		scrollTime = new Date().getTime(),
 		firstLoad = true,
 		initialised = false,
+		wheelEvent = 'onwheel' in document ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll',
 		settings = {
 			//section should be an identifier that is the same for each section
 			section: ".section",
@@ -98,6 +107,9 @@
 			afterRender:function() {}
 		};
 	function animateScroll(index,instant,callbacks) {
+		if(currentIndex===index) {
+			callbacks = false;
+		}
 		if(disabled===true) {
 			return true;
 		}
@@ -151,6 +163,7 @@
 					}
 				}
 				$(settings.target).promise().done(function(){
+					currentIndex = index;
 					locked = false;
 					firstLoad = false;
 					if(callbacks) {
@@ -258,12 +271,23 @@
 					e.preventDefault();
 				}
 				var currentScrollTime = new Date().getTime();
-				delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
+
+
+
+				e = e || window.event;
+				var value = e.originalEvent.wheelDelta || -e.originalEvent.deltaY || -e.originalEvent.detail;
+				var delta = Math.max(-1, Math.min(1, value));
+
+
+
+				//delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
+
 
 				if(scrollSamples.length > 149){
 					scrollSamples.shift();
 				}
-				scrollSamples.push(Math.abs(delta*10));
+				//scrollSamples.push(Math.abs(delta*10));
+				scrollSamples.push(Math.abs(value));
 
 				if((currentScrollTime-scrollTime) > 200){
 					scrollSamples = [];
@@ -336,7 +360,7 @@
 					$("body").css({"overflow":"hidden"});
 				}
 
-				$(document).bind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
+				$(document).bind(wheelEvent,manualScroll.wheelHandler);
 				$(document).bind('keydown', manualScroll.keyHandler);
 			}
 		};
@@ -595,6 +619,9 @@
 							names[i] = "#" + (i + 1);
 						} else {
 							names[i] = "#";
+							if(i===$(selector).length-1 && i>1) {
+								heights[i] = heights[i-1]+parseInt($(this).height());
+							}
 						}
 					}
 					elements[i] = $(this);
@@ -715,7 +742,7 @@
 			$window.unbind('mouseup', manualScroll.handleMouseup);
 			$window.unbind('scroll', manualScroll.handleScroll);
 		}
-		$(document).unbind('DOMMouseScroll mousewheel',manualScroll.wheelHandler);
+		$(document).unbind(wheelEvent,manualScroll.wheelHandler);
 		$(document).unbind('keydown', manualScroll.keyHandler);
 
 		if (document.addEventListener) {
