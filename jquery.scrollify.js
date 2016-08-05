@@ -306,6 +306,16 @@
 							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
 								index++;
+
+								if (settings.centerSections) {
+									// If there are many small sections on top of the page when the centerSections option
+									// is active, no scrolling will occur when jumping between them since they can't be centered.
+									// So go to the first section that will change the scroll instead.
+									while (heights[index] < 0 || index < heights.length - 1 && heights[index] === heights[index + 1]) {
+										index++;
+									}
+								}
+
 								locked = true;
 								animateScroll(index,false,true);
 							} else {
