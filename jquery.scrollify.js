@@ -100,6 +100,7 @@
 			target:"html,body",
 			standardScrollElements: false,
 			setHeights: true,
+			centerSections: false,
 			overflowScroll:true,
 			before:function() {},
 			after:function() {},
@@ -600,6 +601,7 @@
 		}
 		function calculatePositions(resize) {
 			var selector = settings.section;
+			var winHeight = $window.height();
 			if(settings.interstitialSection.length) {
 				selector += "," + settings.interstitialSection;
 			}
@@ -608,7 +610,16 @@
 			elements = [];
 			$(selector).each(function(i){
 					if(i>0) {
-						heights[i] = parseInt($(this).offset().top) + settings.offset;
+						if(settings.centerSections) {
+							var elHeight = $(this).innerHeight();
+							if(elHeight < winHeight) {
+								heights[i] = parseInt($(this).offset().top - (winHeight - elHeight) / 2) + settings.offset;
+							} else {
+								heights[i] = parseInt($(this).offset().top) + settings.offset;
+							}
+						} else {
+							heights[i] = parseInt($(this).offset().top) + settings.offset;
+						}
 					} else {
 						heights[i] = parseInt($(this).offset().top);
 					}
