@@ -338,6 +338,7 @@
 				if(e.keyCode==38) {
 					if(index>0) {
 						if(atTop()) {
+							e.preventDefault();
 							index--;
 							animateScroll(index,false,true);
 						}
@@ -345,6 +346,7 @@
 				} else if(e.keyCode==40) {
 					if(index<heights.length-1) {
 						if(atBottom()) {
+							e.preventDefault();
 							index++;
 							animateScroll(index,false,true);
 						}
