@@ -142,11 +142,11 @@
 				locked = true;
 				if( $().velocity ) {
 					$(settings.target).stop().velocity('scroll', {
-	          duration: settings.scrollSpeed,
-	          easing: settings.easing,
-	          offset: heights[index],
-	          mobileHA: false
-          });
+					  duration: settings.scrollSpeed,
+					  easing: settings.easing,
+					  offset: heights[index],
+					  mobileHA: false
+				  });
 				} else {
 					$(settings.target).stop().animate({
 						scrollTop: heights[index]
