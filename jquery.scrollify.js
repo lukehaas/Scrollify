@@ -69,6 +69,7 @@
 		overflow = [],
 		index = 0,
 		currentIndex = 0,
+		previousIndex = 0,
 		interstitialIndex = 1,
 		hasLocation = false,
 		timeoutId,
@@ -304,7 +305,7 @@
 						if(atBottom()) {
 							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
-								index++;
+								previousIndex = index++;
 								locked = true;
 								animateScroll(index,false,true);
 							} else {
@@ -317,7 +318,7 @@
 						if(atTop()) {
 							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
-								index--;
+								previousIndex = index--;
 								locked = true;
 								animateScroll(index,false,true);
 							} else {
@@ -338,14 +339,14 @@
 				if(e.keyCode==38) {
 					if(index>0) {
 						if(atTop()) {
-							index--;
+							previousIndex = index--;
 							animateScroll(index,false,true);
 						}
 					}
 				} else if(e.keyCode==40) {
 					if(index<heights.length-1) {
 						if(atBottom()) {
-							index++;
+							previousIndex = index++;
 							animateScroll(index,false,true);
 						}
 					}
@@ -456,7 +457,7 @@
 
 					if(atBottom() && index<heights.length-1) {
 
-						index++;
+						previousIndex = index++;
 						animateScroll(index,false,true);
 					} else {
 						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
@@ -475,7 +476,7 @@
 				if(index>=0) {
 					if(atTop() && index>0) {
 
-						index--;
+						previousIndex = index--;
 						animateScroll(index,false,true);
 					} else {
 
@@ -761,8 +762,11 @@
 		}
 		util.handleUpdate();
 	};
-	$.scrollify.current = function() {
+	$.scrollify.getCurrent = function() {
 		return elements[index];
+	};
+	$.scrollify.getPrevious = function() {
+		return elements[previousIndex];
 	};
 	$.scrollify.disable = function() {
 		disabled = true;
