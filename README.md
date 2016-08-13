@@ -190,7 +190,10 @@ Yes. Scrollify works well on mobile but if you need to disable it you can use th
 
 You must ensure that there is no collapsed content within your sections. This often happens when you have floated content within a container that isn't cleared. All content must be properly contained in order for an accurate section height to be calculated.
 
-How can I prevent Scrollify adding hash fragments to the URL?
+- How can I stop Scrollify adding fragment identifiers (hash values) to the URL?
+
+This behaviour is controlled by `sectionName`, setting `sectionName` to false will disable it.
+
 
 ## Setup with SectionName
 
