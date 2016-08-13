@@ -58,6 +58,7 @@ $.scrollify({
 		scrollbars: true,
 		standardScrollElements: "",
 		setHeights: true,
+		centerSections: false,
 		overflowScroll: true,
 		before:function() {},
 		after:function() {},
@@ -91,6 +92,9 @@ A CSS selector for elements within sections that require standard scrolling beha
 
 `setHeights`
 A boolean to define whether Scollify assigns a height to the sections. True by default.
+
+`centerSections`
+A boolean to define whether the sections should be scrolled to the center of the screen, instead of the top. False by default.
 
 `overflowScroll`
 A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default.
