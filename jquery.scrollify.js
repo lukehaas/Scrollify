@@ -122,7 +122,8 @@
 			if(settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
 				    try {
-							history.replaceState(null, null, names[index]);
+						var curURI = window.location.href.split(/[#]/)[0];
+						history.replaceState(null, null, curURI+names[index]);
 				    } catch (e) {
 				    	if(window.console) {
 				    		console.warn("Scrollify warning: This needs to be hosted on a server to manipulate the hash value.");
