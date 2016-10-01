@@ -567,19 +567,20 @@
 				selector += "," + settings.interstitialSection;
 			}
 			$(selector).each(function(i) {
+				var $this = $(this);
 
 				if(settings.setHeights) {
-					if($(this).is(settings.interstitialSection)) {
+					if($this.is(settings.interstitialSection)) {
 						overflow[i] = false;
 					} else {
 
-						if(($(this).css("height","auto").outerHeight()<$window.height()) || $(this).css("overflow")==="hidden") {
-							$(this).css({"height":$window.height()});
+						if(($this.css("height","auto").outerHeight()<$window.height()) || $this.css("overflow")==="hidden") {
+							$this.css({"height":$window.height()});
 
 							overflow[i] = false;
 						} else {
 
-							$(this).css({"height":$(this).height()});
+							$this.css({"height":$this.height()});
 
 							if(settings.overflowScroll) {
 									overflow[i] = true;
@@ -592,7 +593,7 @@
 
 				} else {
 
-					if(($(this).outerHeight()<$window.height()) || (settings.overflowScroll===false)) {
+					if(($this.outerHeight()<$window.height()) || (settings.overflowScroll===false)) {
 						overflow[i] = false;
 					} else {
 						overflow[i] = true;
@@ -609,24 +610,25 @@
 			names = [];
 			elements = [];
 			$(selector).each(function(i){
+					var $this = $(this);
 					if(i>0) {
-						heights[i] = parseInt($(this).offset().top) + settings.offset;
+						heights[i] = parseInt($this.offset().top) + settings.offset;
 					} else {
-						heights[i] = parseInt($(this).offset().top);
+						heights[i] = parseInt($this.offset().top);
 					}
-					if(settings.sectionName && $(this).data(settings.sectionName)) {
-						names[i] = "#" + $(this).data(settings.sectionName).replace(/ /g,"-");
+					if(settings.sectionName && $this.data(settings.sectionName)) {
+						names[i] = "#" + $this.data(settings.sectionName).replace(/ /g,"-");
 					} else {
-						if($(this).is(settings.interstitialSection)===false) {
+						if($this.is(settings.interstitialSection)===false) {
 							names[i] = "#" + (i + 1);
 						} else {
 							names[i] = "#";
 							if(i===$(selector).length-1 && i>1) {
-								heights[i] = heights[i-1]+parseInt($(this).height());
+								heights[i] = heights[i-1]+parseInt($this.height());
 							}
 						}
 					}
-					elements[i] = $(this);
+					elements[i] = $this;
 					try {
 						if($(names[i]).length && window.console) {
 							console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
@@ -771,7 +773,9 @@
 	};
 	$.scrollify.enable = function() {
 		disabled = false;
-		manualScroll.calculateNearest();
+		if (initialised) {
+			manualScroll.calculateNearest();
+		}
 	};
 	$.scrollify.isDisabled = function() {
 		return disabled;
