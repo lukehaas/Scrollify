@@ -6,7 +6,7 @@
         "scroll",
         "snap"
     ],
-    "version": "1.0.4",
+    "version": "1.0.5",
     "author": {
         "name": "Luke Haas",
         "url": "http://lukehaas.me"
@@ -14,7 +14,7 @@
     "maintainers": [
         {
             "name": "Luke Haas",
-            "email": "luke@lukehaas.me",
+            "email": "",
             "url": "http://lukehaas.me"
         }
     ],
@@ -29,6 +29,6 @@
     "docs": "https://github.com/lukehaas/Scrollify",
     "download": "https://github.com/lukehaas/Scrollify",
     "dependencies": {
-        "jquery": ">=1.6"
+        "jquery": ">=1.7"
     }
 }
