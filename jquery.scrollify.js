@@ -771,6 +771,9 @@
 	};
 	$.scrollify.enable = function() {
 		disabled = false;
+		if (initialised) {
+			manualScroll.calculateNearest();
+		}
 	};
 	$.scrollify.isDisabled = function() {
 		return disabled;
