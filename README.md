@@ -20,7 +20,7 @@ A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
 
 ## Basic setup
 
-Scrollify requires jQuery 1.6+.
+Scrollify requires jQuery 1.7+.
 
 The most basic setup is as follows:
 

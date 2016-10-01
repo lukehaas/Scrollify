@@ -1,9 +1,9 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.4
+ * Version 1.0.5
  *
  * Requires:
- * - jQuery 1.6 or higher
+ * - jQuery 1.7 or higher
  *
  * https://github.com/lukehaas/Scrollify
  *
@@ -34,33 +34,32 @@
  */
 (function (global,factory) {
 	"use strict";
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery'], function($) {
-        	return factory($, global, global.document);
-        });
-    } else if (typeof module === 'object' && module.exports) {
-        // Node/CommonJS
-        module.exports = function( root, jQuery ) {
-            if ( jQuery === undefined ) {
-                // require('jQuery') returns a factory that requires window to
-                // build a jQuery instance, we normalize how we use modules
-                // that require this pattern but the window provided is a noop
-                // if it's defined (how jquery works)
-                if ( typeof window !== 'undefined' ) {
-                    jQuery = require('jquery');
-                }
-                else {
-                    jQuery = require('jquery')(root);
-                }
-            }
-            factory(jQuery, global, global.document);
-            return jQuery;
-        };
-    } else {
-        // Browser globals
-        factory(jQuery, global, global.document);
-    }
+	if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], function($) {
+			return factory($, global, global.document);
+		});
+	} else if (typeof module === 'object' && module.exports) {
+		// Node/CommonJS
+		module.exports = function( root, jQuery ) {
+			if ( jQuery === undefined ) {
+				// require('jQuery') returns a factory that requires window to
+				// build a jQuery instance, we normalize how we use modules
+				// that require this pattern but the window provided is a noop
+				// if it's defined (how jquery works)
+				if ( typeof window !== 'undefined' ) {
+					jQuery = require('jquery');
+				} else {
+					jQuery = require('jquery')(root);
+				}
+			}
+			factory(jQuery, global, global.document);
+			return jQuery;
+		};
+	} else {
+		// Browser globals
+		factory(jQuery, global, global.document);
+	}
 }(typeof window !== 'undefined' ? window : this, function ($, window, document, undefined) {
 	"use strict";
 	var heights = [],
@@ -96,7 +95,6 @@
 			scrollSpeed: 1100,
 			offset : 0,
 			scrollbars: true,
-			axis:"y",
 			target:"html,body",
 			standardScrollElements: false,
 			setHeights: true,
@@ -218,7 +216,8 @@
 				}
 				scrollable = true;
 				if(scrolled) {
-					manualScroll.calculateNearest();
+					//instant,callbacks
+					manualScroll.calculateNearest(false,true);
 				}
 			},
 			handleScroll:function() {
@@ -228,18 +227,19 @@
 				if(timeoutId){
 					clearTimeout(timeoutId);
 				}
-				timeoutId = setTimeout(function(){
 
+				timeoutId = setTimeout(function(){
 					scrolled = true;
 					if(scrollable===false) {
 						return false;
 					}
 					scrollable = false;
-					manualScroll.calculateNearest();
 
+					//instant,callbacks
+					manualScroll.calculateNearest(false,true);
 				}, 200);
 			},
-			calculateNearest:function() {
+			calculateNearest:function(instant,callbacks) {
 				top = $window.scrollTop();
 				var i =1,
 					max = heights.length,
@@ -256,10 +256,12 @@
 				}
 				if(atBottom() || atTop()) {
 					index = closest;
-					animateScroll(closest,false,true);
+					//index, instant, callbacks
+					animateScroll(closest,instant,callbacks);
 				}
 			},
-			wheelHandler:function(e,delta) {
+			wheelHandler:function(e) {
+
 				if(disabled===true) {
 					return true;
 				} else if(settings.standardScrollElements) {
@@ -306,6 +308,7 @@
 								e.preventDefault();
 								index++;
 								locked = true;
+								//index, instant, callbacks
 								animateScroll(index,false,true);
 							} else {
 								return false;
@@ -319,6 +322,7 @@
 								e.preventDefault();
 								index--;
 								locked = true;
+								//index, instant, callbacks
 								animateScroll(index,false,true);
 							} else {
 								return false
@@ -340,6 +344,7 @@
 						if(atTop()) {
 							e.preventDefault();
 							index--;
+							//index, instant, callbacks
 							animateScroll(index,false,true);
 						}
 					}
@@ -348,6 +353,7 @@
 						if(atBottom()) {
 							e.preventDefault();
 							index++;
+							//index, instant, callbacks
 							animateScroll(index,false,true);
 						}
 					}
@@ -355,15 +361,15 @@
 			},
 			init:function() {
 				if(settings.scrollbars) {
-					$window.bind('mousedown', manualScroll.handleMousedown);
-					$window.bind('mouseup', manualScroll.handleMouseup);
-					$window.bind('scroll', manualScroll.handleScroll);
+					$window.on('mousedown', manualScroll.handleMousedown);
+					$window.on('mouseup', manualScroll.handleMouseup);
+					$window.on('scroll', manualScroll.handleScroll);
 				} else {
 					$("body").css({"overflow":"hidden"});
 				}
-
-				$(document).bind(wheelEvent,manualScroll.wheelHandler);
-				$(document).bind('keydown', manualScroll.keyHandler);
+				$window.on(wheelEvent,manualScroll.wheelHandler);
+				//$(document).bind(wheelEvent,manualScroll.wheelHandler);
+				$window.on('keydown', manualScroll.keyHandler);
 			}
 		};
 
@@ -459,6 +465,7 @@
 					if(atBottom() && index<heights.length-1) {
 
 						index++;
+						//index, instant, callbacks
 						animateScroll(index,false,true);
 					} else {
 						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
@@ -478,6 +485,7 @@
 					if(atTop() && index>0) {
 
 						index--;
+						//index, instant, callbacks
 						animateScroll(index,false,true);
 					} else {
 
@@ -530,17 +538,19 @@
 		calculatePositions(false);
 
 		if(true===hasLocation) {
+			//index, instant, callbacks
 			animateScroll(index,false,true);
 		} else {
 			setTimeout(function() {
-				animateScroll(0,false,true);
+				//instant,callbacks
+				manualScroll.calculateNearest(true,false);
 			},200);
 		}
 		if(heights.length) {
 			manualScroll.init();
 			swipeScroll.init();
 
-			$window.bind("resize",util.handleResize);
+			$window.on("resize",util.handleResize);
 			if (document.addEventListener) {
 				window.addEventListener("orientationchange", util.handleResize, false);
 			}
@@ -643,6 +653,7 @@
 			});
 
 			if(true===resize) {
+				//index, instant, callbacks
 				animateScroll(index,false,false);
 			} else {
 				settings.afterRender();
@@ -682,11 +693,13 @@
 			if(typeof panel === 'string') {
 				if (names[z]===panel) {
 					index = z;
+					//index, instant, callbacks
 					animateScroll(z,instant,true);
 				}
 			} else {
 				if(z===panel) {
 					index = z;
+					//index, instant, callbacks
 					animateScroll(z,instant,true);
 				}
 			}
@@ -716,18 +729,21 @@
 	$.scrollify.previous = function() {
 		if(index>0) {
 			index -= 1;
+			//index, instant, callbacks
 			animateScroll(index,false,true);
 		}
 	};
 	$.scrollify.instantNext = function() {
 		if(index<names.length) {
 			index += 1;
+			//index, instant, callbacks
 			animateScroll(index,true,true);
 		}
 	};
 	$.scrollify.instantPrevious = function() {
 		if(index>0) {
 			index -= 1;
+			//index, instant, callbacks
 			animateScroll(index,true,true);
 		}
 	};
@@ -740,14 +756,14 @@
 				$(this).css("height","auto");
 			});
 		}
-		$window.unbind("resize",util.handleResize);
+		$window.off("resize",util.handleResize);
 		if(settings.scrollbars) {
-			$window.unbind('mousedown', manualScroll.handleMousedown);
-			$window.unbind('mouseup', manualScroll.handleMouseup);
-			$window.unbind('scroll', manualScroll.handleScroll);
+			$window.off('mousedown', manualScroll.handleMousedown);
+			$window.off('mouseup', manualScroll.handleMouseup);
+			$window.off('scroll', manualScroll.handleScroll);
 		}
-		$(document).unbind(wheelEvent,manualScroll.wheelHandler);
-		$(document).unbind('keydown', manualScroll.keyHandler);
+		$window.off(wheelEvent,manualScroll.wheelHandler);
+		$window.off('keydown', manualScroll.keyHandler);
 
 		if (document.addEventListener) {
 			document.removeEventListener('touchstart', swipeScroll.touchHandler, false);
@@ -774,7 +790,8 @@
 	$.scrollify.enable = function() {
 		disabled = false;
 		if (initialised) {
-			manualScroll.calculateNearest();
+			//instant,callbacks
+			manualScroll.calculateNearest(false,false);
 		}
 	};
 	$.scrollify.isDisabled = function() {
