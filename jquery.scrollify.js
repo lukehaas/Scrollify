@@ -627,7 +627,7 @@
 						heights[i] = parseInt($this.offset().top);
 					}
 					if(settings.sectionName && $this.data(settings.sectionName)) {
-						names[i] = "#" + $this.data(settings.sectionName).replace(/ /g,"-");
+						names[i] = "#" + $this.data(settings.sectionName).toString().replace(/ /g,"-");
 					} else {
 						if($this.is(settings.interstitialSection)===false) {
 							names[i] = "#" + (i + 1);
