@@ -111,7 +111,7 @@ A callback that is fired after Scrollify's initialisation.
 
 `$.scrollify.move("#name");`
 
-The move method can be used to scroll to a particular section. It can be parsed the index of the section, or the name of the section preceded by a hash.
+The move method can be used to scroll to a particular section. It can be passed the index of the section, or the name of the section preceded by a hash.
 
 `$.scrollify.instantMove("#name");`
 
