@@ -115,7 +115,7 @@ The move method can be used to scroll to a particular section. It can be passed 
 
 `$.scrollify.instantMove("#name");`
 
-The instantMove method can be used to scroll to a particular section without animation. It can be parsed the index of the section, or the name of the section preceded by a hash.
+The instantMove method can be used to scroll to a particular section without animation. It can be passed the index of the section, or the name of the section preceded by a hash.
 
 `$.scrollify.next()`
 
