@@ -176,7 +176,7 @@ No, Scrollify sections have no relation to the section element. Scrollify sectio
 
 - Can sections receive an active class when they are scrolled to?
 
-Yes, this is something you can easily do in either the `before` or `after` callbacks (which ever suites you best).
+Yes, this is something you can easily implement in either the `before` or `after` callbacks (which ever suites you best).
 
 - Can Scrollify be used for horizontal scrolling?
 
@@ -194,6 +194,9 @@ You must ensure that there is no collapsed content within your sections. This of
 
 This behaviour is controlled by `sectionName`, setting `sectionName` to false will disable it.
 
+- Why are section heights increasing on resize?
+
+This happens when your browser is running in Quirks Mode, usually as the result of an incorrect doctype.
 
 ## Setup with SectionName
 

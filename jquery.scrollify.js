@@ -576,6 +576,9 @@
 			if(settings.interstitialSection.length) {
 				selector += "," + settings.interstitialSection;
 			}
+			if(settings.scrollbars===false) {
+				settings.overflowScroll = false;
+			}
 			$(selector).each(function(i) {
 				var $this = $(this);
 
