@@ -26,5 +26,9 @@
     "url": "https://github.com/lukehaas/Scrollify/issues"
   },
   "demo": "http://projects.lukehaas.me/scrollify",
-  "homepage": "https://github.com/lukehaas/Scrollify"
+  "homepage": "https://github.com/lukehaas/Scrollify",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-uglify": "^2.0.0"
+  }
 }
