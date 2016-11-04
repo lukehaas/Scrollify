@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.5
+ * Version 1.0.6
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -85,6 +85,7 @@
 		scrollTime = new Date().getTime(),
 		firstLoad = true,
 		initialised = false,
+		destination = 0,
 		wheelEvent = 'onwheel' in document ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll',
 		settings = {
 			//section should be an identifier that is the same for each section
@@ -117,6 +118,18 @@
 				settings.before(index,elements);
 			}
 			interstitialIndex = 1;
+			destination = heights[index];
+			if(firstLoad===false && currentIndex>index) {
+				//We're going backwards
+				if(overflow[index]) {
+
+					interstitialIndex = parseInt(elements[index].outerHeight()/$window.height());
+
+					destination = parseInt(heights[index])+(elements[index].outerHeight()-$window.height());
+				}
+			}
+
+
 			if(settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
 				    try {
@@ -132,7 +145,7 @@
 				}
 			}
 			if(instant) {
-				$(settings.target).stop().scrollTop(heights[index]);
+				$(settings.target).stop().scrollTop(destination);
 				if(callbacks) {
 					settings.after(index,elements);
 				}
@@ -142,12 +155,12 @@
 					$(settings.target).stop().velocity('scroll', {
 					  duration: settings.scrollSpeed,
 					  easing: settings.easing,
-					  offset: heights[index],
+					  offset: destination,
 					  mobileHA: false
 				  });
 				} else {
 					$(settings.target).stop().animate({
-						scrollTop: heights[index]
+						scrollTop: destination
 					}, settings.scrollSpeed,settings.easing);
 				}
 
@@ -514,28 +527,35 @@
 
 
 		util = {
-			refresh:function(withCallback) {
+			refresh:function(withCallback,scroll) {
 				clearTimeout(timeoutId2);
 				timeoutId2 = setTimeout(function() {
 					sizePanels();
-					calculatePositions(true);
+					//scroll, firstLoad
+					calculatePositions(scroll,false);
 					if(withCallback) {
 							settings.afterResize();
 					}
 				},400);
 			},
 			handleUpdate:function() {
-				util.refresh(false);
+				//callbacks, scroll
+				util.refresh(false,true);
 			},
 			handleResize:function() {
-				util.refresh(true);
+				//callbacks, scroll
+				util.refresh(true,false);
+			},
+			handleOrientation() {
+				//callbacks, scroll
+				util.refresh(true,true);
 			}
 		};
 		settings = $.extend(settings, options);
 
 		sizePanels();
 
-		calculatePositions(false);
+		calculatePositions(false,true);
 
 		if(true===hasLocation) {
 			//index, instant, callbacks
@@ -552,7 +572,7 @@
 
 			$window.on("resize",util.handleResize);
 			if (document.addEventListener) {
-				window.addEventListener("orientationchange", util.handleResize, false);
+				window.addEventListener("orientationchange", util.handleOrientation, false);
 			}
 		}
 		function interstitialScroll(pos) {
@@ -614,7 +634,7 @@
 				}
 			});
 		}
-		function calculatePositions(resize) {
+		function calculatePositions(scroll,firstLoad) {
 			var selector = settings.section;
 			if(settings.interstitialSection.length) {
 				selector += "," + settings.interstitialSection;
@@ -655,10 +675,11 @@
 
 			});
 
-			if(true===resize) {
+			if(true===scroll) {
 				//index, instant, callbacks
 				animateScroll(index,false,false);
-			} else {
+			}
+			if(true===firstLoad) {
 				settings.afterRender();
 			}
 		}
