@@ -136,7 +136,7 @@
 							history.replaceState(null, null, names[index]);
 				    } catch (e) {
 				    	if(window.console) {
-				    		console.warn("Scrollify warning: This needs to be hosted on a server to manipulate the hash value.");
+				    		console.warn("Scrollify warning: This must be hosted to manipulate the hash value.");
 				    	}
 				    }
 
@@ -167,7 +167,7 @@
 				if(window.location.hash.length && settings.sectionName && window.console) {
 					try {
 						if($(window.location.hash).length) {
-							console.warn("Scrollify warning: There are IDs on the page that match the hash value - this will cause the page to anchor.");
+							console.warn("Scrollify warning: There are IDs that match the hash value - this will cause the page to anchor.");
 						}
 					} catch (e) {
 						console.warn("Scrollify warning:", window.location.hash, "is not a valid jQuery expression.");
@@ -546,7 +546,7 @@
 				//callbacks, scroll
 				util.refresh(true,false);
 			},
-			handleOrientation() {
+			handleOrientation:function() {
 				//callbacks, scroll
 				util.refresh(true,true);
 			}
@@ -664,7 +664,7 @@
 					elements[i] = $this;
 					try {
 						if($(names[i]).length && window.console) {
-							console.warn("Scrollify warning: Section names can't match IDs on the page - this will cause the browser to anchor.");
+							console.warn("Scrollify warning: Section names can't match IDs - this will cause the browser to anchor.");
 						}
 					} catch (e) {}
 
@@ -829,7 +829,7 @@
 			settings = $.extend(settings, updatedOptions);
 			util.handleUpdate();
 		} else if(window.console) {
-			console.warn("Scrollify warning: Options need to be in an object.");
+			console.warn("Scrollify warning: setOptions expects an object.");
 		}
 	};
 }));
