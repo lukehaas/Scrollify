@@ -100,6 +100,7 @@
 			standardScrollElements: false,
 			setHeights: true,
 			overflowScroll:true,
+			initialScrollToTop: true,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
@@ -560,11 +561,13 @@
 		if(true===hasLocation) {
 			//index, instant, callbacks
 			animateScroll(index,false,true);
-		} else {
+		} else if (settings.initialScrollToTop) {
 			setTimeout(function() {
 				//instant,callbacks
 				manualScroll.calculateNearest(true,false);
 			},200);
+		} else {
+			manualScroll.calculateNearest();
 		}
 		if(heights.length) {
 			manualScroll.init();
