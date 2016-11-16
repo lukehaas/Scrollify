@@ -88,6 +88,7 @@
 		destination = 0,
 		wheelEvent = 'onwheel' in document ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll',
 		settings = {
+			container: $window,
 			//section should be an identifier that is the same for each section
 			section: ".section",
 			sectionName: "section-name",
@@ -123,9 +124,9 @@
 				//We're going backwards
 				if(overflow[index]) {
 
-					interstitialIndex = parseInt(elements[index].outerHeight()/$window.height());
+					interstitialIndex = parseInt(elements[index].outerHeight()/settings.container.height());
 
-					destination = parseInt(heights[index])+(elements[index].outerHeight()-$window.height());
+					destination = parseInt(heights[index])+(elements[index].outerHeight()-settings.container.height());
 				}
 			}
 
@@ -253,7 +254,7 @@
 				}, 200);
 			},
 			calculateNearest:function(instant,callbacks) {
-				top = $window.scrollTop();
+				top = settings.container.scrollTop();
 				var i =1,
 					max = heights.length,
 					closest = 0,
@@ -374,15 +375,15 @@
 			},
 			init:function() {
 				if(settings.scrollbars) {
-					$window.on('mousedown', manualScroll.handleMousedown);
-					$window.on('mouseup', manualScroll.handleMouseup);
-					$window.on('scroll', manualScroll.handleScroll);
+					settings.container.on('mousedown', manualScroll.handleMousedown);
+					settings.container.on('mouseup', manualScroll.handleMouseup);
+					settings.container.on('scroll', manualScroll.handleScroll);
 				} else {
 					$("body").css({"overflow":"hidden"});
 				}
-				$window.on(wheelEvent,manualScroll.wheelHandler);
+				settings.container.on(wheelEvent,manualScroll.wheelHandler);
 				//$(document).bind(wheelEvent,manualScroll.wheelHandler);
-				$window.on('keydown', manualScroll.keyHandler);
+				settings.container.on('keydown', manualScroll.keyHandler);
 			}
 		};
 
@@ -481,13 +482,13 @@
 						//index, instant, callbacks, toTop
 						animateScroll(index,false,true,false);
 					} else {
-						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
+						if(Math.floor(elements[index].height()/settings.container.height())>interstitialIndex) {
 
-							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+(settings.container.height()*interstitialIndex));
 							interstitialIndex += 1;
 
 						} else {
-							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$window.height()));
+							interstitialScroll(parseInt(heights[index])+(elements[index].height()-settings.container.height()));
 						}
 
 					}
@@ -505,7 +506,7 @@
 						if(interstitialIndex>2) {
 
 							interstitialIndex -= 1;
-							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+(settings.container.height()*interstitialIndex));
 
 						} else {
 
@@ -552,6 +553,7 @@
 			}
 		};
 		settings = $.extend(settings, options);
+		top = settings.container.scrollTop();
 
 		sizePanels();
 
@@ -570,7 +572,7 @@
 			manualScroll.init();
 			swipeScroll.init();
 
-			$window.on("resize",util.handleResize);
+			settings.container.on("resize",util.handleResize);
 			if (document.addEventListener) {
 				window.addEventListener("orientationchange", util.handleOrientation, false);
 			}
@@ -607,8 +609,8 @@
 						overflow[i] = false;
 					} else {
 
-						if(($this.css("height","auto").outerHeight()<$window.height()) || $this.css("overflow")==="hidden") {
-							$this.css({"height":$window.height()});
+						if(($this.css("height","auto").outerHeight()<settings.container.height()) || $this.css("overflow")==="hidden") {
+							$this.css({"height":settings.container.height()});
 
 							overflow[i] = false;
 						} else {
@@ -626,7 +628,7 @@
 
 				} else {
 
-					if(($this.outerHeight()<$window.height()) || (settings.overflowScroll===false)) {
+					if(($this.outerHeight()<settings.container.height()) || (settings.overflowScroll===false)) {
 						overflow[i] = false;
 					} else {
 						overflow[i] = true;
@@ -688,7 +690,7 @@
 			if(!overflow[index]) {
 				return true;
 			}
-			top = $window.scrollTop();
+			top = settings.container.scrollTop();
 			if(top>parseInt(heights[index])) {
 				return false;
 			} else {
@@ -699,9 +701,9 @@
 			if(!overflow[index]) {
 				return true;
 			}
-			top = $window.scrollTop();
+			top = settings.container.scrollTop();
 
-			if(top<parseInt(heights[index])+(elements[index].outerHeight()-$window.height())-28) {
+			if(top<parseInt(heights[index])+(elements[index].outerHeight()-settings.container.height())-28) {
 
 				return false;
 
@@ -781,14 +783,14 @@
 				$(this).css("height","auto");
 			});
 		}
-		$window.off("resize",util.handleResize);
+		settings.container.off("resize",util.handleResize);
 		if(settings.scrollbars) {
-			$window.off('mousedown', manualScroll.handleMousedown);
-			$window.off('mouseup', manualScroll.handleMouseup);
-			$window.off('scroll', manualScroll.handleScroll);
+			settings.container.off('mousedown', manualScroll.handleMousedown);
+			settings.container.off('mouseup', manualScroll.handleMouseup);
+			settings.container.off('scroll', manualScroll.handleScroll);
 		}
-		$window.off(wheelEvent,manualScroll.wheelHandler);
-		$window.off('keydown', manualScroll.keyHandler);
+		settings.container.off(wheelEvent,manualScroll.wheelHandler);
+		settings.container.off('keydown', manualScroll.keyHandler);
 
 		if (document.addEventListener) {
 			document.removeEventListener('touchstart', swipeScroll.touchHandler, false);
