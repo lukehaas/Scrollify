@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.6
+ * Version 1.0.7
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -105,7 +105,7 @@
 			afterResize:function() {},
 			afterRender:function() {}
 		};
-	function animateScroll(index,instant,callbacks) {
+	function animateScroll(index,instant,callbacks,toTop) {
 		if(currentIndex===index) {
 			callbacks = false;
 		}
@@ -119,7 +119,7 @@
 			}
 			interstitialIndex = 1;
 			destination = heights[index];
-			if(firstLoad===false && currentIndex>index) {
+			if(firstLoad===false && currentIndex>index && toTop===false) {
 				//We're going backwards
 				if(overflow[index]) {
 
@@ -269,8 +269,8 @@
 				}
 				if(atBottom() || atTop()) {
 					index = closest;
-					//index, instant, callbacks
-					animateScroll(closest,instant,callbacks);
+					//index, instant, callbacks, toTop
+					animateScroll(closest,instant,callbacks,false);
 				}
 			},
 			wheelHandler:function(e) {
@@ -321,8 +321,8 @@
 								e.preventDefault();
 								index++;
 								locked = true;
-								//index, instant, callbacks
-								animateScroll(index,false,true);
+								//index, instant, callbacks, toTop
+								animateScroll(index,false,true, false);
 							} else {
 								return false;
 							}
@@ -335,8 +335,8 @@
 								e.preventDefault();
 								index--;
 								locked = true;
-								//index, instant, callbacks
-								animateScroll(index,false,true);
+								//index, instant, callbacks, toTop
+								animateScroll(index,false,true, false);
 							} else {
 								return false
 							}
@@ -357,8 +357,8 @@
 						if(atTop()) {
 							e.preventDefault();
 							index--;
-							//index, instant, callbacks
-							animateScroll(index,false,true);
+							//index, instant, callbacks, toTop
+							animateScroll(index,false,true,false);
 						}
 					}
 				} else if(e.keyCode==40) {
@@ -366,8 +366,8 @@
 						if(atBottom()) {
 							e.preventDefault();
 							index++;
-							//index, instant, callbacks
-							animateScroll(index,false,true);
+							//index, instant, callbacks, toTop
+							animateScroll(index,false,true,false);
 						}
 					}
 				}
@@ -478,8 +478,8 @@
 					if(atBottom() && index<heights.length-1) {
 
 						index++;
-						//index, instant, callbacks
-						animateScroll(index,false,true);
+						//index, instant, callbacks, toTop
+						animateScroll(index,false,true,false);
 					} else {
 						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
 
@@ -498,8 +498,8 @@
 					if(atTop() && index>0) {
 
 						index--;
-						//index, instant, callbacks
-						animateScroll(index,false,true);
+						//index, instant, callbacks, toTop
+						animateScroll(index,false,true,false);
 					} else {
 
 						if(interstitialIndex>2) {
@@ -558,8 +558,8 @@
 		calculatePositions(false,true);
 
 		if(true===hasLocation) {
-			//index, instant, callbacks
-			animateScroll(index,false,true);
+			//index, instant, callbacks, toTop
+			animateScroll(index,false,true,true);
 		} else {
 			setTimeout(function() {
 				//instant,callbacks
@@ -676,8 +676,8 @@
 			});
 
 			if(true===scroll) {
-				//index, instant, callbacks
-				animateScroll(index,false,false);
+				//index, instant, callbacks, toTop
+				animateScroll(index,false,false,false);
 			}
 			if(true===firstLoad) {
 				settings.afterRender();
@@ -717,14 +717,14 @@
 			if(typeof panel === 'string') {
 				if (names[z]===panel) {
 					index = z;
-					//index, instant, callbacks
-					animateScroll(z,instant,true);
+					//index, instant, callbacks, toTop
+					animateScroll(z,instant,true,true);
 				}
 			} else {
 				if(z===panel) {
 					index = z;
-					//index, instant, callbacks
-					animateScroll(z,instant,true);
+					//index, instant, callbacks, toTop
+					animateScroll(z,instant,true,true);
 				}
 			}
 		}
@@ -747,28 +747,29 @@
 	$.scrollify.next = function() {
 		if(index<names.length) {
 			index += 1;
-			animateScroll(index,false,true);
+			//index, instant, callbacks, toTop
+			animateScroll(index,false,true,true);
 		}
 	};
 	$.scrollify.previous = function() {
 		if(index>0) {
 			index -= 1;
-			//index, instant, callbacks
-			animateScroll(index,false,true);
+			//index, instant, callbacks, toTop
+			animateScroll(index,false,true,true);
 		}
 	};
 	$.scrollify.instantNext = function() {
 		if(index<names.length) {
 			index += 1;
-			//index, instant, callbacks
-			animateScroll(index,true,true);
+			//index, instant, callbacks, toTop
+			animateScroll(index,true,true,true);
 		}
 	};
 	$.scrollify.instantPrevious = function() {
 		if(index>0) {
 			index -= 1;
-			//index, instant, callbacks
-			animateScroll(index,true,true);
+			//index, instant, callbacks, toTop
+			animateScroll(index,true,true,true);
 		}
 	};
 	$.scrollify.destroy = function() {

@@ -1,10 +1,10 @@
 {
   "name": "jquery-scrollify",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A jQuery plugin that assists scrolling and smoothly snaps to sections.",
   "main": "jquery.scrollify.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha ./test/scrollify_test.js --recursive ./test"
   },
   "repository": {
     "type": "git",
@@ -28,7 +28,12 @@
   "demo": "http://projects.lukehaas.me/scrollify",
   "homepage": "https://github.com/lukehaas/Scrollify",
   "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-jquery": "^2.0.0",
     "grunt": "^1.0.1",
-    "grunt-contrib-uglify": "^2.0.0"
+    "grunt-contrib-uglify": "^2.0.0",
+    "jquery": "^3.1.1",
+    "jsdom": "^9.8.3",
+    "mocha": "^3.1.2"
   }
 }
