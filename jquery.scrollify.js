@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.7
+ * Version 1.0.8
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -53,9 +53,9 @@
 					jQuery = require('jquery')(root);
 				}
 			}
-			factory(jQuery, global, global.document);
-			return jQuery;
-		};
+
+			return factory(jQuery, global, global.document);
+		}();
 	} else {
 		// Browser globals
 		factory(jQuery, global, global.document);
@@ -208,7 +208,7 @@
 					return false;
 				}
 	}
-	$.scrollify = function(options) {
+	var scrollify = function(options) {
 		initialised = true;
 
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
@@ -729,7 +729,7 @@
 			}
 		}
 	}
-	$.scrollify.move = function(panel) {
+	scrollify.move = function(panel) {
 		if(panel===undefined) {
 			return false;
 		}
@@ -738,41 +738,41 @@
 		}
 		move(panel,false);
 	};
-	$.scrollify.instantMove = function(panel) {
+	scrollify.instantMove = function(panel) {
 		if(panel===undefined) {
 			return false;
 		}
 		move(panel,true);
 	};
-	$.scrollify.next = function() {
+	scrollify.next = function() {
 		if(index<names.length) {
 			index += 1;
 			//index, instant, callbacks, toTop
 			animateScroll(index,false,true,true);
 		}
 	};
-	$.scrollify.previous = function() {
+	scrollify.previous = function() {
 		if(index>0) {
 			index -= 1;
 			//index, instant, callbacks, toTop
 			animateScroll(index,false,true,true);
 		}
 	};
-	$.scrollify.instantNext = function() {
+	scrollify.instantNext = function() {
 		if(index<names.length) {
 			index += 1;
 			//index, instant, callbacks, toTop
 			animateScroll(index,true,true,true);
 		}
 	};
-	$.scrollify.instantPrevious = function() {
+	scrollify.instantPrevious = function() {
 		if(index>0) {
 			index -= 1;
 			//index, instant, callbacks, toTop
 			animateScroll(index,true,true,true);
 		}
 	};
-	$.scrollify.destroy = function() {
+	scrollify.destroy = function() {
 		if(!initialised) {
 			return false;
 		}
@@ -800,29 +800,29 @@
 		elements = [];
 		overflow = [];
 	};
-	$.scrollify.update = function() {
+	scrollify.update = function() {
 		if(!initialised) {
 			return false;
 		}
 		util.handleUpdate();
 	};
-	$.scrollify.current = function() {
+	scrollify.current = function() {
 		return elements[index];
 	};
-	$.scrollify.disable = function() {
+	scrollify.disable = function() {
 		disabled = true;
 	};
-	$.scrollify.enable = function() {
+	scrollify.enable = function() {
 		disabled = false;
 		if (initialised) {
 			//instant,callbacks
 			manualScroll.calculateNearest(false,false);
 		}
 	};
-	$.scrollify.isDisabled = function() {
+	scrollify.isDisabled = function() {
 		return disabled;
 	};
-	$.scrollify.setOptions = function(updatedOptions) {
+	scrollify.setOptions = function(updatedOptions) {
 		if(!initialised) {
 			return false;
 		}
@@ -833,4 +833,6 @@
 			console.warn("Scrollify warning: setOptions expects an object.");
 		}
 	};
+	$.scrollify = scrollify;
+	return scrollify;
 }));
