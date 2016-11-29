@@ -173,6 +173,7 @@
 						console.warn("Scrollify warning:", window.location.hash, "is not a valid jQuery expression.");
 					}
 				}
+				currentIndex = index;
 				$(settings.target).promise().done(function(){
 					currentIndex = index;
 					locked = false;
