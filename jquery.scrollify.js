@@ -41,21 +41,7 @@
 		});
 	} else if (typeof module === 'object' && module.exports) {
 		// Node/CommonJS
-		module.exports = function( root, jQuery ) {
-			if ( jQuery === undefined ) {
-				// require('jQuery') returns a factory that requires window to
-				// build a jQuery instance, we normalize how we use modules
-				// that require this pattern but the window provided is a noop
-				// if it's defined (how jquery works)
-				if ( typeof window !== 'undefined' ) {
-					jQuery = require('jquery');
-				} else {
-					jQuery = require('jquery')(root);
-				}
-			}
-
-			return factory(jQuery, global, global.document);
-		}();
+		module.exports = factory(require('jquery'), global, global.document);
 	} else {
 		// Browser globals
 		factory(jQuery, global, global.document);
@@ -210,7 +196,6 @@
 	}
 	var scrollify = function(options) {
 		initialised = true;
-
 		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
