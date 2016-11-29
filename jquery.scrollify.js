@@ -100,6 +100,7 @@
 			standardScrollElements: false,
 			setHeights: true,
 			overflowScroll:true,
+			updateHash: true,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
@@ -130,7 +131,7 @@
 			}
 
 
-			if(settings.sectionName && !(firstLoad===true && index===0)) {
+			if(settings.updateHash && settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
 				    try {
 							history.replaceState(null, null, names[index]);
