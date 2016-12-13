@@ -136,6 +136,7 @@
 				if(callbacks) {
 					settings.after(index,elements);
 				}
+				currentIndex = index;
 			} else {
 				locked = true;
 				if( $().velocity ) {
