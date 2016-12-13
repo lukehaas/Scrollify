@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.8
+ * Version 1.0.9
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -123,7 +123,7 @@
 							history.replaceState(null, null, names[index]);
 				    } catch (e) {
 				    	if(window.console) {
-				    		console.warn("Scrollify warning: This must be hosted to manipulate the hash value.");
+				    		console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
 				    	}
 				    }
 
@@ -131,12 +131,18 @@
 					window.location.hash = names[index];
 				}
 			}
+			if(firstLoad) {
+					settings.afterRender();
+					firstLoad = false;
+			}
+
+
+			currentIndex = index;
 			if(instant) {
 				$(settings.target).stop().scrollTop(destination);
 				if(callbacks) {
 					settings.after(index,elements);
 				}
-				currentIndex = index;
 			} else {
 				locked = true;
 				if( $().velocity ) {
@@ -155,15 +161,11 @@
 				if(window.location.hash.length && settings.sectionName && window.console) {
 					try {
 						if($(window.location.hash).length) {
-							console.warn("Scrollify warning: There are IDs that match the hash value - this will cause the page to anchor.");
+							console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
 						}
-					} catch (e) {
-						console.warn("Scrollify warning:", window.location.hash, "is not a valid jQuery expression.");
-					}
+					} catch (e) {}
 				}
-				currentIndex = index;
 				$(settings.target).promise().done(function(){
-					currentIndex = index;
 					locked = false;
 					firstLoad = false;
 					if(callbacks) {
@@ -666,9 +668,6 @@
 			if(true===scroll) {
 				//index, instant, callbacks, toTop
 				animateScroll(index,false,false,false);
-			}
-			if(true===firstLoad) {
-				settings.afterRender();
 			}
 		}
 

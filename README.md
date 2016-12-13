@@ -73,7 +73,7 @@ $.scrollify({
 A CSS selector for the sections of the page.
 
 `sectionName`
-Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`. Set this to `false` to disable hash values.
+Scrollify lets you define a hash value for each section. This makes it possible to permalink to particular sections. This is set as a data attribute on the sections. The name of the data attribute is defined by `sectionName`.
 
 `interstitialSection`
 A CSS selector for non-full-height sections, such as a header and footer.
@@ -97,7 +97,7 @@ A boolean to define whether Scollify assigns a height to the sections. True by d
 A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default.
 
 `updateHash`
-A boolean to define whether Scrollify updates the browser location hash when scrolling through sections. True by default. You can still use hashes to jump to a section (say if you shared a link with a hash) if this value is false.
+A boolean to define whether Scrollify updates the browser location hash when scrolling through sections. True by default.
 
 `before(index, sections)`
 A callback that is fired before a section is scrolled to. Arguments include the index of the section and an array of all section elements.
