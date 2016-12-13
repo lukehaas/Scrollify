@@ -60,6 +60,7 @@ $.scrollify({
 		setHeights: true,
 		overflowScroll: true,
 		updateHash: true,
+		touchScroll:true,
 		before:function() {},
 		after:function() {},
 		afterResize:function() {},
@@ -98,6 +99,9 @@ A boolean to define whether Scrollify will allow scrolling over overflowing cont
 
 `updateHash`
 A boolean to define whether Scrollify updates the browser location hash when scrolling through sections. True by default.
+
+`touchScroll`
+A boolean to define whether Scrollify handles touch scroll events. True by default.
 
 `before(index, sections)`
 A callback that is fired before a section is scrolled to. Arguments include the index of the section and an array of all section elements.
