@@ -351,7 +351,7 @@
 							animateScroll(index,false,true,false);
 						}
 					}
-				} else if(e.keyCode==40) {
+				} else if(e.keyCode==40 || e.keyCode==32) {
 					if(index<heights.length-1) {
 						if(atBottom()) {
 							e.preventDefault();
