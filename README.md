@@ -198,10 +198,6 @@ Yes. Scrollify works well on mobile but if you need to disable it you can use th
 
 You must ensure that there is no collapsed content within your sections. This often happens when you have floated content within a container that isn't cleared. All content must be properly contained in order for an accurate section height to be calculated.
 
-- How can I stop Scrollify adding fragment identifiers (hash values) to the URL?
-
-This behaviour is controlled by `sectionName`, setting `sectionName` to false will disable it.
-
 - Why are section heights increasing on resize?
 
 This happens when your browser is running in Quirks Mode, usually as the result of an incorrect doctype.
