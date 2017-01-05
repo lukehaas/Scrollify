@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.9
+ * Version 1.0.10
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -27,9 +27,7 @@
 
 
 
- If section being scrolled to is an interstitialSection and the last section on page
-
- then value to scroll to is current position plus height of interstitialSection
+if touchScroll is false - update index
 
  */
 (function (global,factory) {
@@ -238,7 +236,6 @@
 						return false;
 					}
 					scrollable = false;
-
 					//instant,callbacks
 					manualScroll.calculateNearest(false,true);
 				}, 200);
@@ -343,7 +340,7 @@
 				if(locked===true) {
 					return false;
 				}
-				if(e.keyCode==38) {
+				if(e.keyCode==38 || e.keyCode==34) {
 					if(index>0) {
 						if(atTop()) {
 							e.preventDefault();
@@ -352,7 +349,7 @@
 							animateScroll(index,false,true,false);
 						}
 					}
-				} else if(e.keyCode==40 || e.keyCode==32) {
+				} else if(e.keyCode==40 || e.keyCode==33) {
 					if(index<heights.length-1) {
 						if(atBottom()) {
 							e.preventDefault();
