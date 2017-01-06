@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.10
+ * Version 1.0.11
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -340,7 +340,7 @@ if touchScroll is false - update index
 				if(locked===true) {
 					return false;
 				}
-				if(e.keyCode==38 || e.keyCode==34) {
+				if(e.keyCode==38 || e.keyCode==33) {
 					if(index>0) {
 						if(atTop()) {
 							e.preventDefault();
@@ -349,7 +349,7 @@ if touchScroll is false - update index
 							animateScroll(index,false,true,false);
 						}
 					}
-				} else if(e.keyCode==40 || e.keyCode==33) {
+				} else if(e.keyCode==40 || e.keyCode==34) {
 					if(index<heights.length-1) {
 						if(atBottom()) {
 							e.preventDefault();
