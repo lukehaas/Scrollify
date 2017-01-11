@@ -342,7 +342,7 @@ if touchScroll is false - update index
 				}
 				if(e.keyCode==38 || e.keyCode==33) {
 					if(index>0) {
-						if(atTop()) {
+					    if (atTop()) {
 							e.preventDefault();
 							index--;
 							//index, instant, callbacks, toTop
@@ -351,13 +351,31 @@ if touchScroll is false - update index
 					}
 				} else if(e.keyCode==40 || e.keyCode==34) {
 					if(index<heights.length-1) {
-						if(atBottom()) {
+					    if (atBottom()) {
 							e.preventDefault();
 							index++;
 							//index, instant, callbacks, toTop
 							animateScroll(index,false,true,false);
 						}
 					}
+				} else if (e.keyCode==36) {
+				    if (index > 0) {
+				        if (atTop()) {
+				            e.preventDefault();
+				            index = 0;
+				            //index, instant, callbacks, toTop
+				            animateScroll(index, true, true, false);
+				        }
+				    }
+				} else if (e.keyCode==35) {
+				    if (index < heights.length - 1) {
+				        if (atBottom()) {
+				            e.preventDefault();
+				            index = heights.length - 1;
+				            //index, instant, callbacks, toTop
+				            animateScroll(index, true, true, false);
+				        }
+				    }
 				}
 			},
 			init:function() {
