@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.11
+ * Version 1.0.12
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -255,7 +255,7 @@ if touchScroll is false - update index
 						closest = i;
 					}
 				}
-				if(atBottom() || atTop()) {
+				if((atBottom() && closest>index) || atTop()) {
 					index = closest;
 					//index, instant, callbacks, toTop
 					animateScroll(closest,instant,callbacks,false);
