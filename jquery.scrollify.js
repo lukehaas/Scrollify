@@ -476,7 +476,7 @@ if touchScroll is false - update index
 							interstitialIndex += 1;
 
 						} else {
-							interstitialScroll(parseInt(heights[index])+(elements[index].height()-$window.height()));
+							interstitialScroll(parseInt(heights[index])+(elements[index].outerHeight()-$window.height()));
 						}
 
 					}
@@ -601,7 +601,6 @@ if touchScroll is false - update index
 
 							overflow[i] = false;
 						} else {
-
 							$this.css({"height":$this.height()});
 
 							if(settings.overflowScroll) {
