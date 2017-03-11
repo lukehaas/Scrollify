@@ -262,7 +262,6 @@ if touchScroll is false - update index
 				}
 			},
 			wheelHandler:function(e) {
-
 				if(disabled===true) {
 					return true;
 				} else if(settings.standardScrollElements) {
@@ -301,9 +300,8 @@ if touchScroll is false - update index
 				if(locked) {
 					return false;
 				}
-
 				if(delta<0) {
-					if(index<heights.length-1) {
+					if(index<heights.length-1) {						
 						if(atBottom()) {
 							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
@@ -595,12 +593,12 @@ if touchScroll is false - update index
 					if($this.is(settings.interstitialSection)) {
 						overflow[i] = false;
 					} else {
-
 						if(($this.css("height","auto").outerHeight()<$window.height()) || $this.css("overflow")==="hidden") {
 							$this.css({"height":$window.height()});
 
 							overflow[i] = false;
 						} else {
+							
 							$this.css({"height":$this.height()});
 
 							if(settings.overflowScroll) {
@@ -645,7 +643,8 @@ if touchScroll is false - update index
 						} else {
 							names[i] = "#";
 							if(i===$(selector).length-1 && i>1) {
-								heights[i] = heights[i-1]+parseInt($this.height());
+
+								heights[i] = heights[i-1]+(parseInt($($(selector)[i-1]).outerHeight())-parseInt($(window).height()))+parseInt($this.outerHeight());
 							}
 						}
 					}
