@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.13
+ * Version 1.0.14
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -517,7 +517,8 @@ if touchScroll is false - update index
 			refresh:function(withCallback,scroll) {
 				clearTimeout(timeoutId2);
 				timeoutId2 = setTimeout(function() {
-					sizePanels();
+					//retain position
+					sizePanels(true);
 					//scroll, firstLoad
 					calculatePositions(scroll,false);
 					if(withCallback) {
@@ -527,7 +528,8 @@ if touchScroll is false - update index
 			},
 			handleUpdate:function() {
 				//callbacks, scroll
-				util.refresh(false,true);
+				//changed from false,true to false,false
+				util.refresh(false,false);
 			},
 			handleResize:function() {
 				//callbacks, scroll
@@ -540,7 +542,8 @@ if touchScroll is false - update index
 		};
 		settings = $.extend(settings, options);
 
-		sizePanels();
+		//retain position
+		sizePanels(false);
 
 		calculatePositions(false,true);
 
@@ -577,7 +580,11 @@ if touchScroll is false - update index
 			}
 		}
 
-		function sizePanels() {
+		function sizePanels(keepPosition) {
+			if(keepPosition) {
+				top = $window.scrollTop();				
+			}
+
 			var selector = settings.section;
 			overflow = [];
 			if(settings.interstitialSection.length) {
@@ -602,7 +609,7 @@ if touchScroll is false - update index
 							$this.css({"height":$this.height()});
 
 							if(settings.overflowScroll) {
-									overflow[i] = true;
+								overflow[i] = true;
 							} else {
 								overflow[i] = false;
 							}
@@ -619,6 +626,9 @@ if touchScroll is false - update index
 					}
 				}
 			});
+			if(keepPosition) {
+				$window.scrollTop(top);
+			}
 		}
 		function calculatePositions(scroll,firstLoad) {
 			var selector = settings.section;

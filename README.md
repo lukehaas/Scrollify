@@ -18,6 +18,8 @@ A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
 
 [Header and footer](http://projects.lukehaas.me/scrollify/examples/header-footer)
 
+[Dynamic content](http://projects.lukehaas.me/scrollify/examples/dynamic-content)
+
 ## Basic setup
 
 Scrollify requires jQuery 1.7+.
