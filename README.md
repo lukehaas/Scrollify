@@ -6,7 +6,7 @@ A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
 
 [http://projects.lukehaas.me/scrollify](https://projects.lukehaas.me/scrollify).
 
-##More examples
+## More examples
 
 [Scroll animations](https://projects.lukehaas.me/scrollify/examples/apple)
 
