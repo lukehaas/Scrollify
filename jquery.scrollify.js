@@ -301,7 +301,7 @@ if touchScroll is false - update index
 					return false;
 				}
 				if(delta<0) {
-					if(index<heights.length-1) {						
+					if(index<heights.length-1) {
 						if(atBottom()) {
 							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
@@ -505,9 +505,12 @@ if touchScroll is false - update index
 			},
 			init: function() {
 				if (document.addEventListener && settings.touchScroll) {
-					document.addEventListener('touchstart', swipeScroll.touchHandler, false);
-					document.addEventListener('touchmove', swipeScroll.touchHandler, false);
-					document.addEventListener('touchend', swipeScroll.touchHandler, false);
+					var eventListenerOptions = {
+						passive: false,
+					};
+					document.addEventListener('touchstart', swipeScroll.touchHandler, eventListenerOptions);
+					document.addEventListener('touchmove', swipeScroll.touchHandler, eventListenerOptions);
+					document.addEventListener('touchend', swipeScroll.touchHandler, eventListenerOptions);
 				}
 			}
 		};
@@ -582,7 +585,7 @@ if touchScroll is false - update index
 
 		function sizePanels(keepPosition) {
 			if(keepPosition) {
-				top = $window.scrollTop();				
+				top = $window.scrollTop();
 			}
 
 			var selector = settings.section;
@@ -605,7 +608,7 @@ if touchScroll is false - update index
 
 							overflow[i] = false;
 						} else {
-							
+
 							$this.css({"height":$this.height()});
 
 							if(settings.overflowScroll) {
