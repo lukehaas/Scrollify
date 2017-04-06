@@ -26,48 +26,48 @@ Scrollify requires jQuery 1.7+.
 
 The most basic setup is as follows:
 
-```
+```html
 <! doctype html>
-	<html>
-		<head>
-			<script>
-				$(function() {
-					$.scrollify({
-						section : ".example-classname",
-					});
-				});
-			</script>
-		</head>
-		<body>
-			<div class="example-classname"></div>
-			<div class="example-classname"></div>
-		</body>
-	</html>
+  <html>
+    <head>
+      <script>
+        $(function() {
+          $.scrollify({
+            section : ".example-classname",
+          });
+        });
+      </script>
+    </head>
+    <body>
+      <div class="example-classname"></div>
+      <div class="example-classname"></div>
+    </body>
+  </html>
 ```
 
 ## Configuration
 
 This is the default configuration:
 
-```
+```javascript
 $.scrollify({
-		section : ".example-classname",
-		sectionName : "section-name",
-		interstitialSection : "",
-		easing: "easeOutExpo",
-		scrollSpeed: 1100,
-		offset : 0,
-		scrollbars: true,
-		standardScrollElements: "",
-		setHeights: true,
-		overflowScroll: true,
-		updateHash: true,
-		touchScroll:true,
-		before:function() {},
-		after:function() {},
-		afterResize:function() {},
-		afterRender:function() {}
-	});
+    section : ".example-classname",
+    sectionName : "section-name",
+    interstitialSection : "",
+    easing: "easeOutExpo",
+    scrollSpeed: 1100,
+    offset : 0,
+    scrollbars: true,
+    standardScrollElements: "",
+    setHeights: true,
+    overflowScroll: true,
+    updateHash: true,
+    touchScroll:true,
+    before:function() {},
+    after:function() {},
+    afterResize:function() {},
+    afterRender:function() {}
+  });
 ```
 
 ## Options
@@ -208,24 +208,24 @@ This happens when your browser is running in Quirks Mode, usually as the result 
 
 Scrollify appends a hash value to the URL for each section, this allows for permalinking to particular sections. To define the hash value for each section you need to set a data-attribute on your sections. This data attribute can be called anything you like. The default is "section-name", but if you'd like something else then you'll need to define it with the `sectionName` option.
 
-```
+```html
 <! doctype html>
-	<html>
-		<head>
-			<script>
-				$(function() {
-					$.scrollify({
-						section : ".section-class-name",
-						sectionName : "section-name"
-					});
-				});
-			</script>
-		</head>
-		<body>
-			<div class="section-class-name" data-section-name="home"></div>
-			<div class="section-class-name" data-section-name="about"></div>
-		</body>
-	</html>
+  <html>
+    <head>
+      <script>
+        $(function() {
+          $.scrollify({
+            section : ".section-class-name",
+            sectionName : "section-name"
+          });
+        });
+      </script>
+    </head>
+    <body>
+      <div class="section-class-name" data-section-name="home"></div>
+      <div class="section-class-name" data-section-name="about"></div>
+    </body>
+  </html>
 ```
 ## Installation
 
