@@ -155,6 +155,10 @@ The update method recalculates the heights and positions of the panels.
 
 The current method returns the current section as a jQuery object.
 
+`$.scrollify.currentIndex()`
+
+The currentIndex method returns the current section index, starting at 0.
+
 `$.scrollify.disable()`
 
 The disable method turns off the scroll snap behaviour so that the page scroll like normal.
