@@ -101,7 +101,9 @@ if touchScroll is false - update index
 		if(names[index]) {
 			scrollable = false;
 			if(callbacks) {
-				settings.before(index,elements);
+                if( typeof settings.before == 'function' && settings.before(index,elements) === false ){
+                    return true;
+                }
 			}
 			interstitialIndex = 1;
 			destination = heights[index];
@@ -301,7 +303,7 @@ if touchScroll is false - update index
 					return false;
 				}
 				if(delta<0) {
-					if(index<heights.length-1) {						
+					if(index<heights.length-1) {
 						if(atBottom()) {
 							if(isAccelerating(scrollSamples)) {
 								e.preventDefault();
@@ -582,7 +584,7 @@ if touchScroll is false - update index
 
 		function sizePanels(keepPosition) {
 			if(keepPosition) {
-				top = $window.scrollTop();				
+				top = $window.scrollTop();
 			}
 
 			var selector = settings.section;
@@ -605,7 +607,7 @@ if touchScroll is false - update index
 
 							overflow[i] = false;
 						} else {
-							
+
 							$this.css({"height":$this.height()});
 
 							if(settings.overflowScroll) {
