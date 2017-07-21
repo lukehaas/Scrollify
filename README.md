@@ -56,6 +56,7 @@ $.scrollify({
     interstitialSection : "",
     easing: "easeOutExpo",
     scrollSpeed: 1100,
+    debounce: 400,
     offset : 0,
     scrollbars: true,
     standardScrollElements: "",
@@ -86,6 +87,9 @@ Define the easing method.
 
 `offset`
 A distance in pixels to offset each sections position by.
+
+`debounce`
+Debounce time for resizing slides, in ms.
 
 `scrollbars`
 A boolean to define whether scroll bars are visible or not.
