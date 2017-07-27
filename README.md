@@ -26,48 +26,48 @@ Scrollify requires jQuery 1.7+.
 
 The most basic setup is as follows:
 
-```
-<! doctype html>
-	<html>
-		<head>
-			<script>
-				$(function() {
-					$.scrollify({
-						section : ".example-classname",
-					});
-				});
-			</script>
-		</head>
-		<body>
-			<div class="example-classname"></div>
-			<div class="example-classname"></div>
-		</body>
-	</html>
+```html
+<!doctype html>
+  <html>
+    <head>
+      <script>
+        $(function() {
+          $.scrollify({
+            section : ".example-classname",
+          });
+        });
+      </script>
+    </head>
+    <body>
+      <div class="example-classname"></div>
+      <div class="example-classname"></div>
+    </body>
+  </html>
 ```
 
 ## Configuration
 
 This is the default configuration:
 
-```
+```javascript
 $.scrollify({
-		section : ".example-classname",
-		sectionName : "section-name",
-		interstitialSection : "",
-		easing: "easeOutExpo",
-		scrollSpeed: 1100,
-		offset : 0,
-		scrollbars: true,
-		standardScrollElements: "",
-		setHeights: true,
-		overflowScroll: true,
-		updateHash: true,
-		touchScroll:true,
-		before:function() {},
-		after:function() {},
-		afterResize:function() {},
-		afterRender:function() {}
-	});
+    section : ".example-classname",
+    sectionName : "section-name",
+    interstitialSection : "",
+    easing: "easeOutExpo",
+    scrollSpeed: 1100,
+    offset : 0,
+    scrollbars: true,
+    standardScrollElements: "",
+    setHeights: true,
+    overflowScroll: true,
+    updateHash: true,
+    touchScroll:true,
+    before:function() {},
+    after:function() {},
+    afterResize:function() {},
+    afterRender:function() {}
+  });
 ```
 
 ## Options
@@ -155,6 +155,10 @@ The update method recalculates the heights and positions of the panels.
 
 The current method returns the current section as a jQuery object.
 
+`$.scrollify.currentIndex()`
+
+The currentIndex method returns the current section index, starting at 0.
+
 `$.scrollify.disable()`
 
 The disable method turns off the scroll snap behaviour so that the page scroll like normal.
@@ -208,24 +212,24 @@ This happens when your browser is running in Quirks Mode, usually as the result 
 
 Scrollify appends a hash value to the URL for each section, this allows for permalinking to particular sections. To define the hash value for each section you need to set a data-attribute on your sections. This data attribute can be called anything you like. The default is "section-name", but if you'd like something else then you'll need to define it with the `sectionName` option.
 
-```
-<! doctype html>
-	<html>
-		<head>
-			<script>
-				$(function() {
-					$.scrollify({
-						section : ".section-class-name",
-						sectionName : "section-name"
-					});
-				});
-			</script>
-		</head>
-		<body>
-			<div class="section-class-name" data-section-name="home"></div>
-			<div class="section-class-name" data-section-name="about"></div>
-		</body>
-	</html>
+```html
+<!doctype html>
+  <html>
+    <head>
+      <script>
+        $(function() {
+          $.scrollify({
+            section : ".section-class-name",
+            sectionName : "section-name"
+          });
+        });
+      </script>
+    </head>
+    <body>
+      <div class="section-class-name" data-section-name="home"></div>
+      <div class="section-class-name" data-section-name="about"></div>
+    </body>
+  </html>
 ```
 ## Installation
 
@@ -235,7 +239,7 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
 
 ## Browser Support
 
-![IE](https://raw.github.com/alrra/browser-logos/master/internet-explorer/internet-explorer_48x48.png) | ![Chrome](https://raw.github.com/alrra/browser-logos/master/chrome/chrome_48x48.png) | ![Firefox](https://raw.github.com/alrra/browser-logos/master/firefox/firefox_48x48.png) | ![Opera](https://raw.github.com/alrra/browser-logos/master/opera/opera_48x48.png) | ![Safari](https://raw.github.com/alrra/browser-logos/master/safari/safari_48x48.png)
+![IE](https://github.com/alrra/browser-logos/raw/master/src/archive/internet-explorer_7-8/internet-explorer_7-8_48x48.png) | ![Chrome](https://github.com/alrra/browser-logos/raw/master/src/chrome/chrome_48x48.png) | ![Firefox](https://github.com/alrra/browser-logos/raw/master/src/firefox/firefox_48x48.png) | ![Opera](https://github.com/alrra/browser-logos/raw/master/src/opera/opera_48x48.png) | ![Safari](https://github.com/alrra/browser-logos/raw/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
 IE 7+ ✔ | Chrome ✔ | Firefox ✔ | Opera ✔ | Safari ✔ |
 
