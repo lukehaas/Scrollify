@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.15
+ * Version 1.0.16
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -460,7 +460,7 @@ if touchScroll is false - update index
 			},
 			down: function() {
 
-				if(index<heights.length-1) {
+				if(index<heights.length) {
 
 					if(atBottom() && index<heights.length-1) {
 
