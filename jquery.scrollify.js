@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.16
+ * Version 1.0.17
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -332,10 +332,10 @@ if touchScroll is false - update index
 
 			},
 			keyHandler:function(e) {
-				if(disabled===true) {
+				if(disabled===true || document.activeElement.readOnly===false) {
 					return true;
 				}
-				if(locked===true || document.activeElement.readOnly===false) {
+				if(locked===true) {
 					return false;
 				}
 				if(e.keyCode==38 || e.keyCode==33) {
