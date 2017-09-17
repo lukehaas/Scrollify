@@ -512,7 +512,6 @@ if touchScroll is false - update index
 			}
 		};
 
-
 		util = {
 			refresh:function(withCallback,scroll) {
 				clearTimeout(timeoutId2);
@@ -541,7 +540,10 @@ if touchScroll is false - update index
 			}
 		};
 		settings = $.extend(settings, options);
-		$window = $(settings.target);
+
+		if (settings.overflowScroll && settings.target !== "html,body") {
+			$window = $(settings.target);
+		}
 
 		//retain position
 		sizePanels(false);
