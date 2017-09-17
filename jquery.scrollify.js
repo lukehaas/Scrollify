@@ -541,6 +541,7 @@ if touchScroll is false - update index
 			}
 		};
 		settings = $.extend(settings, options);
+		$window = $(settings.target);
 
 		//retain position
 		sizePanels(false);
