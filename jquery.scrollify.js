@@ -57,6 +57,7 @@ if touchScroll is false - update index
 		timeoutId,
 		timeoutId2,
 		$window = $(window),
+		viewportHeight,
 		top = $window.scrollTop(),
 		scrollable = false,
 		locked = false,
@@ -91,6 +92,9 @@ if touchScroll is false - update index
 			afterResize:function() {},
 			afterRender:function() {}
 		};
+	function getViewportHeight() {
+		return ($window.height() + settings.offset);
+	}
 	function animateScroll(index,instant,callbacks,toTop) {
 		if(currentIndex===index) {
 			callbacks = false;
@@ -108,10 +112,11 @@ if touchScroll is false - update index
 			if(firstLoad===false && currentIndex>index && toTop===false) {
 				//We're going backwards
 				if(overflow[index]) {
+					viewportHeight = getViewportHeight();
 
-					interstitialIndex = parseInt(elements[index].outerHeight()/$window.height());
+					interstitialIndex = parseInt(elements[index].outerHeight()/viewportHeight);
 
-					destination = parseInt(heights[index])+(elements[index].outerHeight()-$window.height());
+					destination = parseInt(heights[index])+(elements[index].outerHeight()-viewportHeight);
 				}
 			}
 
@@ -468,13 +473,14 @@ if touchScroll is false - update index
 						//index, instant, callbacks, toTop
 						animateScroll(index,false,true,false);
 					} else {
-						if(Math.floor(elements[index].height()/$window.height())>interstitialIndex) {
+						viewportHeight = getViewportHeight();
+						if(Math.floor(elements[index].height()/viewportHeight)>interstitialIndex) {
 
-							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+(viewportHeight*interstitialIndex));
 							interstitialIndex += 1;
 
 						} else {
-							interstitialScroll(parseInt(heights[index])+(elements[index].outerHeight()-$window.height()));
+							interstitialScroll(parseInt(heights[index])+(elements[index].outerHeight()-viewportHeight));
 						}
 
 					}
@@ -490,9 +496,10 @@ if touchScroll is false - update index
 					} else {
 
 						if(interstitialIndex>2) {
+							viewportHeight = getViewportHeight();
 
 							interstitialIndex -= 1;
-							interstitialScroll(parseInt(heights[index])+($window.height()*interstitialIndex));
+							interstitialScroll(parseInt(heights[index])+(viewportHeight*interstitialIndex));
 
 						} else {
 
@@ -593,6 +600,7 @@ if touchScroll is false - update index
 			if(settings.scrollbars===false) {
 				settings.overflowScroll = false;
 			}
+			viewportHeight = getViewportHeight();
 			$(selector).each(function(i) {
 				var $this = $(this);
 
@@ -600,8 +608,8 @@ if touchScroll is false - update index
 					if($this.is(settings.interstitialSection)) {
 						overflow[i] = false;
 					} else {
-						if(($this.css("height","auto").outerHeight()<$window.height()) || $this.css("overflow")==="hidden") {
-							$this.css({"height":$window.height()});
+						if(($this.css("height","auto").outerHeight()<viewportHeight) || $this.css("overflow")==="hidden") {
+							$this.css({"height":viewportHeight});
 
 							overflow[i] = false;
 						} else {
@@ -619,7 +627,7 @@ if touchScroll is false - update index
 
 				} else {
 
-					if(($this.outerHeight()<$window.height()) || (settings.overflowScroll===false)) {
+					if(($this.outerHeight()<viewportHeight) || (settings.overflowScroll===false)) {
 						overflow[i] = false;
 					} else {
 						overflow[i] = true;
@@ -694,8 +702,9 @@ if touchScroll is false - update index
 				return true;
 			}
 			top = $window.scrollTop();
+			viewportHeight = getViewportHeight();
 
-			if(top<parseInt(heights[index])+(elements[index].outerHeight()-$window.height())-28) {
+			if(top<parseInt(heights[index])+(elements[index].outerHeight()-viewportHeight)-28) {
 
 				return false;
 
