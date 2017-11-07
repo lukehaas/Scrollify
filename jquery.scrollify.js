@@ -101,6 +101,10 @@ if touchScroll is false - update index
 		if(names[index]) {
 			scrollable = false;
 			if(callbacks) {
+				if(firstLoad===true) {
+					settings.afterRender();
+					firstLoad = false;
+				}
 				settings.before(index,elements);
 			}
 			interstitialIndex = 1;
