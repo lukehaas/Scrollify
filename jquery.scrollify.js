@@ -123,7 +123,8 @@ if touchScroll is false - update index
 			if(settings.updateHash && settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
 				    try {
-							history.replaceState(null, null, names[index]);
+						var curURI = window.location.href.split(/[#]/)[0];
+						history.replaceState(null, null, curURI+names[index]);
 				    } catch (e) {
 				    	if(window.console) {
 				    		console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
