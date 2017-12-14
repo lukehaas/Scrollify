@@ -134,11 +134,6 @@ if touchScroll is false - update index
 					window.location.hash = names[index];
 				}
 			}
-			if(firstLoad) {
-					settings.afterRender();
-					firstLoad = false;
-			}
-
 
 			currentIndex = index;
 			if(instant) {
@@ -509,9 +504,12 @@ if touchScroll is false - update index
 			},
 			init: function() {
 				if (document.addEventListener && settings.touchScroll) {
-					document.addEventListener('touchstart', swipeScroll.touchHandler, false);
-					document.addEventListener('touchmove', swipeScroll.touchHandler, false);
-					document.addEventListener('touchend', swipeScroll.touchHandler, false);
+					var eventListenerOptions = {
+						passive: false
+					};
+					document.addEventListener('touchstart', swipeScroll.touchHandler, eventListenerOptions);
+					document.addEventListener('touchmove', swipeScroll.touchHandler, eventListenerOptions);
+					document.addEventListener('touchend', swipeScroll.touchHandler, eventListenerOptions);
 				}
 			}
 		};
