@@ -104,11 +104,11 @@ if touchScroll is false - update index
     }
     if(names[index]) {
       scrollable = false;
+      if(firstLoad===true) {
+        settings.afterRender();
+        firstLoad = false;
+      }
       if(callbacks) {
-        if(firstLoad===true) {
-          settings.afterRender();
-          firstLoad = false;
-        }
         if( typeof settings.before == 'function' && settings.before(index,elements) === false ){
           return true;
         }
@@ -661,8 +661,7 @@ if touchScroll is false - update index
             } else {
               names[i] = "#";
               if(i===$(selector).length-1 && i>1) {
-
-                heights[i] = heights[i-1]+(parseInt($($(selector)[i-1]).outerHeight())-parseInt($(window).height()))+parseInt($this.outerHeight());
+                heights[i] = heights[i-1] + (parseInt($($(selector)[i-1]).outerHeight()) - parseInt($(window).height())) + parseInt($this.outerHeight());
               }
             }
           }
