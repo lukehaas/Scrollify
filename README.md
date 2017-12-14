@@ -97,7 +97,7 @@ A CSS selector for elements within sections that require standard scrolling beha
 A boolean to define whether Scollify assigns a height to the sections. True by default.
 
 `overflowScroll`
-A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default.
+A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default. (This will be false if `scrollbars` is false)
 
 `updateHash`
 A boolean to define whether Scrollify updates the browser location hash when scrolling through sections. True by default.
