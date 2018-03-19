@@ -336,6 +336,10 @@ if touchScroll is false - update index
       keyHandler:function(e) {
         if(disabled===true || document.activeElement.readOnly===false) {
           return true;
+        } else if(settings.standardScrollElements) {
+          if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+            return true;
+          }
         }
         if(locked===true) {
           return false;
