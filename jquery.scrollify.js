@@ -618,7 +618,7 @@ if touchScroll is false - update index
               overflow[i] = false;
             } else {
 
-              $this.css({"height":$this.height()});
+              $this.css({"height":$this.outerHeight()});
 
               if(settings.overflowScroll) {
                 overflow[i] = true;
