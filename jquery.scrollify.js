@@ -655,7 +655,11 @@ if touchScroll is false - update index
           if(i>0) {
             heights[i] = parseInt($this.offset().top) + settings.offset;
           } else {
-            heights[i] = parseInt($this.offset().top);
+            if($('body').hasClass('admin-bar')){
+              heights[i] = parseInt($this.offset().top-32);
+            }else{
+              heights[i] = parseInt($this.offset().top);
+            }
           }
           if(settings.sectionName && $this.data(settings.sectionName)) {
             names[i] = "#" + $this.data(settings.sectionName).toString().replace(/ /g,"-");
