@@ -77,7 +77,7 @@ if touchScroll is false - update index
       section: ".section",
       sectionName: "section-name",
       interstitialSection: "",
-      easing: "easeOutExpo",
+      easing: "jswing",
       scrollSpeed: 1100,
       offset: 0,
       scrollbars: true,
@@ -206,7 +206,7 @@ if touchScroll is false - update index
   }
   var scrollify = function(options) {
     initialised = true;
-    $.easing['easeOutExpo'] = function(x, t, b, c, d) {
+    $.easing['jswing'] = function(x, t, b, c, d) {
       return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
     };
 
