@@ -1,6 +1,6 @@
 {
   "name": "jquery-scrollify",
-  "version": "1.0.17",
+  "version": "1.0.19",
   "description": "A jQuery plugin that assists scrolling and smoothly snaps to sections.",
   "main": "jquery.scrollify.js",
   "scripts": {
@@ -30,8 +30,6 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
-    "grunt": "^1.0.1",
-    "grunt-contrib-uglify": "^2.0.0",
     "jquery": "^3.1.1",
     "jsdom": "^9.8.3",
     "mocha": "^3.1.2"

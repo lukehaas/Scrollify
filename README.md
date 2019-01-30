@@ -97,7 +97,7 @@ A CSS selector for elements within sections that require standard scrolling beha
 A boolean to define whether Scollify assigns a height to the sections. True by default.
 
 `overflowScroll`
-A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default.
+A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default. (This will be false if `scrollbars` is false)
 
 `updateHash`
 A boolean to define whether Scrollify updates the browser location hash when scrolling through sections. True by default.
@@ -241,7 +241,7 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
 
 ![IE](https://github.com/alrra/browser-logos/raw/master/src/archive/internet-explorer_7-8/internet-explorer_7-8_48x48.png) | ![Chrome](https://github.com/alrra/browser-logos/raw/master/src/chrome/chrome_48x48.png) | ![Firefox](https://github.com/alrra/browser-logos/raw/master/src/firefox/firefox_48x48.png) | ![Opera](https://github.com/alrra/browser-logos/raw/master/src/opera/opera_48x48.png) | ![Safari](https://github.com/alrra/browser-logos/raw/master/src/safari/safari_48x48.png)
 --- | --- | --- | --- | --- |
-IE 7+ ✔ | Chrome ✔ | Firefox ✔ | Opera ✔ | Safari ✔ |
+IE 8+ ✔ | Chrome ✔ | Firefox ✔ | Opera ✔ | Safari ✔ |
 
 
 [![Browserstack](http://projects.lukehaas.me/scrollify/images/browserstack2.png)](http://www.browserstack.com/)
