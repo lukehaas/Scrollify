@@ -92,11 +92,9 @@ if touchScroll is false - update index
       afterResize: function() {},
       afterRender: function() {}
     };
-
   function getportHeight() {
     return ($window.height() + settings.offset);
   }
-
   function animateScroll(index, instant, callbacks, toTop) {
     if (currentIndex === index) {
       callbacks = false;
@@ -557,8 +555,8 @@ if touchScroll is false - update index
     console.log(settings);
 
     if (settings.overflowScroll && settings.target !== "html,body") {
-			$window = $(settings.target);
-		}
+        $window = $(settings.target);
+    }
 
     //retain position
     sizePanels(false);
@@ -583,7 +581,6 @@ if touchScroll is false - update index
         window.addEventListener("orientationchange", util.handleOrientation, false);
       }
     }
-
     function interstitialScroll(pos) {
       if ($().velocity) {
         $(settings.target).stop().velocity('scroll', {
@@ -650,7 +647,6 @@ if touchScroll is false - update index
         $window.scrollTop(top);
       }
     }
-
     function calculatePositions(scroll, firstLoad) {
       var selector = settings.section;
       if (settings.interstitialSection.length) {
@@ -709,7 +705,6 @@ if touchScroll is false - update index
         return true;
       }
     }
-
     function atBottom() {
       if (!overflow[index]) {
         return true;
@@ -854,5 +849,4 @@ if touchScroll is false - update index
   };
   $.scrollify = scrollify;
   return scrollify;
-
 }));
