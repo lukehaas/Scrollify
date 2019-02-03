@@ -552,8 +552,6 @@ if touchScroll is false - update index
       }
     };
     settings = $.extend(settings, options);
-    console.log(settings);
-
     if (settings.overflowScroll && settings.target !== "html,body") {
         $window = $(settings.target);
     }
