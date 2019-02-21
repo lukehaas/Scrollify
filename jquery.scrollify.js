@@ -105,8 +105,8 @@ if touchScroll is false - update index
     if(names[index]) {
       scrollable = false;
       if(firstLoad===true) {
-        settings.afterRender();
         firstLoad = false;
+        settings.afterRender();
       }
       if(callbacks) {
         if( typeof settings.before == 'function' && settings.before(index,elements) === false ){
