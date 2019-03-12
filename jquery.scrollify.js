@@ -114,7 +114,7 @@ if touchScroll is false - update index
         }
       }
       interstitialIndex = 1;
-      destination = heights[index];
+      destination = (!index) ? 0 : heights[index];
       if(firstLoad===false && currentIndex>index && toTop===false) {
         //We're going backwards
         if(overflow[index]) {
