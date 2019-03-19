@@ -282,7 +282,12 @@ if touchScroll is false - update index
 
 
         e = e || window.event;
-        var value = e.originalEvent.wheelDelta || -e.originalEvent.deltaY || -e.originalEvent.detail;
+        var value;
+        if (e.originalEvent) {
+            value = e.originalEvent.wheelDelta || -e.originalEvent.deltaY || -e.originalEvent.detail;
+        } else {
+            value = e.wheelDelta || -e.deltaY || -e.detail;
+        }
         var delta = Math.max(-1, Math.min(1, value));
 
         //delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
@@ -372,7 +377,7 @@ if touchScroll is false - update index
         } else {
           $("body").css({"overflow":"hidden"});
         }
-        $window.on(wheelEvent,manualScroll.wheelHandler);
+        window.addEventListener(wheelEvent, manualScroll.wheelHandler, { passive: false });
         //$(document).bind(wheelEvent,manualScroll.wheelHandler);
         $window.on('keydown', manualScroll.keyHandler);
       }
