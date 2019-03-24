@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.19
+ * Version 1.0.20
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -798,7 +798,8 @@ if touchScroll is false - update index
       $window.off('mouseup', manualScroll.handleMouseup);
       $window.off('scroll', manualScroll.handleScroll);
     }
-    $window.off(wheelEvent,manualScroll.wheelHandler);
+    // $window.off(wheelEvent,manualScroll.wheelHandler);
+    window.removeEventListener(wheelEvent,manualScroll.wheelHandler);
     $window.off('keydown', manualScroll.keyHandler);
 
     if (document.addEventListener && settings.touchScroll) {
