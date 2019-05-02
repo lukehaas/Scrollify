@@ -22,7 +22,7 @@ A ~~jQuery~~ Pure JS plugin that assists scrolling and snaps to sections. Touch 
 
 ## Basic setup
 
-Scrollify requires jQuery 1.7+.
+Scrollify requires ~~jQuery 1.7+~~ absolutely nothing.
 
 The most basic setup is as follows:
 
@@ -153,7 +153,7 @@ The update method recalculates the heights and positions of the panels.
 
 `$.scrollify.current()`
 
-The current method returns the current section as a jQuery object.
+The current method returns the current section as a DOM object.
 
 `$.scrollify.currentIndex()`
 
