@@ -182,30 +182,31 @@ if touchScroll is false - update index
 	
 	function isAccelerating(samples) {
 		function average(num) {
-		var sum = 0;
-	
-		var lastElements = samples.slice(Math.max(samples.length - num, 1));
-	
-		for(var i = 0; i < lastElements.length; i++){
-			sum += lastElements[i];
-		}
-	
-		return Math.ceil(sum/num);
+			var sum = 0;
+		
+			var lastElements = samples.slice(Math.max(samples.length - num, 1));
+		
+			for(var i = 0; i < lastElements.length; i++){
+				sum += lastElements[i];
+			}
+		
+			return Math.ceil(sum/num);
 		}
 	
 		var avEnd = average(10);
 		var avMiddle = average(70);
 	
 		if(avEnd >= avMiddle) {
-		return true;
+			return true;
 		} else {
-		return false;
+			return false;
 		}
 	}
 	var scrollify = function(options) {
 		initialised = true;
-		$.easing['easeOutExpo'] = function(x, t, b, c, d) {
-		return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
+		scrollify.easing = [];
+		scrollify.easing['easeOutExpo'] = function(x, t, b, c, d) {
+			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
 	
 		manualScroll = {
@@ -554,7 +555,49 @@ if touchScroll is false - update index
 			util.refresh(true,true);
 		}
 		};
-		settings = $.extend(settings, options);
+
+		{
+			// Thanks https://gomakethings.com/vanilla-javascript-version-of-jquery-extend/! (Vanilla JS version of $.extend)
+			let extend = () =>
+			{
+				// Variables
+				var extended = {};
+				var deep = false;
+				var i = 0;
+				var length = arguments.length;
+			
+				// Check if a deep merge
+				if ( Object.prototype.toString.call( arguments[0] ) === '[object Boolean]' ) {
+					deep = arguments[0];
+					i++;
+				}
+			
+				// Merge the object into the extended object
+				var merge = function (obj) {
+					for ( var prop in obj ) {
+						if ( Object.prototype.hasOwnProperty.call( obj, prop ) ) {
+							// If deep merge and property is an object, merge properties
+							if ( deep && Object.prototype.toString.call(obj[prop]) === '[object Object]' ) {
+								extended[prop] = extend( true, extended[prop], obj[prop] );
+							} else {
+								extended[prop] = obj[prop];
+							}
+						}
+					}
+				};
+			
+				// Loop through each object and conduct a merge
+				for ( ; i < length; i++ ) {
+					var obj = arguments[i];
+					merge(obj);
+				}
+			
+				return extended;
+			};
+		
+
+			settings = extend(settings, options);
+		}
 	
 		//retain position
 		sizePanels(false);
