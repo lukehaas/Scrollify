@@ -652,13 +652,17 @@ if touchScroll is false - update index
 						}
 			
 					}
-				} else {
-		
-				if((val.outerHeight()<portHeight) || (settings.overflowScroll===false)) {
-					overflow[i] = false;
-				} else {
-					overflow[i] = true;
 				}
+				else
+				{
+					if(val.offsetHeight < portHeight || settings.overflowScroll === false)
+					{
+						overflow[i] = false;
+					}
+					else
+					{
+						overflow[i] = true;
+					}
 				}
 			});
 			if(keepPosition) {
