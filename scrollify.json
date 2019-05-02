@@ -27,8 +27,5 @@
     "bugs": "https://github.com/lukehaas/Scrollify/issues",
     "homepage": "http://projects.lukehaas.me/scrollify",
     "docs": "https://github.com/lukehaas/Scrollify",
-    "download": "https://github.com/lukehaas/Scrollify",
-    "dependencies": {
-        "jquery": ">=1.7"
-    }
+    "download": "https://github.com/lukehaas/Scrollify"
 }
