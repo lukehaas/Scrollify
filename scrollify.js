@@ -621,33 +621,40 @@ if touchScroll is false - update index
 				settings.overflowScroll = false;
 			}
 			portHeight = getportHeight();
-			document.querySelectorAll(selector).forEach(function(i) {
-				var $this = $(this);
-		
-				if(settings.setHeights) {
-				if($this.is(settings.interstitialSection)) {
-					overflow[i] = false;
-				} else {
-					if(($this.css("height","auto").outerHeight()<portHeight) || $this.css("overflow")==="hidden") {
-					$this.css({"height":portHeight});
-		
-					overflow[i] = false;
-					} else {
-		
-					$this.css({"height":$this.outerHeight()});
-		
-					if(settings.overflowScroll) {
-						overflow[i] = true;
-					} else {
+			document.querySelectorAll(selector).forEach((val, i) =>
+			{
+				if(settings.setHeights)
+				{
+					if(settings.interstitialSection ? val.matches(settings.interstitialSection) : false)
+					{
 						overflow[i] = false;
 					}
+					else
+					{
+						val.style["height"] == "auto";
+						if(val.offsetHeight < portHeight || val.style["overflow"] === "hidden")
+						{
+							val.style["height"] = portHeight;
+				
+							overflow[i] = false;
+						}
+						else
+						{
+							val.style["height"] = val.offsetHeight;
+				
+							if(settings.overflowScroll) {
+								overflow[i] = true;
+							}
+							else
+							{
+								overflow[i] = false;
+							}
+						}
+			
 					}
-		
-				}
-		
 				} else {
 		
-				if(($this.outerHeight()<portHeight) || (settings.overflowScroll===false)) {
+				if((val.outerHeight()<portHeight) || (settings.overflowScroll===false)) {
 					overflow[i] = false;
 				} else {
 					overflow[i] = true;
