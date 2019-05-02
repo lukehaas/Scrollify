@@ -71,24 +71,24 @@ if touchScroll is false - update index
 		destination = 0,
 		wheelEvent = 'onwheel' in document ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll',
 		settings = {
-		//section should be an identifier that is the same for each section
-		section: ".section",
-		sectionName: "section-name",
-		interstitialSection: "",
-		easing: "easeOutExpo",
-		scrollSpeed: 1100,
-		offset: 0,
-		scrollbars: true,
-		target:"html,body",
-		standardScrollElements: false,
-		setHeights: true,
-		overflowScroll:true,
-		updateHash: true,
-		touchScroll:true,
-		before:function() {},
-		after:function() {},
-		afterResize:function() {},
-		afterRender:function() {}
+			//section should be an identifier that is the same for each section
+			section: ".section",
+			sectionName: "section-name",
+			interstitialSection: "",
+			easing: "easeOutExpo",
+			scrollSpeed: 1100,
+			offset: 0,
+			scrollbars: true,
+			target:"html,body",
+			standardScrollElements: false,
+			setHeights: true,
+			overflowScroll:true,
+			updateHash: true,
+			touchScroll:true,
+			before:function() {},
+			after:function() {},
+			afterResize:function() {},
+			afterRender:function() {}
 		};
 	function getportHeight() {
 		return ($window.height() + settings.offset);
@@ -557,45 +557,14 @@ if touchScroll is false - update index
 		};
 
 		{
-			// Thanks https://gomakethings.com/vanilla-javascript-version-of-jquery-extend/! (Vanilla JS version of $.extend)
-			let extend = () =>
-			{
-				// Variables
-				var extended = {};
-				var deep = false;
-				var i = 0;
-				var length = arguments.length;
-			
-				// Check if a deep merge
-				if ( Object.prototype.toString.call( arguments[0] ) === '[object Boolean]' ) {
-					deep = arguments[0];
-					i++;
+			// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
+			let extend = (obj, src) => {
+				for (var key in src) {
+					if (src.hasOwnProperty(key)) obj[key] = src[key];
 				}
+				return obj;
+			}
 			
-				// Merge the object into the extended object
-				var merge = function (obj) {
-					for ( var prop in obj ) {
-						if ( Object.prototype.hasOwnProperty.call( obj, prop ) ) {
-							// If deep merge and property is an object, merge properties
-							if ( deep && Object.prototype.toString.call(obj[prop]) === '[object Object]' ) {
-								extended[prop] = extend( true, extended[prop], obj[prop] );
-							} else {
-								extended[prop] = obj[prop];
-							}
-						}
-					}
-				};
-			
-				// Loop through each object and conduct a merge
-				for ( ; i < length; i++ ) {
-					var obj = arguments[i];
-					merge(obj);
-				}
-			
-				return extended;
-			};
-		
-
 			settings = extend(settings, options);
 		}
 	
@@ -644,6 +613,7 @@ if touchScroll is false - update index
 	
 		var selector = settings.section;
 		overflow = [];
+		console.dir(settings);
 		if(settings.interstitialSection.length) {
 			selector += "," + settings.interstitialSection;
 		}
