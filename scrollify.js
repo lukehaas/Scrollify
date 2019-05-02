@@ -90,9 +90,98 @@ if touchScroll is false - update index
 			afterResize:function() {},
 			afterRender:function() {}
 		};
+	
+	// Smooth page scrolling in vanilla js (Thanks https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/)
+	function scrollIt(destination, duration = 200, easing = 'linear', callback) {
+		const easings = {
+		  linear(t) {
+			return t;
+		  },
+		  easeInQuad(t) {
+			return t * t;
+		  },
+		  // Duplicate of ^
+		  easeInExpo(t) {
+			return t * (2 - t);
+		  },
+		  easeOutQuad(t) {
+			return t * (2 - t);
+		  },
+		  // Duplicate of ^
+		  easeOutExpo(t) {
+			return t * (2 - t);
+		  },
+		  easeInOutQuad(t) {
+			return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+		  },
+		  easeInCubic(t) {
+			return t * t * t;
+		  },
+		  easeOutCubic(t) {
+			return (--t) * t * t + 1;
+		  },
+		  easeInOutCubic(t) {
+			return t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
+		  },
+		  easeInQuart(t) {
+			return t * t * t * t;
+		  },
+		  easeOutQuart(t) {
+			return 1 - (--t) * t * t * t;
+		  },
+		  easeInOutQuart(t) {
+			return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * (--t) * t * t * t;
+		  },
+		  easeInQuint(t) {
+			return t * t * t * t * t;
+		  },
+		  easeOutQuint(t) {
+			return 1 + (--t) * t * t * t * t;
+		  },
+		  easeInOutQuint(t) {
+			return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * (--t) * t * t * t * t;
+		  }
+		};
+	  
+		const start = window.pageYOffset;
+		const startTime = 'now' in window.performance ? performance.now() : new Date().getTime();
+	  
+		const documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
+		const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+		const destinationOffset = typeof destination === 'number' ? destination : destination.offsetTop;
+		const destinationOffsetToScroll = Math.round(documentHeight - destinationOffset < windowHeight ? documentHeight - windowHeight : destinationOffset);
+	  
+		if ('requestAnimationFrame' in window === false) {
+		  window.scroll(0, destinationOffsetToScroll);
+		  if (callback) {
+			callback();
+		  }
+		  return;
+		}
+	  
+		function scroll() {
+		  const now = 'now' in window.performance ? performance.now() : new Date().getTime();
+		  const time = Math.min(1, ((now - startTime) / duration));
+		  const timeFunction = easings[easing](time);
+		  window.scroll(0, Math.ceil((timeFunction * (destinationOffsetToScroll - start)) + start));
+	  
+		  if (window.pageYOffset === destinationOffsetToScroll) {
+			if (callback) {
+			  callback();
+			}
+			return;
+		  }
+	  
+		  requestAnimationFrame(scroll);
+		}
+	  
+		scroll();
+	}
+
 	function getportHeight() {
 		return ($window.innerHeight + settings.offset);
 	}
+
 	function animateScroll(index,instant,callbacks,toTop) {
 		if(currentIndex===index) {
 		callbacks = false;
@@ -141,40 +230,42 @@ if touchScroll is false - update index
 		}
 	
 		currentIndex = index;
-		if(instant) {
-			$(settings.target).stop().scrollTop(destination);
-			if(callbacks) {
-			settings.after(index,elements);
-			}
-		} else {
-			locked = true;
-			if( $().velocity ) {
-			$(settings.target).stop().velocity('scroll', {
-				duration: settings.scrollSpeed,
-				easing: settings.easing,
-				offset: destination,
-				mobileHA: false
-			});
-			} else {
-			$(settings.target).stop().animate({
-				scrollTop: destination
-			}, settings.scrollSpeed,settings.easing);
-			}
-	
-			if(window.location.hash.length && settings.sectionName && window.console) {
-			try {
-				if($(window.location.hash).length) {
-				console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
-				}
-			} catch (e) {}
-			}
-			$(settings.target).promise().done(function(){
-			locked = false;
-			firstLoad = false;
-			if(callbacks) {
+		if(instant)
+		{
+			document.body.scrollTop = destination;
+
+			if(callbacks)
+			{
 				settings.after(index,elements);
 			}
-			});
+		}
+		else
+		{
+			locked = true;
+
+			// Scroll to section
+			scrollIt(
+				destination,
+				settings.scrollSpeed,
+				settings.easing,
+				() =>
+				{
+					locked = false;
+					firstLoad = false;
+					if(callbacks) {
+						settings.after(index,elements);
+					}
+				}
+			);
+	
+			if(window.location.hash.length && settings.sectionName && window.console)
+			{
+				try {
+					if(window.location.hash.length) {
+						console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
+					}
+				} catch (e) {}
+			}
 		}
 	
 		}
@@ -586,28 +677,28 @@ if touchScroll is false - update index
 			manualScroll.calculateNearest(true,false);
 		},200);
 		}
-		if(heights.length) {
-		manualScroll.init();
-		swipeScroll.init();
-	
-		$window.addEventListener("resize",util.handleResize);
-		if (document.addEventListener) {
-			window.addEventListener("orientationchange", util.handleOrientation, false);
+		if(heights.length)
+		{
+			manualScroll.init();
+			swipeScroll.init();
+		
+			$window.addEventListener("resize",util.handleResize);
+
+			if (document.addEventListener)
+			{
+				window.addEventListener("orientationchange", util.handleOrientation, false);
+			}
 		}
-		}
-		function interstitialScroll(pos) {
-		if( $().velocity ) {
-			$(settings.target).stop().velocity('scroll', {
-			duration: settings.scrollSpeed,
-			easing: settings.easing,
-			offset: pos,
-			mobileHA: false
-			});
-		} else {
-			$(settings.target).stop().animate({
-			scrollTop: pos
-			}, settings.scrollSpeed,settings.easing);
-		}
+
+		function interstitialScroll(pos)
+		{
+			// Scroll to section
+			scrollIt(
+				pos,
+				settings.scrollSpeed,
+				settings.easing,
+				() => {}
+			);
 		}
 	
 		function sizePanels(keepPosition) {
@@ -638,13 +729,15 @@ if touchScroll is false - update index
 						val.style["height"] == "auto";
 						if(val.offsetHeight < portHeight || val.style["overflow"] === "hidden")
 						{
-							val.style["height"] = portHeight;
+							console.log(portHeight);
+							val.style["height"] = portHeight.toString() + "px";
+							console.dir(val);
 				
 							overflow[i] = false;
 						}
 						else
 						{
-							val.style["height"] = val.offsetHeight;
+							val.style["height"] = val.offsetHeight.toString() + "px";
 				
 							if(settings.overflowScroll) {
 								overflow[i] = true;
@@ -893,15 +986,21 @@ if touchScroll is false - update index
 	scrollify.isDisabled = function() {
 		return disabled;
 	};
-	scrollify.setOptions = function(updatedOptions) {
-		if(!initialised) {
-		return false;
+	scrollify.setOptions = function(updatedOptions)
+	{
+		if(!initialised)
+		{
+			return false;
 		}
-		if(typeof updatedOptions === "object") {
-		settings = $.extend(settings, updatedOptions);
-		util.handleUpdate();
-		} else if(window.console) {
-		console.warn("Scrollify warning: setOptions expects an object.");
+
+		if(typeof updatedOptions === "object")
+		{
+			settings = $.extend(settings, updatedOptions);
+			util.handleUpdate();
+		}
+		else if(window.console)
+		{
+			console.warn("Scrollify warning: setOptions expects an object.");
 		}
 	};
 	window.scrollify = scrollify;
