@@ -669,51 +669,77 @@ if touchScroll is false - update index
 				$window.scrollTop(top);
 			}
 		}
-		function calculatePositions(scroll,firstLoad) {
-		var selector = settings.section;
-		if(settings.interstitialSection.length) {
-			selector += "," + settings.interstitialSection;
-		}
-		heights = [];
-		names = [];
-		elements = [];
-		$(selector).each(function(i){
-			var $this = $(this);
-			if(i>0) {
-				heights[i] = parseInt($this.offset().top) + settings.offset;
-			} else {
-				heights[i] = parseInt($this.offset().top);
+		function calculatePositions (scroll,firstLoad)
+		{
+			var selector = settings.section;
+
+			var offset = (elem) =>
+			{
+				// Thanks http://youmightnotneedjquery.com/
+				var rect = elem.getBoundingClientRect();
+
+				return {
+				  top: rect.top + document.body.scrollTop,
+				  left: rect.left + document.body.scrollLeft
+				};
 			}
-			if(settings.sectionName && $this.data(settings.sectionName)) {
-				names[i] = "#" + $this.data(settings.sectionName).toString().replace(/ /g,"-");
-			} else {
-				if($this.is(settings.interstitialSection)===false) {
-				names[i] = "#" + (i + 1);
-				} else {
-				names[i] = "#";
-				if(i===$(selector).length-1 && i>1) {
-					heights[i] = heights[i-1] + (parseInt($($(selector)[i-1]).outerHeight()) - parseInt($(window).height())) + parseInt($this.outerHeight());
-				}
-				}
+
+			if(settings.interstitialSection.length)
+			{
+				selector += "," + settings.interstitialSection;
 			}
-			elements[i] = $this;
-			try {
-				if($(names[i]).length && window.console) {
-				console.warn("Scrollify warning: Section names can't match IDs - this will cause the browser to anchor.");
+
+			heights = [];
+			names = [];
+			elements = [];
+
+			document.querySelectorAll(selector).forEach((val,i) =>
+			{
+				var $this = val;
+				if(i > 0)
+				{
+					heights[i] = parseInt(offset($this).top) + settings.offset;
 				}
-			} catch (e) {}
-	
-			if(window.location.hash===names[i]) {
-				index = i;
-				hasLocation = true;
+				else
+				{
+					heights[i] = parseInt(offset($this).top);
+				}
+				if(settings.sectionName && $this.data(settings.sectionName))
+				{
+					names[i] = "#" + $this.data(settings.sectionName).toString().replace(/ /g,"-");
+				} else
+				{
+					if($this.is(settings.interstitialSection)===false)
+					{
+						names[i] = "#" + (i + 1);
+					}
+					else
+					{
+						names[i] = "#";
+						if(i===$(selector).length-1 && i>1)
+						{
+							heights[i] = heights[i-1] + (parseInt($($(selector)[i-1]).outerHeight()) - parseInt($(window).height())) + parseInt($this.outerHeight());
+						}
+					}
+				}
+				elements[i] = $this;
+				try {
+					if($(names[i]).length && window.console) {
+					console.warn("Scrollify warning: Section names can't match IDs - this will cause the browser to anchor.");
+					}
+				} catch (e) {}
+		
+				if(window.location.hash===names[i]) {
+					index = i;
+					hasLocation = true;
+				}
+		
+			});
+		
+			if(true===scroll) {
+				//index, instant, callbacks, toTop
+				animateScroll(index,false,false,false);
 			}
-	
-		});
-	
-		if(true===scroll) {
-			//index, instant, callbacks, toTop
-			animateScroll(index,false,false,false);
-		}
 		}
 	
 		function atTop() {
