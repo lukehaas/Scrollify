@@ -209,177 +209,181 @@ if touchScroll is false - update index
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
 	
-		manualScroll = {
-		handleMousedown:function() {
-			if(disabled===true) {
-			return true;
-			}
-			scrollable = false;
-			scrolled = false;
-		},
-		handleMouseup:function() {
-			if(disabled===true) {
-			return true;
-			}
-			scrollable = true;
-			if(scrolled) {
-			//instant,callbacks
-			manualScroll.calculateNearest(false,true);
-			}
-		},
-		handleScroll:function() {
-			if(disabled===true) {
-			return true;
-			}
-			if(timeoutId){
-			clearTimeout(timeoutId);
-			}
-	
-			timeoutId = setTimeout(function(){
-			scrolled = true;
-			if(scrollable===false) {
-				return false;
-			}
-			scrollable = false;
-			//instant,callbacks
-			manualScroll.calculateNearest(false,true);
-			}, 200);
-		},
-		calculateNearest:function(instant,callbacks) {
-			top = $window.scrollTop();
-			var i =1,
-			max = heights.length,
-			closest = 0,
-			prev = Math.abs(heights[0] - top),
-			diff;
-			for(;i<max;i++) {
-			diff = Math.abs(heights[i] - top);
-	
-			if(diff < prev) {
-				prev = diff;
-				closest = i;
-			}
-			}
-			if((atBottom() && closest>index) || atTop()) {
-			index = closest;
-			//index, instant, callbacks, toTop
-			animateScroll(closest,instant,callbacks,false);
-			}
-		},
-		wheelHandler:function(e) {
-			if(disabled===true) {
-			return true;
-			} else if(settings.standardScrollElements) {
-			if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+			manualScroll = {
+			handleMousedown:function() {
+				if(disabled===true) {
 				return true;
-			}
-			}
-			if(!overflow[index]) {
-			e.preventDefault();
-			}
-			var currentScrollTime = new Date().getTime();
-	
-	
-			e = e || window.event;
-			var value;
-			if (e.originalEvent) {
-				value = e.originalEvent.wheelDelta || -e.originalEvent.deltaY || -e.originalEvent.detail;
-			} else {
-				value = e.wheelDelta || -e.deltaY || -e.detail;
-			}
-			var delta = Math.max(-1, Math.min(1, value));
-	
-			//delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
-	
-			if(scrollSamples.length > 149){
-			scrollSamples.shift();
-			}
-			//scrollSamples.push(Math.abs(delta*10));
-			scrollSamples.push(Math.abs(value));
-	
-			if((currentScrollTime-scrollTime) > 200){
-			scrollSamples = [];
-			}
-			scrollTime = currentScrollTime;
-	
-	
-			if(locked) {
-			return false;
-			}
-			if(delta<0) {
-			if(index<heights.length-1) {
-				if(atBottom()) {
-				if(isAccelerating(scrollSamples)) {
-					e.preventDefault();
-					index++;
-					locked = true;
-					//index, instant, callbacks, toTop
-					animateScroll(index,false,true, false);
-				} else {
+				}
+				scrollable = false;
+				scrolled = false;
+			},
+			handleMouseup:function() {
+				if(disabled===true) {
+				return true;
+				}
+				scrollable = true;
+				if(scrolled) {
+				//instant,callbacks
+				manualScroll.calculateNearest(false,true);
+				}
+			},
+			handleScroll:function() {
+				if(disabled===true) {
+				return true;
+				}
+				if(timeoutId){
+				clearTimeout(timeoutId);
+				}
+		
+				timeoutId = setTimeout(function(){
+				scrolled = true;
+				if(scrollable===false) {
 					return false;
 				}
+				scrollable = false;
+				//instant,callbacks
+				manualScroll.calculateNearest(false,true);
+				}, 200);
+			},
+			calculateNearest:function(instant,callbacks) {
+				top = $window.scrollTop();
+				var i =1,
+				max = heights.length,
+				closest = 0,
+				prev = Math.abs(heights[0] - top),
+				diff;
+				for(;i<max;i++) {
+				diff = Math.abs(heights[i] - top);
+		
+				if(diff < prev) {
+					prev = diff;
+					closest = i;
 				}
-			}
-			} else if(delta>0) {
-			if(index>0) {
-				if(atTop()) {
-				if(isAccelerating(scrollSamples)) {
+				}
+				if((atBottom() && closest>index) || atTop()) {
+				index = closest;
+				//index, instant, callbacks, toTop
+				animateScroll(closest,instant,callbacks,false);
+				}
+			},
+			wheelHandler:function(e) {
+				if(disabled===true) {
+				return true;
+				} else if(settings.standardScrollElements) {
+				if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+					return true;
+				}
+				}
+				if(!overflow[index]) {
+				e.preventDefault();
+				}
+				var currentScrollTime = new Date().getTime();
+		
+		
+				e = e || window.event;
+				var value;
+				if (e.originalEvent) {
+					value = e.originalEvent.wheelDelta || -e.originalEvent.deltaY || -e.originalEvent.detail;
+				} else {
+					value = e.wheelDelta || -e.deltaY || -e.detail;
+				}
+				var delta = Math.max(-1, Math.min(1, value));
+		
+				//delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
+		
+				if(scrollSamples.length > 149){
+				scrollSamples.shift();
+				}
+				//scrollSamples.push(Math.abs(delta*10));
+				scrollSamples.push(Math.abs(value));
+		
+				if((currentScrollTime-scrollTime) > 200){
+				scrollSamples = [];
+				}
+				scrollTime = currentScrollTime;
+		
+		
+				if(locked) {
+				return false;
+				}
+				if(delta<0) {
+				if(index<heights.length-1) {
+					if(atBottom()) {
+					if(isAccelerating(scrollSamples)) {
+						e.preventDefault();
+						index++;
+						locked = true;
+						//index, instant, callbacks, toTop
+						animateScroll(index,false,true, false);
+					} else {
+						return false;
+					}
+					}
+				}
+				} else if(delta>0) {
+				if(index>0) {
+					if(atTop()) {
+					if(isAccelerating(scrollSamples)) {
+						e.preventDefault();
+						index--;
+						locked = true;
+						//index, instant, callbacks, toTop
+						animateScroll(index,false,true, false);
+					} else {
+						return false
+					}
+					}
+				}
+				}
+		
+			},
+			keyHandler:function(e) {
+				if(disabled===true || document.activeElement.readOnly===false) {
+				return true;
+				} else if(settings.standardScrollElements) {
+				if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+					return true;
+				}
+				}
+				if(locked===true) {
+				return false;
+				}
+				if(e.keyCode==38 || e.keyCode==33) {
+				if(index>0) {
+					if(atTop()) {
 					e.preventDefault();
 					index--;
-					locked = true;
 					//index, instant, callbacks, toTop
-					animateScroll(index,false,true, false);
-				} else {
-					return false
+					animateScroll(index,false,true,false);
+					}
+				}
+				} else if(e.keyCode==40 || e.keyCode==34) {
+				if(index<heights.length-1) {
+					if(atBottom()) {
+					e.preventDefault();
+					index++;
+					//index, instant, callbacks, toTop
+					animateScroll(index,false,true,false);
+					}
 				}
 				}
-			}
-			}
-	
-		},
-		keyHandler:function(e) {
-			if(disabled===true || document.activeElement.readOnly===false) {
-			return true;
-			} else if(settings.standardScrollElements) {
-			if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
-				return true;
-			}
-			}
-			if(locked===true) {
-			return false;
-			}
-			if(e.keyCode==38 || e.keyCode==33) {
-			if(index>0) {
-				if(atTop()) {
-				e.preventDefault();
-				index--;
-				//index, instant, callbacks, toTop
-				animateScroll(index,false,true,false);
+			},
+			init: () =>
+			{
+				if(settings.scrollbars)
+				{
+					$window.addEventListener('mousedown', manualScroll.handleMousedown);
+					$window.addEventListener('mouseup', manualScroll.handleMouseup);
+					$window.addEventListener('scroll', manualScroll.handleScroll);
 				}
-			}
-			} else if(e.keyCode==40 || e.keyCode==34) {
-			if(index<heights.length-1) {
-				if(atBottom()) {
-				e.preventDefault();
-				index++;
-				//index, instant, callbacks, toTop
-				animateScroll(index,false,true,false);
+				else
+				{
+					$("body").css({"overflow":"hidden"});
 				}
+				window.addEventListener(wheelEvent, manualScroll.wheelHandler, { passive: false });
+				//$(document).bind(wheelEvent,manualScroll.wheelHandler);
+				$window.addEventListener('keydown', manualScroll.keyHandler);
 			}
-			}
-		},
-		init:function() {
-			if(settings.scrollbars) {
-			$window.on('mousedown', manualScroll.handleMousedown);
-			$window.on('mouseup', manualScroll.handleMouseup);
-			$window.on('scroll', manualScroll.handleScroll);
-			} else {
-			$("body").css({"overflow":"hidden"});
-			}
-			window.addEventListener(wheelEvent, manualScroll.wheelHandler, { passive: false });
-			//$(document).bind(wheelEvent,manualScroll.wheelHandler);
-			$window.on('keydown', manualScroll.keyHandler);
-		}
 		};
 	
 		swipeScroll = {
@@ -586,7 +590,7 @@ if touchScroll is false - update index
 		manualScroll.init();
 		swipeScroll.init();
 	
-		$window.on("resize",util.handleResize);
+		$window.addEventListener("resize",util.handleResize);
 		if (document.addEventListener) {
 			window.addEventListener("orientationchange", util.handleOrientation, false);
 		}
@@ -696,6 +700,7 @@ if touchScroll is false - update index
 			document.querySelectorAll(selector).forEach((val,i) =>
 			{
 				var $this = val;
+
 				if(i > 0)
 				{
 					heights[i] = parseInt(offset($this).top) + settings.offset;
@@ -704,19 +709,22 @@ if touchScroll is false - update index
 				{
 					heights[i] = parseInt(offset($this).top);
 				}
-				if(settings.sectionName && $this.data(settings.sectionName))
+
+				if(settings.sectionName && $this.getAttribute(settings.sectionName))
 				{
-					names[i] = "#" + $this.data(settings.sectionName).toString().replace(/ /g,"-");
-				} else
+					names[i] = "#" + $this.getAttribute(settings.sectionName).toString().replace(/ /g,"-");
+				}
+				else
 				{
-					if($this.is(settings.interstitialSection)===false)
+					if(settings.interstitialSection ? ($this.matches(settings.interstitialSection) === false) : false)
 					{
 						names[i] = "#" + (i + 1);
 					}
 					else
 					{
 						names[i] = "#";
-						if(i===$(selector).length-1 && i>1)
+
+						if(i === document.querySelectorAll(selector).length-1 && i>1)
 						{
 							heights[i] = heights[i-1] + (parseInt($($(selector)[i-1]).outerHeight()) - parseInt($(window).height())) + parseInt($this.outerHeight());
 						}
