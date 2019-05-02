@@ -246,7 +246,7 @@ if touchScroll is false - update index
 				}, 200);
 			},
 			calculateNearest:function(instant,callbacks) {
-				top = $window.scrollTop();
+				top = window.pageYOffset | document.body.scrollTop;
 				var i =1,
 				max = heights.length,
 				closest = 0,
