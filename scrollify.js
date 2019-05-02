@@ -607,56 +607,56 @@ if touchScroll is false - update index
 		}
 	
 		function sizePanels(keepPosition) {
-		if(keepPosition) {
-			top = $window.scrollTop();
-		}
-	
-		var selector = settings.section;
-		overflow = [];
-		console.dir(settings);
-		if(settings.interstitialSection.length) {
-			selector += "," + settings.interstitialSection;
-		}
-		if(settings.scrollbars===false) {
-			settings.overflowScroll = false;
-		}
-		portHeight = getportHeight();
-		$(selector).each(function(i) {
-			var $this = $(this);
-	
-			if(settings.setHeights) {
-			if($this.is(settings.interstitialSection)) {
-				overflow[i] = false;
-			} else {
-				if(($this.css("height","auto").outerHeight()<portHeight) || $this.css("overflow")==="hidden") {
-				$this.css({"height":portHeight});
-	
-				overflow[i] = false;
-				} else {
-	
-				$this.css({"height":$this.outerHeight()});
-	
-				if(settings.overflowScroll) {
-					overflow[i] = true;
-				} else {
+			if(keepPosition) {
+				top = $window.scrollTop();
+			}
+		
+			var selector = settings.section;
+			overflow = [];
+			
+			if(settings.interstitialSection.length) {
+				selector += "," + settings.interstitialSection;
+			}
+			if(settings.scrollbars===false) {
+				settings.overflowScroll = false;
+			}
+			portHeight = getportHeight();
+			document.querySelectorAll(selector).forEach(function(i) {
+				var $this = $(this);
+		
+				if(settings.setHeights) {
+				if($this.is(settings.interstitialSection)) {
 					overflow[i] = false;
+				} else {
+					if(($this.css("height","auto").outerHeight()<portHeight) || $this.css("overflow")==="hidden") {
+					$this.css({"height":portHeight});
+		
+					overflow[i] = false;
+					} else {
+		
+					$this.css({"height":$this.outerHeight()});
+		
+					if(settings.overflowScroll) {
+						overflow[i] = true;
+					} else {
+						overflow[i] = false;
+					}
+					}
+		
+				}
+		
+				} else {
+		
+				if(($this.outerHeight()<portHeight) || (settings.overflowScroll===false)) {
+					overflow[i] = false;
+				} else {
+					overflow[i] = true;
 				}
 				}
-	
+			});
+			if(keepPosition) {
+				$window.scrollTop(top);
 			}
-	
-			} else {
-	
-			if(($this.outerHeight()<portHeight) || (settings.overflowScroll===false)) {
-				overflow[i] = false;
-			} else {
-				overflow[i] = true;
-			}
-			}
-		});
-		if(keepPosition) {
-			$window.scrollTop(top);
-		}
 		}
 		function calculatePositions(scroll,firstLoad) {
 		var selector = settings.section;
