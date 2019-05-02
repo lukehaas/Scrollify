@@ -30,8 +30,12 @@
 if touchScroll is false - update index
 
  */
+
+/*jshint esversion: 6 */
+
 (function (global,factory) {
 	"use strict";
+	"esversion: 6";
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		return factory(document.querySelector, global, global.document);
@@ -296,7 +300,7 @@ if touchScroll is false - update index
 	var scrollify = function(options) {
 		initialised = true;
 		scrollify.easing = [];
-		scrollify.easing['easeOutExpo'] = function(x, t, b, c, d) {
+		scrollify.easing.easeOutExpo = function(x, t, b, c, d) {
 			return (t==d) ? b+c : c * (-Math.pow(2, -10 * t/d) + 1) + b;
 		};
 	
@@ -421,7 +425,7 @@ if touchScroll is false - update index
 						//index, instant, callbacks, toTop
 						animateScroll(index,false,true, false);
 					} else {
-						return false
+						return false;
 					}
 					}
 				}
@@ -658,7 +662,7 @@ if touchScroll is false - update index
 					if (src.hasOwnProperty(key)) obj[key] = src[key];
 				}
 				return obj;
-			}
+			};
 			
 			settings = extend(settings, options);
 		}
@@ -726,18 +730,18 @@ if touchScroll is false - update index
 					}
 					else
 					{
-						val.style["height"] == "auto";
-						if(val.offsetHeight < portHeight || val.style["overflow"] === "hidden")
+						val.style.height = "auto";
+						if(val.offsetHeight < portHeight || val.style.overflow === "hidden")
 						{
 							console.log(portHeight);
-							val.style["height"] = portHeight.toString() + "px";
+							val.style.height = portHeight.toString() + "px";
 							console.dir(val);
 				
 							overflow[i] = false;
 						}
 						else
 						{
-							val.style["height"] = val.offsetHeight.toString() + "px";
+							val.style.height = val.offsetHeight.toString() + "px";
 				
 							if(settings.overflowScroll) {
 								overflow[i] = true;
@@ -779,7 +783,7 @@ if touchScroll is false - update index
 				  top: rect.top + document.body.scrollTop,
 				  left: rect.left + document.body.scrollLeft
 				};
-			}
+			};
 
 			if(settings.interstitialSection.length)
 			{
@@ -869,7 +873,7 @@ if touchScroll is false - update index
 			return true;
 		}
 		}
-	}
+	};
 	
 	function move(panel,instant) {
 		var z = names.length;
