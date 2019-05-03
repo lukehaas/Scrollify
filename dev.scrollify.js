@@ -25,7 +25,6 @@
 
 (function (global,factory) {
 	"use strict";
-	"esversion: 6";
 	if (typeof define === 'function' && define.amd) {
 		// AMD. Register as an anonymous module.
 		return factory(document.querySelector, global, global.document);
