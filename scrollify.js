@@ -326,12 +326,16 @@ if touchScroll is false - update index
 		var avEnd = average(10);
 		var avMiddle = average(70);
 	
-		if(avEnd >= avMiddle) {
+		if(avEnd >= avMiddle)
+		{
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
+
 	var scrollify = function(options) {
 		initialised = true;
 		scrollify.easing = [];
@@ -913,6 +917,11 @@ if touchScroll is false - update index
 	function move(panel,instant)
 	{
 		var z = names.length;
+
+		// Don't both with out of range panels
+		if(typeof panel === "number" && panel >= z)
+			return;
+
 		for(;z>=0;z--)
 		{
 			if(typeof panel === 'string')
