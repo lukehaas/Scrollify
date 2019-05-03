@@ -742,7 +742,7 @@ if touchScroll is false - update index
 	
 		function sizePanels(keepPosition) {
 			if(keepPosition) {
-				top = $window.scrollTop();
+				top = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
 			}
 		
 			var selector = settings.section;
@@ -802,7 +802,7 @@ if touchScroll is false - update index
 				}
 			});
 			if(keepPosition) {
-				$window.scrollTop(top);
+				window.scrollTo(top,0);
 			}
 		}
 		function calculatePositions (scroll,firstLoad)
