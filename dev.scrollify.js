@@ -1045,7 +1045,7 @@
 		}
 		if(settings.setHeights)
 		{
-			$(settings.section).forEach((val) =>
+			document.querySelectorAll(settings.section).forEach((val) =>
 			{
 				val.style.height = "auto";
 			});

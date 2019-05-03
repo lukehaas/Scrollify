@@ -186,6 +186,10 @@ If you're working with Scrollify and having issues, please post your questions t
 
 If you think the issue is with Scrollify itself, please check the [open issues](https://github.com/lukehaas/Scrollify/issues) to see if it has already been logged. If it hasn't, please open a ticket with a detailed description of what you're seeing and details of the device and browser version you're seeing it on.
 
+## Known Issues
+
+- Refreshing the page while not at the top will cause scrolling to be locked.
+
 ## FAQ
 
 - Do I have to use the section element for Scrollify sections?
