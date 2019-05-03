@@ -955,18 +955,32 @@ if touchScroll is false - update index
 		{
 			return false;
 		}
-		if(panel.originalEvent)
+
+		if(typeof panel === "number")
 		{
-			panel = panel.getAttribute("href");
+			//index, instant, callbacks, toTop
+			animateScroll(panel,false,true,true);
 		}
-		move(panel,false);
+		else if(typeof panel === "string" && panel.substr(0,1) === "#")
+		{
+			move(panel,false);
+		}
 	};
 	scrollify.instantMove = (panel) => {
 		if(panel===undefined)
 		{
 			return false;
 		}
-		move(panel,true);
+
+		if(typeof panel === "number")
+		{
+			//index, instant, callbacks, toTop
+			animateScroll(panel,true,true,true);
+		}
+		else if(typeof panel === "string" && panel.substr(0,1) === "#")
+		{
+			move(panel,true);
+		}
 	};
 	scrollify.next = () => 
 	{
