@@ -920,7 +920,7 @@ if touchScroll is false - update index
 		}
 		move(panel,true);
 	};
-	scrollify.next = function() 
+	scrollify.next = () => 
 	{
 		if(index < names.length)
 		{
@@ -929,28 +929,31 @@ if touchScroll is false - update index
 			animateScroll(index,false,true,true);
 		}
 	};
-	scrollify.previous = function() {
+	scrollify.previous = () =>
+	{
 		if(index>0) {
 		index -= 1;
 		//index, instant, callbacks, toTop
 		animateScroll(index,false,true,true);
 		}
 	};
-	scrollify.instantNext = function() {
-		if(index<names.length) {
+	scrollify.instantNext = () =>
+	{
+		if(index<names.length)
+		{
 		index += 1;
 		//index, instant, callbacks, toTop
 		animateScroll(index,true,true,true);
 		}
 	};
-	scrollify.instantPrevious = function() {
+	scrollify.instantPrevious = () => {
 		if(index>0) {
 		index -= 1;
 		//index, instant, callbacks, toTop
 		animateScroll(index,true,true,true);
 		}
 	};
-	scrollify.destroy = function() {
+	scrollify.destroy = () => {
 		if(!initialised) {
 		return false;
 		}
@@ -979,29 +982,29 @@ if touchScroll is false - update index
 		elements = [];
 		overflow = [];
 	};
-	scrollify.update = function() {
+	scrollify.update = () => {
 		if(!initialised) {
 		return false;
 		}
 		util.handleUpdate();
 	};
-	scrollify.current = function() {
+	scrollify.current = () => {
 		return elements[index];
 	};
-	scrollify.currentIndex = function() {
+	scrollify.currentIndex = () => {
 		return index;
 	};
-	scrollify.disable = function() {
+	scrollify.disable = () => {
 		disabled = true;
 	};
-	scrollify.enable = function() {
+	scrollify.enable = () => {
 		disabled = false;
 		if (initialised) {
 		//instant,callbacks
 		manualScroll.calculateNearest(false,false);
 		}
 	};
-	scrollify.isDisabled = function() {
+	scrollify.isDisabled = () => {
 		return disabled;
 	};
 	scrollify.setOptions = function(updatedOptions)
