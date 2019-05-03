@@ -1,9 +1,6 @@
 /*!
- * jQuery Scrollify
+ * Scrollify
  * Version 1.0.20
- *
- * Requires:
- * - jQuery 1.7 or higher
  *
  * https://github.com/lukehaas/Scrollify
  *
@@ -24,14 +21,7 @@
  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
-if touchScroll is false - update index
-
  */
-
-/*jshint esversion: 6 */
 
 (function (global,factory) {
 	"use strict";
