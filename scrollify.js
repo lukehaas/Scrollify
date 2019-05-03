@@ -187,11 +187,13 @@ if touchScroll is false - update index
 	}
 
 	function animateScroll(index,instant,callbacks,toTop) {
-		if(currentIndex===index) {
-		callbacks = false;
+		if(currentIndex === index)
+		{
+			callbacks = false;
 		}
-		if(disabled===true) {
-		return true;
+		if(disabled===true)
+		{
+			return true;
 		}
 		if(names[index]) {
 		scrollable = false;
@@ -236,8 +238,8 @@ if touchScroll is false - update index
 		currentIndex = index;
 		if(instant)
 		{
-			document.body.scrollTop = destination;
-
+			window.scrollTo(destination);
+			
 			if(callbacks)
 			{
 				settings.after(index,elements);
@@ -931,19 +933,20 @@ if touchScroll is false - update index
 	};
 	scrollify.previous = () =>
 	{
-		if(index>0) {
-		index -= 1;
-		//index, instant, callbacks, toTop
-		animateScroll(index,false,true,true);
+		if(index > 0)
+		{
+			index -= 1;
+			//index, instant, callbacks, toTop
+			animateScroll(index,false,true,true);
 		}
 	};
 	scrollify.instantNext = () =>
 	{
-		if(index<names.length)
+		if(index < names.length)
 		{
-		index += 1;
-		//index, instant, callbacks, toTop
-		animateScroll(index,true,true,true);
+			index += 1;
+			//index, instant, callbacks, toTop
+			animateScroll(index,true,true,true);
 		}
 	};
 	scrollify.instantPrevious = () => {
