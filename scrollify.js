@@ -404,73 +404,93 @@ if touchScroll is false - update index
 				}
 			},
 			wheelHandler:function(e) {
-				if(disabled===true) {
-				return true;
-				} else if(settings.standardScrollElements) {
-				if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+				if(disabled===true)
+				{
 					return true;
 				}
+				else if(settings.standardScrollElements)
+				{
+					if(e.target.is(settings.standardScrollElements) || e.target.closest(settings.standardScrollElements).length)
+					{
+						return true;
+					}
 				}
-				if(!overflow[index]) {
-				e.preventDefault();
+				if(!overflow[index])
+				{
+					e.preventDefault();
 				}
+				
 				var currentScrollTime = new Date().getTime();
 		
-		
 				e = e || window.event;
-				var value;
-				if (e.originalEvent) {
-					value = e.originalEvent.wheelDelta || -e.originalEvent.deltaY || -e.originalEvent.detail;
-				} else {
-					value = e.wheelDelta || -e.deltaY || -e.detail;
-				}
+
+				var value = e.wheelDelta || -e.deltaY || -e.detail;
+
 				var delta = Math.max(-1, Math.min(1, value));
 		
 				//delta = delta || -e.originalEvent.detail / 3 || e.originalEvent.wheelDelta / 120;
 		
-				if(scrollSamples.length > 149){
-				scrollSamples.shift();
+				if(scrollSamples.length > 149)
+				{
+					scrollSamples.shift();
 				}
+				
 				//scrollSamples.push(Math.abs(delta*10));
 				scrollSamples.push(Math.abs(value));
 		
-				if((currentScrollTime-scrollTime) > 200){
-				scrollSamples = [];
+				if((currentScrollTime-scrollTime) > 200)
+				{
+					scrollSamples = [];
 				}
 				scrollTime = currentScrollTime;
 		
 		
-				if(locked) {
-				return false;
+				if(locked)
+				{
+					return false;
 				}
-				if(delta<0) {
-				if(index<heights.length-1) {
-					if(atBottom()) {
-					if(isAccelerating(scrollSamples)) {
-						e.preventDefault();
-						index++;
-						locked = true;
-						//index, instant, callbacks, toTop
-						animateScroll(index,false,true, false);
-					} else {
-						return false;
-					}
-					}
-				}
-				} else if(delta>0) {
-				if(index>0) {
-					if(atTop()) {
-					if(isAccelerating(scrollSamples)) {
-						e.preventDefault();
-						index--;
-						locked = true;
-						//index, instant, callbacks, toTop
-						animateScroll(index,false,true, false);
-					} else {
-						return false;
-					}
+
+				if(delta<0)
+				{
+					if(index<heights.length-1)
+					{
+						if(atBottom())
+						{
+							if(isAccelerating(scrollSamples))
+							{
+								e.preventDefault();
+								index++;
+								locked = true;
+								//index, instant, callbacks, toTop
+								animateScroll(index,false,true, false);
+							}
+							else
+							{
+								return false;
+							}
+						}
 					}
 				}
+				else if(delta>0)
+				{
+					if(index>0)
+					{
+						if(atTop())
+						{
+							if(isAccelerating(scrollSamples))
+							{
+								e.preventDefault();
+								index--;
+								locked = true;
+								//index, instant, callbacks, toTop
+								animateScroll(index,false,true, false);
+							}
+							else
+							{
+								return false;
+							}
+						}
+					}
 				}
 		
 			},
