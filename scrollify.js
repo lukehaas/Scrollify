@@ -274,6 +274,8 @@ if touchScroll is false - update index
 	
 		}
 	}
+
+	console.dir(animateScroll);
 	
 	function isAccelerating(samples) {
 		function average(num) {
@@ -875,30 +877,39 @@ if touchScroll is false - update index
 		}
 	};
 	
-	function move(panel,instant) {
+	function move(panel,instant)
+	{
 		var z = names.length;
-		for(;z>=0;z--) {
-		if(typeof panel === 'string') {
-			if (names[z]===panel) {
-			index = z;
-			//index, instant, callbacks, toTop
-			animateScroll(z,instant,true,true);
+		for(;z>=0;z--)
+		{
+			if(typeof panel === 'string')
+			{
+				if (names[z]===panel)
+				{
+					index = z;
+					//index, instant, callbacks, toTop
+					animateScroll(z,instant,true,true);
+				}
 			}
-		} else {
-			if(z===panel) {
-			index = z;
-			//index, instant, callbacks, toTop
-			animateScroll(z,instant,true,true);
+			else
+			{
+				if(z===panel)
+				{
+					index = z;
+					//index, instant, callbacks, toTop
+					animateScroll(z,instant,true,true);
+				}
 			}
-		}
 		}
 	}
 	scrollify.move = function(panel) {
-		if(panel===undefined) {
-		return false;
+		if(panel===undefined)
+		{
+			return false;
 		}
-		if(panel.originalEvent) {
-		panel = $(this).attr("href");
+		if(panel.originalEvent)
+		{
+			panel = panel.getAttribute("href");
 		}
 		move(panel,false);
 	};
