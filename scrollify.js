@@ -410,7 +410,7 @@ if touchScroll is false - update index
 				}
 				else if(settings.standardScrollElements)
 				{
-					if(e.target.is(settings.standardScrollElements) || e.target.closest(settings.standardScrollElements).length)
+					if(e.target.matches(settings.standardScrollElements) || e.target.closest(settings.standardScrollElements).length)
 					{
 						return true;
 					}
@@ -495,34 +495,34 @@ if touchScroll is false - update index
 		
 			},
 			keyHandler:function(e) {
-				if(disabled===true || document.activeElement.readOnly===false) {
-				return true;
-				} else if(settings.standardScrollElements) {
-				if($(e.target).is(settings.standardScrollElements) || $(e.target).closest(settings.standardScrollElements).length) {
+				if (disabled === true || document.activeElement.readOnly === false) {
 					return true;
-				}
-				}
-				if(locked===true) {
-				return false;
-				}
-				if(e.keyCode==38 || e.keyCode==33) {
-				if(index>0) {
-					if(atTop()) {
-					e.preventDefault();
-					index--;
-					//index, instant, callbacks, toTop
-					animateScroll(index,false,true,false);
+				} else if (settings.standardScrollElements) {
+					if (e.target.matches(settings.standardScrollElements) || e.target.closest(settings.standardScrollElements).length) {
+						return true;
 					}
 				}
-				} else if(e.keyCode==40 || e.keyCode==34) {
-				if(index<heights.length-1) {
-					if(atBottom()) {
-					e.preventDefault();
-					index++;
-					//index, instant, callbacks, toTop
-					animateScroll(index,false,true,false);
-					}
+				if (locked === true) {
+					return false;
 				}
+				if (e.keyCode == 38 || e.keyCode == 33) {
+					if (index > 0) {
+						if (atTop()) {
+							e.preventDefault();
+							index--;
+							//index, instant, callbacks, toTop
+							animateScroll(index, false, true, false);
+						}
+					}
+				} else if (e.keyCode == 40 || e.keyCode == 34) {
+					if (index < heights.length - 1) {
+						if (atBottom()) {
+							e.preventDefault();
+							index++;
+							//index, instant, callbacks, toTop
+							animateScroll(index, false, true, false);
+						}
+					}
 				}
 			},
 			init: () =>
@@ -535,7 +535,7 @@ if touchScroll is false - update index
 				}
 				else
 				{
-					$("body").css({"overflow":"hidden"});
+					document.body.style.overflow = "hidden";
 				}
 				window.addEventListener(wheelEvent, manualScroll.wheelHandler, { passive: false });
 				//$(document).bind(wheelEvent,manualScroll.wheelHandler);
@@ -557,76 +557,79 @@ if touchScroll is false - update index
 		},
 		touchHandler: function(event) {
 			if(disabled===true) {
-			return true;
-			} else if(settings.standardScrollElements) {
-			if($(event.target).is(settings.standardScrollElements) || $(event.target).closest(settings.standardScrollElements).length) {
 				return true;
 			}
+			else if(settings.standardScrollElements)
+			{
+				if(event.target.matches(settings.standardScrollElements) || event.target.closest(settings.standardScrollElements).length)
+				{
+					return true;
+				}
 			}
 			var touch;
 			if (typeof event !== 'undefined'){
-			if (typeof event.touches !== 'undefined') {
-				touch = event.touches[0];
-				switch (event.type) {
-				case 'touchstart':
-					swipeScroll.touches.touchstart.y = touch.pageY;
-					swipeScroll.touches.touchmove.y = -1;
-	
-					swipeScroll.touches.touchstart.x = touch.pageX;
-					swipeScroll.touches.touchmove.x = -1;
-	
-					swipeScroll.options.timeStamp = new Date().getTime();
-					swipeScroll.touches.touchend = false;
-				case 'touchmove':
-					swipeScroll.touches.touchmove.y = touch.pageY;
-					swipeScroll.touches.touchmove.x = touch.pageX;
-					if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y && (Math.abs(swipeScroll.touches.touchstart.y-swipeScroll.touches.touchmove.y)>Math.abs(swipeScroll.touches.touchstart.x-swipeScroll.touches.touchmove.x))) {
-					//if(!overflow[index]) {
-						event.preventDefault();
-					//}
-					swipeScroll.touches.direction = "y";
-					if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
-	
-						swipeScroll.touches.touchend = true;
-						if (swipeScroll.touches.touchstart.y > -1) {
-	
-						if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
-							if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
-	
-							swipeScroll.up();
-	
-							} else {
-							swipeScroll.down();
-	
+				if (typeof event.touches !== 'undefined') {
+					touch = event.touches[0];
+					switch (event.type) {
+					case 'touchstart':
+						swipeScroll.touches.touchstart.y = touch.pageY;
+						swipeScroll.touches.touchmove.y = -1;
+		
+						swipeScroll.touches.touchstart.x = touch.pageX;
+						swipeScroll.touches.touchmove.x = -1;
+		
+						swipeScroll.options.timeStamp = new Date().getTime();
+						swipeScroll.touches.touchend = false;
+					case 'touchmove':
+						swipeScroll.touches.touchmove.y = touch.pageY;
+						swipeScroll.touches.touchmove.x = touch.pageX;
+						if(swipeScroll.touches.touchstart.y!==swipeScroll.touches.touchmove.y && (Math.abs(swipeScroll.touches.touchstart.y-swipeScroll.touches.touchmove.y)>Math.abs(swipeScroll.touches.touchstart.x-swipeScroll.touches.touchmove.x))) {
+						//if(!overflow[index]) {
+							event.preventDefault();
+						//}
+						swipeScroll.touches.direction = "y";
+						if((swipeScroll.options.timeStamp+swipeScroll.options.timeGap)<(new Date().getTime()) && swipeScroll.touches.touchend == false) {
+		
+							swipeScroll.touches.touchend = true;
+							if (swipeScroll.touches.touchstart.y > -1) {
+		
+							if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
+								if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
+		
+								swipeScroll.up();
+		
+								} else {
+								swipeScroll.down();
+		
+								}
+							}
 							}
 						}
 						}
-					}
-					}
-					break;
-				case 'touchend':
-					if(swipeScroll.touches[event.type]===false) {
-					swipeScroll.touches[event.type] = true;
-					if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1 && swipeScroll.touches.direction==="y") {
-	
-						if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
-						if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
-							swipeScroll.up();
-	
-						} else {
-							swipeScroll.down();
-	
+						break;
+					case 'touchend':
+						if(swipeScroll.touches[event.type]===false) {
+						swipeScroll.touches[event.type] = true;
+						if (swipeScroll.touches.touchstart.y > -1 && swipeScroll.touches.touchmove.y > -1 && swipeScroll.touches.direction==="y") {
+		
+							if(Math.abs(swipeScroll.touches.touchmove.y-swipeScroll.touches.touchstart.y)>swipeScroll.options.distance) {
+							if(swipeScroll.touches.touchstart.y < swipeScroll.touches.touchmove.y) {
+								swipeScroll.up();
+		
+							} else {
+								swipeScroll.down();
+		
+							}
+							}
+							swipeScroll.touches.touchstart.y = -1;
+							swipeScroll.touches.touchstart.x = -1;
+							swipeScroll.touches.direction = "undetermined";
 						}
 						}
-						swipeScroll.touches.touchstart.y = -1;
-						swipeScroll.touches.touchstart.x = -1;
-						swipeScroll.touches.direction = "undetermined";
+					default:
+						break;
 					}
-					}
-				default:
-					break;
 				}
-			}
 			}
 		},
 		down: function() {
@@ -868,20 +871,20 @@ if touchScroll is false - update index
 
 				if(i > 0)
 				{
-					heights[i] = parseInt(offset($this).top) + settings.offset;
+					heights[i] = parseInt(offset(val).top) + settings.offset;
 				}
 				else
 				{
-					heights[i] = parseInt(offset($this).top);
+					heights[i] = parseInt(offset(val).top);
 				}
 
-				if(settings.sectionName && $this.getAttribute(settings.sectionName))
+				if(settings.sectionName && val.getAttribute(settings.sectionName))
 				{
-					names[i] = "#" + $this.getAttribute(settings.sectionName).toString().replace(/ /g,"-");
+					names[i] = "#" + val.getAttribute(settings.sectionName).toString().replace(/ /g,"-");
 				}
 				else
 				{
-					if(settings.interstitialSection ? ($this.matches(settings.interstitialSection) === false) : false)
+					if(settings.interstitialSection ? (val.matches(settings.interstitialSection) === false) : false)
 					{
 						names[i] = "#" + (i + 1);
 					}
@@ -891,14 +894,14 @@ if touchScroll is false - update index
 
 						if(i === document.querySelectorAll(selector).length-1 && i>1)
 						{
-							heights[i] = heights[i-1] + (parseInt($($(selector)[i-1]).outerHeight()) - parseInt($(window).height())) + parseInt($this.outerHeight());
+							heights[i] = heights[i-1] + (parseInt($($(selector)[i-1]).outerHeight()) - parseInt(window.innerHeight())) + parseInt(val.outerHeight());
 						}
 					}
 				}
-				elements[i] = $this;
+				elements[i] = val;
 				try {
 					if($(names[i]).length && window.console) {
-					log("Section names can't match IDs - this will cause the browser to anchor.", true);
+						log("Section names can't match IDs - this will cause the browser to anchor.", true);
 					}
 				} catch (e) {}
 		
