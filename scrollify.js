@@ -186,98 +186,114 @@ if touchScroll is false - update index
 		return ($window.innerHeight + settings.offset);
 	}
 
-	function animateScroll(index,instant,callbacks,toTop) {
+	function animateScroll(index,instant,callbacks,toTop)
+	{
+		// If we're already there at that index
 		if(currentIndex === index)
 		{
 			callbacks = false;
 		}
+
+		// If scrollify is disabled
 		if(disabled===true)
 		{
 			return true;
 		}
-		if(names[index]) {
-		scrollable = false;
-		if(firstLoad===true) {
-			firstLoad = false;
-			settings.afterRender();
-		}
-		if(callbacks) {
-			if( typeof settings.before == 'function' && settings.before(index,elements) === false ){
-			return true;
-			}
-		}
-		interstitialIndex = 1;
-		destination = (!index) ? 0 : heights[index];
-		if(firstLoad===false && currentIndex>index && toTop===false) {
-			//We're going backwards
-			if(overflow[index]) {
-			portHeight = getportHeight();
-	
-			interstitialIndex = parseInt(elements[index].outerHeight()/portHeight);
-	
-			destination = parseInt(heights[index])+(elements[index].outerHeight()-portHeight);
-			}
-		}
-	
-	
-		if(settings.updateHash && settings.sectionName && !(firstLoad===true && index===0)) {
-			if(history.pushState) {
-				try {
-				history.replaceState(null, null, names[index]);
-				} catch (e) {
-				if(window.console) {
-					console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
-				}
-				}
-	
-			} else {
-			window.location.hash = names[index];
-			}
-		}
-	
-		currentIndex = index;
-		if(instant)
-		{
-			window.scrollTo(
-				/* x */
-				0,
-				/* y */
-				destination
-			);
-			
-			if(callbacks)
-			{
-				settings.after(index,elements);
-			}
-		}
-		else
-		{
-			locked = true;
 
-			// Scroll to section
-			scrollIt(
-				destination,
-				settings.scrollSpeed,
-				settings.easing,
-				() =>
-				{
-					locked = false;
-					firstLoad = false;
-					if(callbacks) {
-						settings.after(index,elements);
-					}
-				}
-			);
-	
-			if(window.location.hash.length && settings.sectionName && window.console)
+		// If this index actually exists
+		if(names[index])
+		{
+			// Don't allow scrolling while we're animating
+			scrollable = false;
+
+			// If this is being triggered by the page load run the afterRender callback
+			if(firstLoad === true)
 			{
-				try {
-					if(window.location.hash.length) {
-						console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
-					}
-				} catch (e) {}
+				firstLoad = false;
+				settings.afterRender();
 			}
-		}
+
+			// If the user's before callback tells us not to proceed, then we won't
+			if(callbacks) {
+				if( typeof settings.before == 'function' && settings.before(index,elements) === false ){
+					return true;
+				}
+			}
+
+			interstitialIndex = 1;
+			destination = (!index) ? 0 : heights[index];
+			if(firstLoad===false && currentIndex>index && toTop===false)
+			{
+				//We're going backwards
+				if(overflow[index])
+				{
+					portHeight = getportHeight();
+			
+					interstitialIndex = parseInt(elements[index].outerHeight()/portHeight);
+			
+					destination = parseInt(heights[index])+(elements[index].outerHeight()-portHeight);
+				}
+			}
+		
+		
+			if(settings.updateHash && settings.sectionName && !(firstLoad===true && index===0)) {
+				if(history.pushState) {
+					try {
+					history.replaceState(null, null, names[index]);
+					} catch (e) {
+					if(window.console) {
+						console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
+					}
+					}
+		
+				} else {
+				window.location.hash = names[index];
+				}
+			}
+		
+			currentIndex = index;
+			if(instant)
+			{
+				window.scrollTo(
+					/* x */
+					0,
+					/* y */
+					destination
+				);
+				
+				if(callbacks)
+				{
+					settings.after(index,elements);
+				}
+			}
+			else
+			{
+				locked = true;
+
+				// Scroll to section
+				scrollIt(
+					destination,
+					settings.scrollSpeed,
+					settings.easing,
+					() =>
+					{
+						locked = false;
+						firstLoad = false;
+						if(callbacks) {
+							settings.after(index,elements);
+						}
+					}
+				);
+		
+				if(window.location.hash.length && settings.sectionName && window.console)
+				{
+					try {
+						if(window.location.hash.length) {
+							console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
+						}
+					} catch (e) {}
+				}
+			}
 	
 		}
 	}
@@ -891,7 +907,7 @@ if touchScroll is false - update index
 		{
 			if(typeof panel === 'string')
 			{
-				if (names[z]===panel)
+				if (names[z] === panel)
 				{
 					index = z;
 					//index, instant, callbacks, toTop
@@ -900,7 +916,7 @@ if touchScroll is false - update index
 			}
 			else
 			{
-				if(z===panel)
+				if(z === panel)
 				{
 					index = z;
 					//index, instant, callbacks, toTop
@@ -909,7 +925,7 @@ if touchScroll is false - update index
 			}
 		}
 	}
-	scrollify.move = function(panel) {
+	scrollify.move = (panel) => {
 		if(panel===undefined)
 		{
 			return false;
@@ -920,7 +936,7 @@ if touchScroll is false - update index
 		}
 		move(panel,false);
 	};
-	scrollify.instantMove = function(panel) {
+	scrollify.instantMove = (panel) => {
 		if(panel===undefined)
 		{
 			return false;
