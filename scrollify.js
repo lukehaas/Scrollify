@@ -740,18 +740,22 @@ if touchScroll is false - update index
 			);
 		}
 	
-		function sizePanels(keepPosition) {
-			if(keepPosition) {
+		function sizePanels(keepPosition)
+		{
+			if(keepPosition)
+			{
 				top = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
 			}
 		
 			var selector = settings.section;
 			overflow = [];
 			
-			if(settings.interstitialSection.length) {
+			if(settings.interstitialSection.length)
+			{
 				selector += "," + settings.interstitialSection;
 			}
-			if(settings.scrollbars===false) {
+			if(settings.scrollbars===false)
+			{
 				settings.overflowScroll = false;
 			}
 			portHeight = getportHeight();
@@ -768,15 +772,13 @@ if touchScroll is false - update index
 						val.style.height = "auto";
 						if(val.offsetHeight < portHeight || val.style.overflow === "hidden")
 						{
-							console.log(portHeight);
-							val.style.height = portHeight.toString() + "px";
-							console.dir(val);
+							val.style.height = `${portHeight.toString()}px`;
 				
 							overflow[i] = false;
 						}
 						else
 						{
-							val.style.height = val.offsetHeight.toString() + "px";
+							val.style.height = `${val.offsetHeight.toString()}px`;
 				
 							if(settings.overflowScroll) {
 								overflow[i] = true;
@@ -801,7 +803,8 @@ if touchScroll is false - update index
 					}
 				}
 			});
-			if(keepPosition) {
+			if(keepPosition)
+			{
 				window.scrollTo(top,0);
 			}
 		}
