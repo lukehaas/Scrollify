@@ -89,6 +89,7 @@ if touchScroll is false - update index
 			overflowScroll:true,
 			updateHash: true,
 			touchScroll:true,
+			logging:false,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
@@ -309,6 +310,14 @@ if touchScroll is false - update index
 	}
 
 	console.dir(animateScroll);
+
+	function log(msg, warn = false)
+	{
+		if(!settings.logging)
+			return;
+		
+		(warn ? console.warn : console.log)(msg);
+	}
 	
 	function isAccelerating(samples) {
 		function average(num) {
@@ -754,11 +763,14 @@ if touchScroll is false - update index
 			{
 				selector += "," + settings.interstitialSection;
 			}
+
 			if(settings.scrollbars===false)
 			{
 				settings.overflowScroll = false;
 			}
+
 			portHeight = getportHeight();
+
 			document.querySelectorAll(selector).forEach((val, i) =>
 			{
 				if(settings.setHeights)
