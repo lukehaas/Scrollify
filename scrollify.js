@@ -238,7 +238,12 @@ if touchScroll is false - update index
 		currentIndex = index;
 		if(instant)
 		{
-			window.scrollTo(destination);
+			window.scrollTo(
+				/* x */
+				0,
+				/* y */
+				destination
+			);
 			
 			if(callbacks)
 			{
