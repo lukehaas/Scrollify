@@ -914,16 +914,19 @@ if touchScroll is false - update index
 		move(panel,false);
 	};
 	scrollify.instantMove = function(panel) {
-		if(panel===undefined) {
-		return false;
+		if(panel===undefined)
+		{
+			return false;
 		}
 		move(panel,true);
 	};
-	scrollify.next = function() {
-		if(index<names.length) {
-		index += 1;
-		//index, instant, callbacks, toTop
-		animateScroll(index,false,true,true);
+	scrollify.next = function() 
+	{
+		if(index < names.length)
+		{
+			index += 1;
+			//index, instant, callbacks, toTop
+			animateScroll(index,false,true,true);
 		}
 	};
 	scrollify.previous = function() {
