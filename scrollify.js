@@ -58,7 +58,6 @@ if touchScroll is false - update index
 		hasLocation = false,
 		timeoutId,
 		timeoutId2,
-		$window = window,
 		portHeight,
 		top = window.scrollY,
 		scrollable = false,
@@ -95,6 +94,14 @@ if touchScroll is false - update index
 			afterResize:function() {},
 			afterRender:function() {}
 		};
+
+	function log(msg, warn = false)
+	{
+		if(!settings.logging || !window.console)
+			return;
+		
+		(warn ? console.warn : console.log)("Scrollify warning: " + msg);
+	}
 	
 	// Smooth page scrolling in vanilla js (Thanks https://pawelgrzybek.com/page-scroll-in-vanilla-javascript/)
 	function scrollIt(destination, duration = 200, easing = 'linear', callback) {
@@ -184,7 +191,7 @@ if touchScroll is false - update index
 	}
 
 	function getportHeight() {
-		return ($window.innerHeight + settings.offset);
+		return (window.innerHeight + settings.offset);
 	}
 
 	function animateScroll(index,instant,callbacks,toTop)
@@ -245,10 +252,7 @@ if touchScroll is false - update index
 					}
 					catch (e)
 					{
-						if(window.console)
-						{
-							console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
-						}
+						log("Page must be hosted to manipulate the hash value.", true);
 					}
 				} else {
 					window.location.hash = names[index];
@@ -299,7 +303,7 @@ if touchScroll is false - update index
 					{
 						if(window.location.hash.length)
 						{
-							console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
+							log("ID matches hash value - this will cause the page to anchor.", true);
 						}
 					}
 					catch (e) {}
@@ -307,16 +311,6 @@ if touchScroll is false - update index
 			}
 	
 		}
-	}
-
-	console.dir(animateScroll);
-
-	function log(msg, warn = false)
-	{
-		if(!settings.logging)
-			return;
-		
-		(warn ? console.warn : console.log)(msg);
 	}
 	
 	function isAccelerating(samples) {
@@ -515,9 +509,9 @@ if touchScroll is false - update index
 			{
 				if(settings.scrollbars)
 				{
-					$window.addEventListener('mousedown', manualScroll.handleMousedown);
-					$window.addEventListener('mouseup', manualScroll.handleMouseup);
-					$window.addEventListener('scroll', manualScroll.handleScroll);
+					window.addEventListener('mousedown', manualScroll.handleMousedown);
+					window.addEventListener('mouseup', manualScroll.handleMouseup);
+					window.addEventListener('scroll', manualScroll.handleScroll);
 				}
 				else
 				{
@@ -525,7 +519,7 @@ if touchScroll is false - update index
 				}
 				window.addEventListener(wheelEvent, manualScroll.wheelHandler, { passive: false });
 				//$(document).bind(wheelEvent,manualScroll.wheelHandler);
-				$window.addEventListener('keydown', manualScroll.keyHandler);
+				window.addEventListener('keydown', manualScroll.keyHandler);
 			}
 		};
 	
@@ -734,7 +728,7 @@ if touchScroll is false - update index
 			manualScroll.init();
 			swipeScroll.init();
 		
-			$window.addEventListener("resize",util.handleResize);
+			window.addEventListener("resize",util.handleResize);
 
 			if (document.addEventListener)
 			{
@@ -824,7 +818,7 @@ if touchScroll is false - update index
 				window.scrollTo(top,0);
 			}
 		}
-		function calculatePositions (scroll,firstLoad)
+		function calculatePositions (scroll, firstLoad)
 		{
 			var selector = settings.section;
 
@@ -884,7 +878,7 @@ if touchScroll is false - update index
 				elements[i] = $this;
 				try {
 					if($(names[i]).length && window.console) {
-					console.warn("Scrollify warning: Section names can't match IDs - this will cause the browser to anchor.");
+					log("Section names can't match IDs - this will cause the browser to anchor.", true);
 					}
 				} catch (e) {}
 		
@@ -902,40 +896,42 @@ if touchScroll is false - update index
 		}
 	
 		function atTop() {
-		if(!overflow[index]) {
-			return true;
+			if(!overflow[index]) {
+				return true;
+			}
+			top = window.scrollTop();
+			if(top>parseInt(heights[index]))
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
-		top = $window.scrollTop();
-		if(top>parseInt(heights[index])) {
-			return false;
-		} else {
-			return true;
-		}
-		}
-		function atBottom() {
-		if(!overflow[index]) {
-			return true;
-		}
-		top = $window.scrollTop();
-		portHeight = getportHeight();
-	
-		if(top<parseInt(heights[index])+(elements[index].outerHeight()-portHeight)-28) {
-	
-			return false;
-	
-		} else {
-			return true;
-		}
+		function atBottom()
+		{
+			if(!overflow[index])
+			{
+				return true;
+			}
+
+			top = window.scrollTop();
+			portHeight = getportHeight();
+		
+			if(top < parseInt(heights[index]) + (elements[index].outerHeight() - portHeight) - 28) {
+				return false;
+			}
+			else
+			{
+				return true;
+			}
 		}
 	};
 	
 	function move(panel,instant)
 	{
 		var z = names.length;
-
-		// Don't both with out of range panels
-		if(typeof panel === "number" && panel >= z)
-			return;
 
 		for(;z>=0;z--)
 		{
@@ -959,6 +955,7 @@ if touchScroll is false - update index
 			}
 		}
 	}
+
 	scrollify.move = (panel) => {
 		if(panel===undefined)
 		{
@@ -975,6 +972,7 @@ if touchScroll is false - update index
 			move(panel,false);
 		}
 	};
+
 	scrollify.instantMove = (panel) => {
 		if(panel===undefined)
 		{
@@ -991,6 +989,7 @@ if touchScroll is false - update index
 			move(panel,true);
 		}
 	};
+
 	scrollify.next = () => 
 	{
 		if(index < names.length)
@@ -1018,36 +1017,41 @@ if touchScroll is false - update index
 			animateScroll(index,true,true,true);
 		}
 	};
-	scrollify.instantPrevious = () => {
+	scrollify.instantPrevious = () => 
+	{
 		if(index>0) {
-		index -= 1;
-		//index, instant, callbacks, toTop
-		animateScroll(index,true,true,true);
+			index -= 1;
+			//index, instant, callbacks, toTop
+			animateScroll(index,true,true,true);
 		}
 	};
-	scrollify.destroy = () => {
-		if(!initialised) {
-		return false;
+	scrollify.destroy = () =>
+	{
+		if(!initialised)
+		{
+			return false;
 		}
-		if(settings.setHeights) {
-		$(settings.section).each(function() {
-			$(this).css("height","auto");
-		});
+		if(settings.setHeights)
+		{
+			$(settings.section).forEach((val) =>
+			{
+				val.style.height = "auto";
+			});
 		}
-		$window.off("resize",util.handleResize);
+		window.removeEventListener("resize",util.handleResize);
 		if(settings.scrollbars) {
-		$window.off('mousedown', manualScroll.handleMousedown);
-		$window.off('mouseup', manualScroll.handleMouseup);
-		$window.off('scroll', manualScroll.handleScroll);
+			window.removeEventListener('mousedown', manualScroll.handleMousedown);
+			window.removeEventListener('mouseup', manualScroll.handleMouseup);
+			window.removeEventListener('scroll', manualScroll.handleScroll);
 		}
-		// $window.off(wheelEvent,manualScroll.wheelHandler);
+		// window.off(wheelEvent,manualScroll.wheelHandler);
 		window.removeEventListener(wheelEvent,manualScroll.wheelHandler);
-		$window.off('keydown', manualScroll.keyHandler);
+		window.removeEventListener('keydown', manualScroll.keyHandler);
 	
 		if (document.addEventListener && settings.touchScroll) {
-		document.removeEventListener('touchstart', swipeScroll.touchHandler, false);
-		document.removeEventListener('touchmove', swipeScroll.touchHandler, false);
-		document.removeEventListener('touchend', swipeScroll.touchHandler, false);
+			document.removeEventListener('touchstart', swipeScroll.touchHandler, false);
+			document.removeEventListener('touchmove', swipeScroll.touchHandler, false);
+			document.removeEventListener('touchend', swipeScroll.touchHandler, false);
 		}
 		heights = [];
 		names = [];
@@ -1056,7 +1060,7 @@ if touchScroll is false - update index
 	};
 	scrollify.update = () => {
 		if(!initialised) {
-		return false;
+			return false;
 		}
 		util.handleUpdate();
 	};
@@ -1072,8 +1076,8 @@ if touchScroll is false - update index
 	scrollify.enable = () => {
 		disabled = false;
 		if (initialised) {
-		//instant,callbacks
-		manualScroll.calculateNearest(false,false);
+			//instant,callbacks
+			manualScroll.calculateNearest(false,false);
 		}
 	};
 	scrollify.isDisabled = () => {
@@ -1088,13 +1092,21 @@ if touchScroll is false - update index
 
 		if(typeof updatedOptions === "object")
 		{
-			settings = $.extend(settings, updatedOptions);
+			// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
+			let extend = (obj, src) => {
+				for (var key in src) {
+					if (src.hasOwnProperty(key)) obj[key] = src[key];
+				}
+				return obj;
+			};
+			
+			settings = extend(settings, updatedOptions);
+
 			util.handleUpdate();
+			return;
 		}
-		else if(window.console)
-		{
-			console.warn("Scrollify warning: setOptions expects an object.");
-		}
+		
+		log("setOptions expects an object.", true);
 	};
 	window.scrollify = scrollify;
 	return scrollify;
