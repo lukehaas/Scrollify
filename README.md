@@ -190,6 +190,8 @@ If you think the issue is with Scrollify itself, please check the [open issues](
 
 - Refreshing the page while not at the top will cause scrolling to be locked.
 
+- Scrollify.update() causes the page to jerk to the top and lock scrolling.
+
 ## FAQ
 
 - Do I have to use the section element for Scrollify sections?

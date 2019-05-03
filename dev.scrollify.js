@@ -682,31 +682,31 @@
 	
 	
 		util = {
-		refresh:function(withCallback,scroll) {
-			clearTimeout(timeoutId2);
-			timeoutId2 = setTimeout(function() {
-			//retain position
-			sizePanels(true);
-			//scroll, firstLoad
-			calculatePositions(scroll,false);
-			if(withCallback) {
-				settings.afterResize();
+			refresh: (withCallback,scroll) => {
+				clearTimeout(timeoutId2);
+				timeoutId2 = setTimeout(() => {
+					//retain position
+					sizePanels(true);
+					//scroll, firstLoad
+					calculatePositions(scroll,false);
+					if(withCallback) {
+						settings.afterResize();
+					}
+				},400);
+			},
+			handleUpdate: () => {
+				//callbacks, scroll
+				//changed from false,true to false,false
+				util.refresh(false,false);
+			},
+			handleResize:() => {
+				//callbacks, scroll
+				util.refresh(true,false);
+			},
+			handleOrientation:() => {
+				//callbacks, scroll
+				util.refresh(true,true);
 			}
-			},400);
-		},
-		handleUpdate:function() {
-			//callbacks, scroll
-			//changed from false,true to false,false
-			util.refresh(false,false);
-		},
-		handleResize:function() {
-			//callbacks, scroll
-			util.refresh(true,false);
-		},
-		handleOrientation:function() {
-			//callbacks, scroll
-			util.refresh(true,true);
-		}
 		};
 
 		{
@@ -1095,7 +1095,11 @@
 	scrollify.isDisabled = () => {
 		return disabled;
 	};
-	scrollify.setOptions = function(updatedOptions)
+	scrollify.getOptions = () =>
+	{
+		return settings;
+	}
+	scrollify.setOptions = (updatedOptions) =>
 	{
 		if(!initialised)
 		{
