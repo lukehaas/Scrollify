@@ -89,6 +89,7 @@ if touchScroll is false - update index
 			overflowScroll:true,
 			updateHash: true,
 			touchScroll:true,
+			logging:false,
 			before:function() {},
 			after:function() {},
 			afterResize:function() {},
@@ -309,6 +310,14 @@ if touchScroll is false - update index
 	}
 
 	console.dir(animateScroll);
+
+	function log(msg, warn = false)
+	{
+		if(!settings.logging)
+			return;
+		
+		(warn ? console.warn : console.log)(msg);
+	}
 	
 	function isAccelerating(samples) {
 		function average(num) {
@@ -744,21 +753,28 @@ if touchScroll is false - update index
 			);
 		}
 	
-		function sizePanels(keepPosition) {
-			if(keepPosition) {
-				top = $window.scrollTop();
+		function sizePanels(keepPosition)
+		{
+			if(keepPosition)
+			{
+				top = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
 			}
 		
 			var selector = settings.section;
 			overflow = [];
 			
-			if(settings.interstitialSection.length) {
+			if(settings.interstitialSection.length)
+			{
 				selector += "," + settings.interstitialSection;
 			}
-			if(settings.scrollbars===false) {
+
+			if(settings.scrollbars===false)
+			{
 				settings.overflowScroll = false;
 			}
+
 			portHeight = getportHeight();
+
 			document.querySelectorAll(selector).forEach((val, i) =>
 			{
 				if(settings.setHeights)
@@ -772,15 +788,13 @@ if touchScroll is false - update index
 						val.style.height = "auto";
 						if(val.offsetHeight < portHeight || val.style.overflow === "hidden")
 						{
-							console.log(portHeight);
-							val.style.height = portHeight.toString() + "px";
-							console.dir(val);
+							val.style.height = `${portHeight.toString()}px`;
 				
 							overflow[i] = false;
 						}
 						else
 						{
-							val.style.height = val.offsetHeight.toString() + "px";
+							val.style.height = `${val.offsetHeight.toString()}px`;
 				
 							if(settings.overflowScroll) {
 								overflow[i] = true;
@@ -805,8 +819,9 @@ if touchScroll is false - update index
 					}
 				}
 			});
-			if(keepPosition) {
-				$window.scrollTop(top);
+			if(keepPosition)
+			{
+				window.scrollTo(top,0);
 			}
 		}
 		function calculatePositions (scroll,firstLoad)
@@ -949,18 +964,32 @@ if touchScroll is false - update index
 		{
 			return false;
 		}
-		if(panel.originalEvent)
+
+		if(typeof panel === "number")
 		{
-			panel = panel.getAttribute("href");
+			//index, instant, callbacks, toTop
+			animateScroll(panel,false,true,true);
 		}
-		move(panel,false);
+		else if(typeof panel === "string" && panel.substr(0,1) === "#")
+		{
+			move(panel,false);
+		}
 	};
 	scrollify.instantMove = (panel) => {
 		if(panel===undefined)
 		{
 			return false;
 		}
-		move(panel,true);
+
+		if(typeof panel === "number")
+		{
+			//index, instant, callbacks, toTop
+			animateScroll(panel,true,true,true);
+		}
+		else if(typeof panel === "string" && panel.substr(0,1) === "#")
+		{
+			move(panel,true);
+		}
 	};
 	scrollify.next = () => 
 	{
