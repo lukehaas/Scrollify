@@ -235,23 +235,28 @@ if touchScroll is false - update index
 				}
 			}
 		
-		
+			// If we've been told to update page hash on section changed then we'll do that
 			if(settings.updateHash && settings.sectionName && !(firstLoad===true && index===0)) {
 				if(history.pushState) {
-					try {
-					history.replaceState(null, null, names[index]);
-					} catch (e) {
-					if(window.console) {
-						console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
+					try
+					{
+						history.replaceState(null, null, names[index]);
 					}
+					catch (e)
+					{
+						if(window.console)
+						{
+							console.warn("Scrollify warning: Page must be hosted to manipulate the hash value.");
+						}
 					}
-		
 				} else {
-				window.location.hash = names[index];
+					window.location.hash = names[index];
 				}
 			}
 		
 			currentIndex = index;
+
+			// If we should be scrolling instantly, we'll just scroll there
 			if(instant)
 			{
 				window.scrollTo(
@@ -263,11 +268,13 @@ if touchScroll is false - update index
 				
 				if(callbacks)
 				{
+					// We've finished scrolling, call the after callback
 					settings.after(index,elements);
 				}
 			}
 			else
 			{
+				// Otherwise lock the page scrolling and start scrolling with an animation
 				locked = true;
 
 				// Scroll to section
@@ -287,11 +294,14 @@ if touchScroll is false - update index
 		
 				if(window.location.hash.length && settings.sectionName && window.console)
 				{
-					try {
-						if(window.location.hash.length) {
+					try
+					{
+						if(window.location.hash.length)
+						{
 							console.warn("Scrollify warning: ID matches hash value - this will cause the page to anchor.");
 						}
-					} catch (e) {}
+					}
+					catch (e) {}
 				}
 			}
 	
