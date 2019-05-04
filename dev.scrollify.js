@@ -770,10 +770,11 @@
 			var offset = (elem) => {
 				// Thanks http://youmightnotneedjquery.com/
 				var rect = elem.getBoundingClientRect();
+				console.log(rect);
 
 				return {
-					top: rect.top + document.body.scrollTop,
-					left: rect.left + document.body.scrollLeft
+					top: rect.top,
+					left: rect.left
 				};
 			};
 
@@ -786,12 +787,10 @@
 			elements = [];
 
 			document.querySelectorAll(selector).forEach((val, i) => {
-				var $this = val;
-
 				if (i > 0) {
-					heights[i] = parseInt(offset(val).top) + settings.offset;
+					heights[i] = Math.abs(parseInt(offset(val).top) + settings.offset);
 				} else {
-					heights[i] = parseInt(offset(val).top);
+					heights[i] = Math.abs(parseInt(offset(val).top));
 				}
 
 				if (settings.sectionName && val.getAttribute(settings.sectionName)) {
@@ -803,10 +802,11 @@
 						names[i] = "#";
 
 						if (i === document.querySelectorAll(selector).length - 1 && i > 1) {
-							heights[i] = heights[i - 1] + (parseInt($($(selector)[i - 1]).outerHeight()) - parseInt(window.innerHeight())) + parseInt(val.outerHeight());
+							heights[i] = heights[i - 1] + (parseInt($(document.querySelectorAll(selector)[i - 1]).outerHeight()) - parseInt(window.innerHeight())) + parseInt(val.outerHeight());
 						}
 					}
 				}
+
 				elements[i] = val;
 				try {
 					if ($(names[i]).length && window.console) {
@@ -820,6 +820,8 @@
 				}
 
 			});
+
+			console.log(heights);
 
 			if (true === scroll) {
 				//index, instant, callbacks, toTop
