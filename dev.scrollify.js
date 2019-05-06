@@ -306,10 +306,6 @@
 
 	var scrollify = function(options) {
 		initialised = true;
-		scrollify.easing = [];
-		scrollify.easing.easeOutExpo = function(x, t, b, c, d) {
-			return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
-		};
 
 		manualScroll = {
 			handleMousedown: function() {
@@ -662,20 +658,17 @@
 			handleOrientation: () => {
 				//callbacks, scroll
 				util.refresh(true, true);
-			}
-		};
-
-		{
-			// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
-			let extend = (obj, src) => {
+			},
+			extend: (obj, src) => {
+				// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
 				for (var key in src) {
 					if (src.hasOwnProperty(key)) obj[key] = src[key];
 				}
 				return obj;
-			};
+			},
+		};
 
-			settings = extend(settings, options);
-		}
+		settings = util.extend(settings, options);
 
 		//retain position
 		sizePanels(false);
@@ -994,15 +987,7 @@
 		}
 
 		if (typeof updatedOptions === "object") {
-			// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
-			let extend = (obj, src) => {
-				for (var key in src) {
-					if (src.hasOwnProperty(key)) obj[key] = src[key];
-				}
-				return obj;
-			};
-
-			settings = extend(settings, updatedOptions);
+			settings = util.extend(settings, updatedOptions);
 
 			util.handleUpdate();
 			return;
