@@ -47,7 +47,7 @@
 		timeoutId,
 		timeoutId2,
 		portHeight,
-		top = window.scrollY,
+		top = getScrollTop(),
 		scrollable = false,
 		locked = false,
 		scrolled = false,
@@ -82,6 +82,14 @@
 			afterResize: function() {},
 			afterRender: function() {}
 		};
+
+	function getScrollTop() {
+		return window.scrollY || window.pageYOffset;
+	}
+
+	function getNow() {
+		return 'now' in window.performance ? performance.now() : new Date().getTime();
+	}
 
 	function log(msg, warn = false) {
 		if (!settings.logging || !window.console)
@@ -142,16 +150,16 @@
 			}
 		};
 
-		const start = window.pageYOffset;
-		const startTime = 'now' in window.performance ? performance.now() : new Date().getTime();
+		const start = getScrollTop();
+		const startTime = getNow();
 
 		const documentHeight = Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight);
-		const windowHeight = window.innerHeight || document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+		const windowHeight = window.innerHeight;
 		const destinationOffset = typeof destination === 'number' ? destination : destination.offsetTop;
 		const destinationOffsetToScroll = Math.round(documentHeight - destinationOffset < windowHeight ? documentHeight - windowHeight : destinationOffset);
 
 		if ('requestAnimationFrame' in window === false) {
-			window.scroll(0, destinationOffsetToScroll);
+			window.scrollTo(0, destinationOffsetToScroll);
 			if (callback) {
 				callback();
 			}
@@ -159,12 +167,12 @@
 		}
 
 		function scroll() {
-			const now = 'now' in window.performance ? performance.now() : new Date().getTime();
+			const now = getNow();
 			const time = Math.min(1, ((now - startTime) / duration));
 			const timeFunction = easings[easing](time);
-			window.scroll(0, Math.ceil((timeFunction * (destinationOffsetToScroll - start)) + start));
+			window.scrollTo(0, Math.ceil((timeFunction * (destinationOffsetToScroll - start)) + start));
 
-			if (window.pageYOffset === destinationOffsetToScroll) {
+			if (getScrollTop() === destinationOffsetToScroll) {
 				if (callback) {
 					callback();
 				}
@@ -217,9 +225,9 @@
 				if (overflow[index]) {
 					portHeight = getportHeight();
 
-					interstitialIndex = parseInt(elements[index].outerHeight() / portHeight);
+					interstitialIndex = parseInt(elements[index].offsetHeight / portHeight);
 
-					destination = parseInt(heights[index]) + (elements[index].outerHeight() - portHeight);
+					destination = parseInt(heights[index]) + (elements[index].offsetHeight - portHeight);
 				}
 			}
 
@@ -306,10 +314,6 @@
 
 	var scrollify = function(options) {
 		initialised = true;
-		scrollify.easing = [];
-		scrollify.easing.easeOutExpo = function(x, t, b, c, d) {
-			return (t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
-		};
 
 		manualScroll = {
 			handleMousedown: function() {
@@ -348,7 +352,7 @@
 				}, 200);
 			},
 			calculateNearest: function(instant, callbacks) {
-				top = window.pageYOffset | document.body.scrollTop;
+				top = getScrollTop();
 				var i = 1,
 					max = heights.length,
 					closest = 0,
@@ -594,7 +598,7 @@
 							interstitialIndex += 1;
 
 						} else {
-							interstitialScroll(parseInt(heights[index]) + (elements[index].outerHeight() - portHeight));
+							interstitialScroll(parseInt(heights[index]) + (elements[index].offsetHeight - portHeight));
 						}
 
 					}
@@ -662,20 +666,17 @@
 			handleOrientation: () => {
 				//callbacks, scroll
 				util.refresh(true, true);
-			}
-		};
-
-		{
-			// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
-			let extend = (obj, src) => {
+			},
+			extend: (obj, src) => {
+				// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
 				for (var key in src) {
 					if (src.hasOwnProperty(key)) obj[key] = src[key];
 				}
 				return obj;
-			};
+			},
+		};
 
-			settings = extend(settings, options);
-		}
+		settings = util.extend(settings, options);
 
 		//retain position
 		sizePanels(false);
@@ -714,7 +715,7 @@
 
 		function sizePanels(keepPosition) {
 			if (keepPosition) {
-				top = window.pageYOffset || (document.documentElement || document.body.parentNode || document.body).scrollTop;
+				top = getScrollTop();
 			}
 
 			var selector = settings.section;
@@ -766,6 +767,7 @@
 
 		function calculatePositions(scroll, firstLoad) {
 			var selector = settings.section;
+			var windowHeight = window.innerHeight;
 
 			var offset = (elem) => {
 				// Thanks http://youmightnotneedjquery.com/
@@ -802,7 +804,8 @@
 						names[i] = "#";
 
 						if (i === document.querySelectorAll(selector).length - 1 && i > 1) {
-							heights[i] = heights[i - 1] + (parseInt($(document.querySelectorAll(selector)[i - 1]).outerHeight()) - parseInt(window.innerHeight())) + parseInt(val.outerHeight());
+							console.log('$',document.querySelectorAll(selector))
+							heights[i] = heights[i - 1] + (parseInt(document.querySelectorAll(selector)[i - 1].offsetHeight) - windowHeight) + parseInt(val.offsetHeight);
 						}
 					}
 				}
@@ -833,7 +836,7 @@
 			if (!overflow[index]) {
 				return true;
 			}
-			top = window.scrollTop();
+			top = getScrollTop();
 			if (top > parseInt(heights[index])) {
 				return false;
 			} else {
@@ -846,10 +849,10 @@
 				return true;
 			}
 
-			top = window.scrollTop();
+			top = getScrollTop();
 			portHeight = getportHeight();
 
-			if (top < parseInt(heights[index]) + (elements[index].outerHeight() - portHeight) - 28) {
+			if (top < parseInt(heights[index]) + (elements[index].offsetHeight - portHeight) - 28) {
 				return false;
 			} else {
 				return true;
@@ -994,15 +997,7 @@
 		}
 
 		if (typeof updatedOptions === "object") {
-			// Thanks https://plainjs.com/javascript/utilities/merge-two-javascript-objects-19/! (Vanilla JS version of $.extend)
-			let extend = (obj, src) => {
-				for (var key in src) {
-					if (src.hasOwnProperty(key)) obj[key] = src[key];
-				}
-				return obj;
-			};
-
-			settings = extend(settings, updatedOptions);
+			settings = util.extend(settings, updatedOptions);
 
 			util.handleUpdate();
 			return;
