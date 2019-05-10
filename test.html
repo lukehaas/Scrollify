@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Scrollify test</title>
+		<link rel="icon" href="data:;base64,iVBORw0KGgo=">
+	</head>
+	<body>
+		<section class="first-page">
+			<h1>Wow this is scrollify</h1>
+		</section>
+		<section class="second-page">
+			<p>
+				It's pretty cool isn't it
+			</p>
+		</section>
+	</body>
+
+	<style>
+
+	body
+	{
+		margin: 0;
+	}
+
+	p
+	{
+		margin: 0;
+	}
+	
+	section.first-page
+	{
+		background-color: grey;
+		display: grid;
+	}
+	
+	section.first-page > h1
+	{
+		margin: auto;
+	}
+
+	section.second-page
+	{
+		background-color: lightgrey;
+	}
+	
+	</style>
+
+	<script src="dev.scrollify.js"></script>
+
+	<script>
+	document.addEventListener("load", (event) =>
+	{ 
+		scrollify(
+		{
+			section : "section",
+			logging: true
+		}
+		);
+	});
+	</script>
+</html>

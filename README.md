@@ -1,6 +1,6 @@
-# [jQuery Scrollify](https://projects.lukehaas.me/scrollify)
+# [Scrollify](https://projects.lukehaas.me/scrollify)
 
-A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
+A vanilla JS plugin that assists scrolling and snaps to sections. Touch optimised.
 
 ## Demo
 
@@ -22,7 +22,7 @@ A jQuery plugin that assists scrolling and snaps to sections. Touch optimised.
 
 ## Basic setup
 
-Scrollify requires jQuery 1.7+.
+Scrollify no longer requires JQuery.
 
 The most basic setup is as follows:
 
@@ -31,8 +31,8 @@ The most basic setup is as follows:
   <html>
     <head>
       <script>
-        $(function() {
-          $.scrollify({
+        document.addEventListener("DOMContentLoaded", function() {
+          scrollify({
             section : ".example-classname",
           });
         });
@@ -50,7 +50,7 @@ The most basic setup is as follows:
 This is the default configuration:
 
 ```javascript
-$.scrollify({
+scrollify({
     section : ".example-classname",
     sectionName : "section-name",
     interstitialSection : "",
@@ -63,6 +63,7 @@ $.scrollify({
     overflowScroll: true,
     updateHash: true,
     touchScroll:true,
+    logging:false,
     before:function() {},
     after:function() {},
     afterResize:function() {},
@@ -105,6 +106,9 @@ A boolean to define whether Scrollify updates the browser location hash when scr
 `touchScroll`
 A boolean to define whether Scrollify handles touch scroll events. True by default.
 
+`logging`
+A boolean to define whether Scrollify will log any errors to the console. False by default.
+
 `before(index, sections)`
 A callback that is fired before a section is scrolled to. Arguments include the index of the section and an array of all section elements.
 
@@ -119,60 +123,60 @@ A callback that is fired after Scrollify's initialisation.
 
 ## Methods
 
-`$.scrollify.move("#name");`
+`scrollify.move("#name");`
 
 The move method can be used to scroll to a particular section. It can be passed the index of the section, or the name of the section preceded by a hash.
 
-`$.scrollify.instantMove("#name");`
+`scrollify.instantMove("#name");`
 
 The instantMove method can be used to scroll to a particular section without animation. It can be passed the index of the section, or the name of the section preceded by a hash.
 
-`$.scrollify.next()`
+`scrollify.next()`
 
 The next method can be used to scroll to a panel that immediately follows the current panel.
 
-`$.scrollify.previous()`
+`scrollify.previous()`
 
 The previous method can be used to scroll to a panel that immediately precedes the current panel.
 
-`$.scrollify.instantNext()`
+`scrollify.instantNext()`
 
 The instantNext method can be used to scroll to a panel that immediately follows the current panel, without animation.
 
-`$.scrollify.instantPrevious()`
+`scrollify.instantPrevious()`
 
 The instantPrevious method can be used to scroll to a panel that immediately precedes the current panel.
 
-`$.scrollify.destroy()`
+`scrollify.destroy()`
 
 The destroy method removes all Scrollify events and removes set heights from the panels.
 
-`$.scrollify.update()`
+`scrollify.update()`
 
 The update method recalculates the heights and positions of the panels.
 
-`$.scrollify.current()`
+`scrollify.current()`
 
-The current method returns the current section as a jQuery object.
+The current method returns the current section as a DOM object.
 
-`$.scrollify.currentIndex()`
+`scrollify.currentIndex()`
 
 The currentIndex method returns the current section index, starting at 0.
 
-`$.scrollify.disable()`
+`scrollify.disable()`
 
 The disable method turns off the scroll snap behaviour so that the page scroll like normal.
 
-`$.scrollify.enable()`
+`scrollify.enable()`
 
 The enable method resumes the scroll snap behaviour after the disable method has been used.
 
-`$.scrollify.isDisabled()`
+`scrollify.isDisabled()`
 
 The isDisabled method returns true if Scrollify is currently disabled, otherwise false.
 
 
-`$.scrollify.setOptions()`
+`scrollify.setOptions()`
 
 The setOptions method can be used to change any of the initialisation options. Just parse it an options object.
 
@@ -181,6 +185,12 @@ The setOptions method can be used to change any of the initialisation options. J
 If you're working with Scrollify and having issues, please post your questions to [Stackoverflow](http://stackoverflow.com) and tag it with 'jquery-scrollify'.
 
 If you think the issue is with Scrollify itself, please check the [open issues](https://github.com/lukehaas/Scrollify/issues) to see if it has already been logged. If it hasn't, please open a ticket with a detailed description of what you're seeing and details of the device and browser version you're seeing it on.
+
+## Known Issues
+
+- Refreshing the page while not at the top will cause scrolling to be locked.
+
+- Scrollify.update() causes the page to jerk to the top and lock scrolling.
 
 ## FAQ
 
@@ -217,9 +227,9 @@ Scrollify appends a hash value to the URL for each section, this allows for perm
   <html>
     <head>
       <script>
-        $(function() {
-          $.scrollify({
-            section : ".section-class-name",
+        document.addEventListener("DOMContentLoaded", function() {
+          scrollify({
+            section : "div.section-class-name",
             sectionName : "section-name"
           });
         });
