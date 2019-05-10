@@ -765,20 +765,16 @@
 			}
 		}
 
+		function offset(elem) {
+			const rect = elem.getBoundingClientRect(),
+			scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+			scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+			return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
+		}
+
 		function calculatePositions(scroll, firstLoad) {
 			var selector = settings.section;
 			var windowHeight = window.innerHeight;
-
-			var offset = (elem) => {
-				// Thanks http://youmightnotneedjquery.com/
-				var rect = elem.getBoundingClientRect();
-				console.log(rect);
-
-				return {
-					top: rect.top,
-					left: rect.left
-				};
-			};
 
 			if (settings.interstitialSection.length) {
 				selector += "," + settings.interstitialSection;
