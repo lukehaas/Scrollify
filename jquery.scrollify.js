@@ -93,7 +93,7 @@ if touchScroll is false - update index
       afterRender:function() {}
     };
   function getportHeight() {
-    return ($window.height() + settings.offset);
+    return (window.innerHeight + settings.offset);
   }
   function animateScroll(index,instant,callbacks,toTop) {
     if(currentIndex===index) {
