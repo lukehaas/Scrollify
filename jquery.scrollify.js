@@ -93,7 +93,7 @@ if touchScroll is false - update index
       afterRender:function() {}
     };
   function getportHeight() {
-    return ($window.height() + settings.offset);
+    return (window.innerHeight + settings.offset);
   }
   function animateScroll(index,instant,callbacks,toTop) {
     if(currentIndex===index) {
@@ -557,10 +557,12 @@ if touchScroll is false - update index
       }
     };
     settings = $.extend(settings, options);
+    
+    // any block element with overflow: scroll
     if (settings.overflowScroll && settings.target !== "html,body") {
       $window = $(settings.target);
     }
-
+    
     //retain position
     sizePanels(false);
 
