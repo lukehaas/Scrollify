@@ -94,7 +94,7 @@ A boolean to define whether scroll bars are visible or not.
 A CSS selector for elements within sections that require standard scrolling behaviour. For example `standardScrollElements: ".map, .frame"`.
 
 `setHeights`
-A boolean to define whether Scollify assigns a height to the sections. True by default.
+A boolean to define whether Scrollify assigns a height to the sections. True by default.
 
 `overflowScroll`
 A boolean to define whether Scrollify will allow scrolling over overflowing content within sections. True by default. (This will be false if `scrollbars` is false)

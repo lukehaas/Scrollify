@@ -1,6 +1,6 @@
 /*!
  * jQuery Scrollify
- * Version 1.0.20
+ * Version 1.0.21
  *
  * Requires:
  * - jQuery 1.7 or higher
@@ -72,6 +72,7 @@ if touchScroll is false - update index
     initialised = false,
     destination = 0,
     wheelEvent = 'onwheel' in document ? 'wheel' : document.onmousewheel !== undefined ? 'mousewheel' : 'DOMMouseScroll',
+    eventListenerOptions = { passive: false },
     settings = {
       //section should be an identifier that is the same for each section
       section: ".section",
@@ -518,9 +519,6 @@ if touchScroll is false - update index
       },
       init: function() {
         if (document.addEventListener && settings.touchScroll) {
-          var eventListenerOptions = {
-            passive: false
-          };
           document.addEventListener('touchstart', swipeScroll.touchHandler, eventListenerOptions);
           document.addEventListener('touchmove', swipeScroll.touchHandler, eventListenerOptions);
           document.addEventListener('touchend', swipeScroll.touchHandler, eventListenerOptions);
@@ -803,16 +801,16 @@ if touchScroll is false - update index
     $window.off('keydown', manualScroll.keyHandler);
 
     if (document.addEventListener && settings.touchScroll) {
-      document.removeEventListener('touchstart', swipeScroll.touchHandler, false);
-      document.removeEventListener('touchmove', swipeScroll.touchHandler, false);
-      document.removeEventListener('touchend', swipeScroll.touchHandler, false);
+      document.removeEventListener('touchstart', swipeScroll.touchHandler, eventListenerOptions);
+      document.removeEventListener('touchmove', swipeScroll.touchHandler, eventListenerOptions);
+      document.removeEventListener('touchend', swipeScroll.touchHandler, eventListenerOptions);
     }
     heights = [];
     names = [];
     elements = [];
     overflow = [];
-    firstLoad=true;
-    initialised=false;
+    firstLoad = true;
+    initialised = false;
   };
   scrollify.update = function() {
     if(!initialised) {
