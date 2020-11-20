@@ -744,7 +744,7 @@ if touchScroll is false - update index
     if(panel===undefined) {
       return false;
     }
-    if(panel.originalEvent) {
+    if(typeof panel!=="number" && panel.originalEvent) {
       panel = $(this).attr("href");
     }
     move(panel,false);
