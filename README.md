@@ -251,7 +251,7 @@ Special thanks to [Browserstack](https://www.browserstack.com/) for supporting S
 
 [![RunJS](https://raw.githubusercontent.com/lukehaas/RunJS/master/docs/icon-64.png)](https://runjs.app)
 
-Also, make sure to check out RunJS. [RunJS](https://runjs.app) is a JavaScript playground that evaluates your code as you type and gives instant feedback. It's ideal for prototyping ideas or trying out new libraries.
+Also, make sure to check out [RunJS](https://runjs.app). RunJS is a JavaScript playground that evaluates your code as you type and gives instant feedback. It's ideal for prototyping ideas or trying out new libraries.
 
 ## Contributing
 
